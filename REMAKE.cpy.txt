@@ -10,5 +10,3 @@
 　→KEYLIST_REDUCE_CODESIZEで関数橋渡し方式。
 　→!KEYLIST_REDUCE_CODESIZEでマクロ直展開方式。
 　→どっちにしろコード本体はマクロに書くけれども。
-
-→ただし、keyhashだけは全生成式でやらないと死ぬヨカーン

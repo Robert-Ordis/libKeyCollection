@@ -29,6 +29,11 @@
 		} while(0)\
 #endif
 
+//おおむねいえることは、
+//「ライブラリの中身はkeylist_link_tだけで操作する」
+//「インターフェースの段階でnodetype_tに変換する」
+//っていうところかな？
+//特に、マクロでポンと実装する部分に関してはkeylist_link_sだけで送させねヴぁならぬよ
 
 typedef struct keylist_s {
 	struct keylist_link_s	*head;
@@ -49,6 +54,8 @@ typedef struct keylist_link_s {
 	void					*list;
 } keylist_link_t;
 
+#define	keycollect_get_container_(offset, plink) ((void*)((char*)plink - (char*)offset)
+
 #define KEYLIST_REF_FIRST_RAW_(offset, self)\
 	(void*)(((char*) self->head) - offset)
 
@@ -64,18 +71,45 @@ void* keylist_ref_first_raw(size_t offset, keylist_t *self){
 #define keylist_ref_first_generic(type, member) keylist_ref_first_raw(offsetof(type, member), self)
 →これはできない。
 
-//xxx_genericの実装に関しては、_rawを素直に呼び出すマクロに置き換えよう。リターンコード書けないし、関数1個なら…
+//xxx_genericは、構造体の実態が明らかな場合に使用可能。rawは原則使用禁止。
+
+//xxx_genericの実装に関しては、_rawを素直に呼び出すマクロで書こうか。中をマクロにしてもリターンコード書けないし、関数1個なら…
+//→んで、↓のやつにつながるわけですを。
+
+int keylist_add_raw(size_t offset, keylist_t *self, void *node){
+	int ret;
+	keycollect_lock_acquire(self);{
+		KEYLIST_IMPL_ADD_TAIL_(
+			self,
+			keycollection_get_link_ptr_(offset, node),
+			ret
+		);
+	}keycollect_lock_release(self);
+	return ret;
+}
+
+#define keylist_ref_first_generic(type, member, self)\
+	(type*)keylist_ref_first_raw_(offsetof(type, member), self)
+
+#define keylist_add_generic(type, member, self, node)\
+	keylist_add_raw_(offsetof(type, member), self, (void*)node)
+
+
 
 //reducing codesize
-int KEYLIST_APPEND_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *index_node){
-	return keylist_append_generic(nodetype_s, member, self);
+int KEYLIST_APPEND_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){
+	return keylist_add_generic(nodetype_s, member, self, node);
 }
 
 //prefer speed
-int KEYLIST_APPEND_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *index_node){
+int KEYLIST_ADD_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){
 	int ret;
 	keycollect_lock_acquire(self);{
-		KEYLIST_APPEND_RAW_(self, offseted(index_node, nodetype_s, member), ret);
+		KEYLIST_IMPL_ADD_TAIL_(
+			self,
+			keycollection_get_link_ptr_(offsetof(nodetype_s, member), node),
+			ret
+		);
 	}keycollect_lock_release(self);
 	return ret;
 }
