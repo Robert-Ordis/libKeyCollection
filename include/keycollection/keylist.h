@@ -23,7 +23,7 @@ typedef struct keylist_link_s keylist_link_t;
 struct keylist_link_s {
 	struct keylist_link_s	prev;			///previous pointer
 	struct keylist_link_s	next;			///next pointer.
-	void					*coll;	///pointer of container(e.g. keylist_t)
+	void*					coll;			///pointer of container(e.g. keylist_t)
 }
 
 /**
@@ -33,8 +33,8 @@ struct keylist_link_s {
  */
 typedef struct keylist_s keylist_t;
 struct keylist_s {
-	struct keylist_link_s	*head;	///Pointer to head link.
-	struct keylist_link_s	*tail;	///Pointer to tail link.
+	struct keylist_link_s*	head;	///Pointer to head link.
+	struct keylist_link_s*	tail;	///Pointer to tail link.
 	int						size;	///Counter for having nodes.
 	//2020-10-04/KK: ロックの搭載を試みたものの、今のバージョンではやめた。
 	//コンセプトとしてdestroyを提供しない以上、init & destroyをAPIとして提供するﾓﾉとは相性が悪い。
