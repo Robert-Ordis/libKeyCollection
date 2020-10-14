@@ -1,9 +1,6 @@
 #ifndef	KEYCOLLECT_CONFIG_H_
 #define	KEYCOLLECT_CONFIG_H_
 
-///define if you want to make the collection as thread safe.(BUT ONLY IN LINUX !!)
-#define	KEYCOLLECT_PTHREAD_SAFETY_
-
 /**
  *	\def	KEYLIST_GENERATE_FUNCS_AS_WRAPPER
  *	\brief	(config) making the generated Doubly linked list functions as wrapper or not.
