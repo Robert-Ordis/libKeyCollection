@@ -48,7 +48,7 @@ int main(int argc, char *argv[]){
 		pnode->b = (double)i / 2.0;
 		pnode->c = (char)i;
 		printf("[%p] start.\n", pnode);
-		printf("%s: [%p], a->%d, b->%f, c->%c, d->%llu\n", __func__, pnode, pnode->a, pnode->b, pnode->c, pnode->d);		
+		printf("%s: [%p], a->%d, b->%f, c->0x%02x d->%llu\n", __func__, pnode, pnode->a, pnode->b, pnode->c, pnode->d);		
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add_raw(offset, plist, pnode));
 		printf("%s: [%p], link->%p, link.next->%p, link.prev->%p, link.coll->%p\n", __func__, pnode, &pnode->link, pnode->link.next, pnode->link.prev, pnode->link.coll);
 	}
@@ -65,16 +65,21 @@ int main(int argc, char *argv[]){
 	printf("%s: fast forward iterating\n", __func__);
 	for(pnode = keylist_ref_head_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_next_raw(offset, pnode)){
 		printf("[%p] start.\n", pnode);
-		printf("%s: [%p], a->%d, b->%f, c->%c, d->%llu\n", __func__, pnode, pnode->a, pnode->b, pnode->c, pnode->d);		
+		printf("%s: [%p], a->%d, b->%f, c->0x%02x d->%llu\n", __func__, pnode, pnode->a, pnode->b, pnode->c, pnode->d);	
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add_raw(offset, plist, pnode));
 		printf("%s: [%p], link->%p, link.next->%p, link.prev->%p, link.coll->%p\n", __func__, pnode, &pnode->link, pnode->link.next, pnode->link.prev, pnode->link.coll);
 	}
 	
-	
+	printf("%s: iterator forward iterating\n", __func__);
+	printf("%s: [%p], curr->%p, next->%p, prev->%p, coll->%p\n", __func__,
+		it, it->curr, it->next, it->prev, it->coll
+	);
 	while((pnode = keylist_iterator_forward_raw(offset, it)) != NULL){
-		printf("%s: [%p], a->%d, b->%f, c->%c, d->%llu\n", __func__, pnode, pnode->a, pnode->b, pnode->c, pnode->d);
+		printf("%s: [%p], a->%d, b->%f, c->0x%02x d->%llu\n", __func__, pnode, pnode->a, pnode->b, pnode->c, pnode->d);	
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add_raw(offset, plist, pnode));
 	}
+	
+	
 	
 	
 	return 0;

@@ -177,14 +177,14 @@
 			/*nextの所属がイテレータと違う→書き換えられた可能性。手でnextを取り直す*/\
 			next_link = NULL;\
 			if((iterator)->curr != NULL && (iterator)->curr->coll == (iterator)->coll){\
-				next_link = (iterator)->curr->prev;\
+				next_link = (iterator)->curr->next;\
 			}\
 		}\
 		if(next_link != NULL){\
-			/*イテレータを一つ戻す*/\
-			(iterator)->next = (iterator)->curr;\
+			/*イテレータを一つ進める*/\
+			(iterator)->prev = (iterator)->curr;\
 			(iterator)->curr = next_link;\
-			(iterator)->prev = (next_link)->prev;\
+			(iterator)->next = (next_link)->next;\
 			ret = next_link;\
 		}\
 	}while(0)
