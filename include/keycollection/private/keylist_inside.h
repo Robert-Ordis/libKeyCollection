@@ -157,50 +157,42 @@
 //型不定につき、(next|prev)_nodeを別途外部で定義しなければラナイ
 
 //前方イテレーションのパーツ。retに「次のノード」を入れる。
-#define	KEYLIST_IMPL_ITERATE_FORWARD_(self, iterator, next_node, ret)\
+#define	KEYLIST_IMPL_ITERATE_FORWARD_(iterator, next_link, ret)\
 	do{\
 		ret = NULL;\
-		if((iterator)->coll != self){\
-			/*イテレータの出身が違うコレクションの場合、NG*/\
-			break;\
-		}\
-		if(next_node != NULL && (next_node)->coll != self){\
-			/*nextの所属イテレータが違う→書き換えられた可能性。手でnextを取り直す*/\
-			next_node = NULL;\
-			if((iterator)->curr != NULL && (iterator)->curr->coll == self){\
-				next_node = (iterator)->curr->next;\
+		if(next_link != NULL && (next_link)->coll != (iterator)->coll){\
+			/*nextの所属がイテレータと違う→書き換えられた可能性。手でnextを取り直す*/\
+			next_link = NULL;\
+			if((iterator)->curr != NULL && (iterator)->curr->coll == (iterator)->coll){\
+				next_link = (iterator)->curr->prev;\
 			}\
 		}\
-		if(next_node != NULL){\
-			/*イテレータを一つ進める*/\
-			(iterator)->prev = (iterator)->curr;\
-			(iterator)->curr = next_node;\
-			(iterator)->next = (next_node)->next;\
-			ret = next_node;\
+		if(next_link != NULL){\
+			/*イテレータを一つ戻す*/\
+			(iterator)->next = (iterator)->curr;\
+			(iterator)->curr = next_link;\
+			(iterator)->prev = (next_link)->prev;\
+			ret = next_link;\
 		}\
 	}while(0)
 	
 //後方イテレーションのパーツ。retに「前のノード」を入れる。
-#define	KEYLIST_IMPL_ITERATE_BACKWARD_(self, iterator, prev_node, ret)\
+#define	KEYLIST_IMPL_ITERATE_BACKWARD_(iterator, prev_link, ret)\
 	do{\
 		ret = NULL;\
-		if((iterator)->coll != self){\
-			/*イテレータの出身が違うコレクションの場合、NG*/\
-			break;\
-		}\
-		if(prev_node != NULL && (prev_node)->coll != self){\
-			/*prevの所属イテレータが違う→書き換えられた可能性。手でprevを取り直す*/\
-			prev_node = NULL;\
-			if((iterator)->curr != NULL && (iterator)->curr->coll == self){\
-				prev_node = (iterator)->curr->prev;\
+		if(prev_link != NULL && (prev_link)->coll != (iterator)->coll){\
+			/*prevの所属がイテレータと違う→書き換えられた可能性。手でprevを取り直す*/\
+			prev_link = NULL;\
+			if((iterator)->curr != NULL && (iterator)->curr->coll == (iterator)->coll){\
+				prev_link = (iterator)->curr->prev;\
 			}\
 		}\
-		if(prev_node != NULL){\
+		if(prev_link != NULL){\
 			/*イテレータを一つ戻す*/\
 			(iterator)->next = (iterator)->curr;\
-			(iterator)->curr = prev_node;\
-			(iterator)->prev = (prev_node)->prev;\
-			ret = prev_node;\
+			(iterator)->curr = prev_link;\
+			(iterator)->prev = (prev_link)->prev;\
+			ret = prev_link;\
 		}\
 	}while(0)
 

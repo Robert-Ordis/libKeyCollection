@@ -4,7 +4,6 @@
  *  \remarks	メンバを直接使うライブラリにつき、
  */
 
-#include "./keycollect_config.h"
 #include "./keylist_functions.h"
 #include "./private/keycollection_commons.h"
 

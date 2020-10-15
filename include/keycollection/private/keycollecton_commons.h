@@ -7,11 +7,11 @@
 
 //オフセットを指定すると、リンク構造体のポインタを内包する構造体を持ってこれる。
 #define	keycollection_get_container_ptr(offset, plink)\
-	((void*)((plink != NULL) ? ((char*)plink - (char*)offset) : NULL))
+	((void*)((plink != NULL) ? ((char*)plink - offset) : NULL))
 
 //オフセットを指定すると、リンク構造体のポインタを持ってきてくれる
 #define	keycollection_get_link_ptr(offset, pstruct)\
-	((void*)((plink != NULL) ? ((char*)pstruct + (char*)offset) : NULL))
+	((void*)((pstruct != NULL) ? ((char*)pstruct + offset) : NULL))
 
 
 #endif	/* !PRIVATE_KEYCOLLECTION_COMMONS_H_ */
