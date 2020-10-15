@@ -17,8 +17,9 @@ SRC_PROGRAM		=\
 				 main.c\
 
 #### default compilers ####
-CC	= gcc
+#CC	= gcc
 AR	= ar
+CC = clang
 
 ####build options####
 CFLAGS			= -Wall -O2

@@ -194,15 +194,15 @@ void*		keylist_iterator_forward_raw(size_t offset, keylist_iterator_t *iterator)
 void*		keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator);
 
 /**
- *  \def			keylist_iterator_ref_current
+ *  \def			keylist_iterator_ref_current_raw
  *  \brief		Refer the current node on the iterator.
  *  \param		offset	offset length to link member of the node..
  *  \param		*iterator	iterator instance.
  *  \return	Current node. If in the tail, NULL will be returned.
  *  \remarks	While iterating by this, You can safely delete the node from the list.
  */
-#define		keylist_iterator_ref_current(offset, iterator)\
-	(keycollection_get_container_ptr(offset, (iterator)->curr)
+#define		keylist_iterator_ref_current_raw(offset, iterator)\
+	(keycollection_get_container_ptr(offset, (iterator)->curr))
 
 /**
  *  \def			keylist_iterator_is_head_raw
@@ -227,14 +227,14 @@ void*		keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator
 	((iterator)->tail == (iterator)->curr)
 
 /**
- *  \def			keylist_link_get_belonged_raw
+ *  \def			keylist_link_get_belong_raw
  *  \brief		Get the list instance which the node belongs to.
  *  \param		offset	offset length to link member of the node.
  *  \param		*node	node instance.
  *  \return	The list instance which the node belongs to.
  */
-#define		keylist_link_get_belonged_raw(offset, node)\
-	((keylist_t *)(((keylist_link_t *)keycollection_get_link_ptr(node))->coll))
+#define		keylist_link_get_belong_raw(offset, node)\
+	((keylist_t *)(((keylist_link_t *)keycollection_get_link_ptr(offset, node))->coll))
 
 /**
  *  \def			keylist_link_get_next_raw
