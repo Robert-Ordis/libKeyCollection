@@ -20,10 +20,10 @@
  */
 typedef struct keylist_link_s keylist_link_t;
 struct keylist_link_s {
-	struct keylist_link_s	prev;			///previous pointer
-	struct keylist_link_s	next;			///next pointer.
-	void*					coll;			///pointer of container(e.g. keylist_t)
-}
+	struct keylist_link_s	*prev;			///previous pointer
+	struct keylist_link_s	*next;			///next pointer.
+	void					*coll;			///pointer of container(e.g. keylist_t)
+};
 
 /**
  *  \struct	keylist_t

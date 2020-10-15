@@ -92,6 +92,26 @@ void*		keylist_ref_nth_raw(size_t offset, keylist_t *self, int nth);
 int			keylist_add_raw(size_t offset, keylist_t *self, void *node);
 
 /**
+ *  \fn			keylist_add_head_raw
+ *  \brief		Add a node to the head of the list.
+ *  \param		offset	offset length to link member of the node.
+ *  \param		*self	list instance.
+ *  \param		*node	The node you want to add to *self.
+ *  \return	0: success, -1: error[tried to add the node already belongin in some list]
+ */
+int			keylist_add_head_raw(size_t offset, keylist_t *self, void *node);
+
+/**
+ *  \fn			keylist_add_tail_raw
+ *  \brief		Add a node to the tail of the list.
+ *  \param		offset	offset length to link member of the node.
+ *  \param		*self	list instance.
+ *  \param		*node	The node you want to add to *self.
+ *  \return	0: success, -1: error[tried to add the node already belongin in some list]
+ */
+int			keylist_add_tail_raw(size_t offset, keylist_t *self, void *node);
+
+/**
  *  \fn			keylist_del_raw
  *  \brief		Delete the node from the list.
  *  \param		offset	offset length to link member of the node.

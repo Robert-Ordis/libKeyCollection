@@ -11,11 +11,10 @@ TARGET_SLIB		=
 ####Source files####
 
 SRC_LIBPART		=\
-				 raw_implements.c\
+				 keylist_raw.c\
 
 SRC_PROGRAM		=\
 				 main.c\
-				 sampleListing.c\
 
 #### default compilers ####
 CC	= gcc

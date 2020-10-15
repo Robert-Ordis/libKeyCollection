@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-#include "./include/keylist.h"
-#include "./include/keylist_raw.h"
-#include "./include/private/keylist_inside.h"
-#include "./include/private/keycollection_lock.h"
+#include "./include/keycollection/keylist.h"
+#include "./include/keycollection/keylist_raw.h"
+#include "./include/keycollection/private/keylist_inside.h"
+#include "./include/keycollection/private/keycollection_lock.h"
 
 //void		keylist_init_raw(size_t offset, keylist_t *self);
 
@@ -23,6 +23,7 @@ void*			keylist_pop_head_raw(size_t offset, keylist_t *self){
 			KEYLIST_IMPL_DEL_(self, link, ret);
 		}
 	}KEYCOLLECT_LOCK_RELEASE_(self);
+	ret = ret;
 	return keycollection_get_container_ptr(offset, link);
 }
 
@@ -36,6 +37,7 @@ void*			keylist_pop_tail_raw(size_t offset, keylist_t *self){
 			KEYLIST_IMPL_DEL_(self, link, ret);
 		}
 	}KEYCOLLECT_LOCK_RELEASE_(self);
+	ret = ret;
 	return keycollection_get_container_ptr(offset, link);
 }
 
@@ -126,7 +128,7 @@ int				keylist_insert_after_raw(size_t offset, keylist_t *self, void *index_node
 }
 
 int				keylist_init_iterator_raw(size_t offset, keylist_t *self, keylist_iterator_t *iterator){
-	itarator->prev = self->tail;
+	iterator->prev = self->tail;
 	iterator->next = self->head;
 	iterator->curr = NULL;
 	iterator->coll = self;
@@ -155,20 +157,18 @@ int				keylist_init_iterator_from_raw(size_t offset, keylist_t *self, keylist_it
 void*			keylist_iterator_forward_raw(size_t offset, keylist_iterator_t *iterator){
 	keylist_link_t	*tmp_link = iterator->next;
 	keylist_link_t	*ret_link;
-	keylist_t		*self = (keylist_t *)iterator->coll;
-	KEYLIST_LOCK_ACQUIRE_(self);{
+	KEYCOLLECT_LOCK_ACQUIRE_(self);{
 		KEYLIST_IMPL_ITERATE_FORWARD_(iterator, tmp_link, ret_link);
-	}KEYLIST_LOCK_RELEASE_(self);
+	}KEYCOLLECT_LOCK_RELEASE_(self);
 	return keycollection_get_container_ptr(offset, ret_link);
 }
 
 void*			keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator){
 	keylist_link_t	*tmp_link = iterator->prev;
 	keylist_link_t	*ret_link;
-	keylist_t		*self = (keylist_t *)iterator->coll;
-	KEYLIST_LOCK_ACQUIRE_(self);{
+	KEYCOLLECT_LOCK_ACQUIRE_(self);{
 		KEYLIST_IMPL_ITERATE_BACKWARD_(iterator, tmp_link, ret_link);
-	}KEYLIST_LOCK_RELEASE_(self);
+	}KEYCOLLECT_LOCK_RELEASE_(self);
 	return keycollection_get_container_ptr(offset, ret_link);
 }
 

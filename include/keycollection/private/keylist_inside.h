@@ -52,18 +52,23 @@
 		\
 		(link)->prev = (self)->tail;\
 		(link)->next = NULL;\
+		(link)->coll = self;\
 		(self)->tail = link;\
 		(self)->size++;\
 		/*すでに末尾に誰かがいるのなら、巻き込んで再接続*/\
 		if((link)->prev != NULL){\
 			(link)->prev->next = link;\
 		}\
+		else{\
+			/*末尾にも誰もいないなら、先頭も自分になる*/\
+			(self)->head = link;\
+		}\
 		\
 		ret = 0;\
 	}while(0)
 	
 //該当リストの先頭へ追加。
-#define	KEYLIST_IMPL_ADD_TAIL_(self, link, ret)\
+#define	KEYLIST_IMPL_ADD_HEAD_(self, link, ret)\
 	do{\
 		if((link)->coll != NULL){\
 			ret = -1;\
@@ -71,11 +76,17 @@
 		}\
 		\
 		(link)->next = (self)->head;\
+		(link)->prev = NULL;\
+		(link)->coll = self;\
 		(self)->head = link;\
 		(self)->size++;\
-		/*すでに末尾に誰かがいるのなら、巻き込んで再接続*/\
+		/*すでに先頭に誰かがいるのなら、巻き込んで再接続*/\
 		if((link)->next != NULL){\
 			(link)->next->prev = link;\
+		}\
+		else{\
+			/*先頭にも誰もいないなら、末尾も自分になる*/\
+			(self)->tail = link;\
 		}\
 		\
 		ret = 0;\
@@ -100,6 +111,7 @@
 			break;\
 		}\
 		/*ここからはindex_linkは非NULL(コードサイズはちょっと増えるが…まあいいや)*/\
+		(link)->coll = self;\
 		/*index_linkの前（の前任）がいるのなら、そこもつなぎなおす。いないならlinkがhead*/\
 		if((index_link)->prev != NULL){\
 			(index_link)->prev->next = link;\
@@ -135,6 +147,7 @@
 			break;\
 		}\
 		\
+		(link)->coll = self;\
 		/*index_linkの後（の前任）がいるのなら、そこもつなぎなおす。いないならlinkがhead*/\
 		if((index_link)->next != NULL){\
 			(index_link)->next->prev = link;\
