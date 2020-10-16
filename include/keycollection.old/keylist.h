@@ -101,7 +101,7 @@
  *	\brief	構造体の後に行う各種宣言。
  *	\brief	yourlist_tとyourlist_iterator_t及び関連関数(yourlist_xxx)がの宣言出来上がる。
  */
-#define	keylist_define_prototypes(yourlist, basename, nodetype_s, link_member)\
+#define	keylist_define_prototypes(yourlist, nodetype_s, link_member)\
 	typedef			KEYLIST_INNER_TYPE_S_(basename) KEYLIST_T_(yourlist);\
 	typedef			KEYLIST_INNER_ITERATOR_TYPE_S_(basename) KEYLIST_ITERATOR_T_(yourlist);\
 	\

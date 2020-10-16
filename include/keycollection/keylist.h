@@ -35,6 +35,7 @@ struct keylist_s {
 	struct keylist_link_s*	head;	///Pointer to head link.
 	struct keylist_link_s*	tail;	///Pointer to tail link.
 	int						size;	///Counter for having nodes.
+	size_t					ofst;	///DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL
 	//2020-10-04/KK: ロックの搭載を試みたものの、今のバージョンではやめた。
 	//コンセプトとしてdestroyを提供しない以上、init & destroyをAPIとして提供するﾓﾉとは相性が悪い。
 	//スレッドセーフティについては、外側から提供してください。

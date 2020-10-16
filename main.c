@@ -11,7 +11,6 @@
 
 
 //コンセプト：めんどくさいキャストを排除。リストには常に一定の型しか入れない
-//コンセプト：メモリ仕様のやり方を突いた方法をとらない。これで複数リストを同一ノードで構成できる。（関数は増えるが）
 //コンセプト：イテレーションの実装
 
 typedef struct {
@@ -19,7 +18,10 @@ typedef struct {
 	double		b;
 	char		c;
 	uint64_t	d;
-	keylist_link_t	link;
+	struct{
+		keylist_link_t	link;
+		keylist_link_t	link2;
+	}lebs;
 } type_t;
 
 #define type_dbg_printf(pnode)\
@@ -29,7 +31,7 @@ typedef struct {
 			break;\
 		}\
 		printf("%s: [%p], a->%d, b->%f, c->0x%02x d->%llu\n", __func__, pnode, pnode->a, pnode->b, pnode->c, pnode->d);	\
-		printf("%s: [%p], link->%p, link.next->%p, link.prev->%p, link.coll->%p\n", __func__, pnode, &pnode->link, pnode->link.next, pnode->link.prev, pnode->link.coll);\
+		printf("%s: [%p], lebs.link2->%p, lebs.link2.next->%p, lebs.link2.prev->%p, lebs.link2.coll->%p\n", __func__, pnode, &pnode->lebs.link2, pnode->lebs.link2.next, pnode->lebs.link2.prev, pnode->lebs.link2.coll);\
 	}while(0)
 
 static int raw_test(){
@@ -42,7 +44,7 @@ static int raw_test(){
 	
 	type_t	nodes[NODENUM];
 	type_t	*pnode, *pnodeC;
-	size_t	offset = offsetof(type_t, link);
+	size_t	offset = offsetof(type_t, lebs.link2);
 	
 	int i, ret;
 	
@@ -299,7 +301,7 @@ static int generic_test(){
 	int i, ret;
 	
 	
-	keylist_init_generic(type_t, link, plist);
+	keylist_init_generic(type_t, lebs.link2, plist);
 	
 	memset(nodes, 0, sizeof(type_t) * NODENUM);
 	
@@ -311,15 +313,15 @@ static int generic_test(){
 		pnode->b = (double)i / 2.0;
 		pnode->c = (char)i;
 		printf("[%p] start.\n", pnode);
-		printf("%s: result of add_generic is %d\n", __func__, keylist_add_generic(type_t, link, plist, pnode));
+		printf("%s: result of add_generic is %d\n", __func__, keylist_add_generic(type_t, lebs.link2, plist, pnode));
 		type_dbg_printf(pnode);
 	}
 	
 	printf("%s: size->%d, head->%p, tail->%p\n", 
 		__func__, 
-		keylist_get_count_generic(type_t, link, plist),
-		keylist_ref_head_generic(type_t, link, plist),
-		keylist_ref_tail_generic(type_t, link, plist)
+		keylist_get_count_generic(type_t, lebs.link2, plist),
+		keylist_ref_head_generic(type_t, lebs.link2, plist),
+		keylist_ref_tail_generic(type_t, lebs.link2, plist)
 	);
 	
 	printf("\n\n");
@@ -328,39 +330,39 @@ static int generic_test(){
 	
 	printf("\n\n");
 	printf("%s: fast forward iterating\n", __func__);
-	for(pnode = keylist_ref_head_generic(type_t, link, plist); pnode != NULL; pnode = keylist_link_get_next_generic(type_t, link, pnode)){
+	for(pnode = keylist_ref_head_generic(type_t, lebs.link2, plist); pnode != NULL; pnode = keylist_link_get_next_generic(type_t, lebs.link2, pnode)){
 		printf("[%p] start.\n", pnode);
-		printf("%s: result of add_generic is %d\n", __func__, keylist_add_generic(type_t, link, plist, pnode));
+		printf("%s: result of add_generic is %d\n", __func__, keylist_add_generic(type_t, lebs.link2, plist, pnode));
 		type_dbg_printf(pnode);
 	}
 	
 	printf("\n\n");
-	keylist_init_iterator_generic(type_t, link, plist, it);
+	keylist_init_iterator_generic(type_t, lebs.link2, plist, it);
 	printf("%s: iterator forward iterating\n", __func__);
 	printf("%s: [%p], curr->%p, next->%p, prev->%p, coll->%p\n", __func__,
 		it, it->curr, it->next, it->prev, it->coll
 	);
-	while((pnode = keylist_iterator_forward_generic(type_t, link, it)) != NULL){
-		printf("%s: result of add_generic is %d\n", __func__, keylist_add_generic(type_t, link, plist, pnode));
+	while((pnode = keylist_iterator_forward_generic(type_t, lebs.link2, it)) != NULL){
+		printf("%s: result of add_generic is %d\n", __func__, keylist_add_generic(type_t, lebs.link2, plist, pnode));
 		type_dbg_printf(pnode);
 	}
 	
 	printf("\n\n");
 	printf("%s: fast backward iterating\n", __func__);
-	for(pnode = keylist_ref_tail_generic(type_t, link, plist); pnode != NULL; pnode = keylist_link_get_prev_generic(type_t, link, pnode)){
+	for(pnode = keylist_ref_tail_generic(type_t, lebs.link2, plist); pnode != NULL; pnode = keylist_link_get_prev_generic(type_t, lebs.link2, pnode)){
 		printf("[%p] start.\n", pnode);
-		printf("%s: result of add_generic is %d\n", __func__, keylist_add_generic(type_t, link, plist, pnode));
+		printf("%s: result of add_generic is %d\n", __func__, keylist_add_generic(type_t, lebs.link2, plist, pnode));
 		type_dbg_printf(pnode);
 	}
 	
 	printf("\n\n");
-	keylist_init_iterator_generic(type_t, link, plist, it);
+	keylist_init_iterator_generic(type_t, lebs.link2, plist, it);
 	printf("%s: iterator backward iterating\n", __func__);
 	printf("%s: [%p], curr->%p, next->%p, prev->%p, coll->%p\n", __func__,
 		it, it->curr, it->next, it->prev, it->coll
 	);
-	while((pnode = keylist_iterator_backward_generic(type_t, link, it)) != NULL){
-		printf("%s: result of add_generic is %d\n", __func__, keylist_add_generic(type_t, link, plist, pnode));
+	while((pnode = keylist_iterator_backward_generic(type_t, lebs.link2, it)) != NULL){
+		printf("%s: result of add_generic is %d\n", __func__, keylist_add_generic(type_t, lebs.link2, plist, pnode));
 		type_dbg_printf(pnode);
 	}
 	
@@ -368,28 +370,28 @@ static int generic_test(){
 	printf("%s: test for picking up\n", __func__);
 	
 	i = 0;
-	pnode = keylist_ref_nth_generic(type_t, link, plist, i);
+	pnode = keylist_ref_nth_generic(type_t, lebs.link2, plist, i);
 	printf("%s: index: %d\n", __func__, i);
 	type_dbg_printf(pnode);
 	
 	i = NODENUM / 2;
-	pnode = keylist_ref_nth_generic(type_t, link, plist, i);
+	pnode = keylist_ref_nth_generic(type_t, lebs.link2, plist, i);
 	printf("%s: index: %d\n", __func__, i);
 	type_dbg_printf(pnode);
 	
 	i = NODENUM + 1;
-	pnode = keylist_ref_nth_generic(type_t, link, plist, i);
+	pnode = keylist_ref_nth_generic(type_t, lebs.link2, plist, i);
 	printf("%s: index: %d\n", __func__, i);
 	type_dbg_printf(pnode);
 	
 	
 	i = -1;
-	pnode = keylist_ref_nth_generic(type_t, link, plist, i);
+	pnode = keylist_ref_nth_generic(type_t, lebs.link2, plist, i);
 	printf("%s: index: %d\n", __func__, i);
 	type_dbg_printf(pnode);
 	
 	i = -2;
-	pnode = keylist_ref_nth_generic(type_t, link, plist, i);
+	pnode = keylist_ref_nth_generic(type_t, lebs.link2, plist, i);
 	printf("%s: index: %d\n", __func__, i);
 	type_dbg_printf(pnode);
 	
@@ -397,112 +399,112 @@ static int generic_test(){
 	printf("%s: test fo popping.\n", __func__);
 	i = NODENUM / 10;
 	printf("%s: pop %dth node (shown as below)\n", __func__, i);
-	pnodeC = keylist_ref_nth_generic(type_t, link, plist, i);
-	printf("%s: deleting %p[a->%d] = %d\n", __func__, pnodeC, pnodeC->a, keylist_del_generic(type_t, link, plist, pnodeC));
+	pnodeC = keylist_ref_nth_generic(type_t, lebs.link2, plist, i);
+	printf("%s: deleting %p[a->%d] = %d\n", __func__, pnodeC, pnodeC->a, keylist_del_generic(type_t, lebs.link2, plist, pnodeC));
 	type_dbg_printf(pnodeC);
 	
 	i = NODENUM - 2;
 	printf("%s: insert after %dth(shown as below)\n", __func__, i);
-	pnode = keylist_ref_nth_generic(type_t, link, plist, i);
+	pnode = keylist_ref_nth_generic(type_t, lebs.link2, plist, i);
 	type_dbg_printf(pnode);
-	printf("%s: ret=%d\n", __func__, keylist_insert_after_generic(type_t, link, plist, pnode, pnodeC));
+	printf("%s: ret=%d\n", __func__, keylist_insert_after_generic(type_t, lebs.link2, plist, pnode, pnodeC));
 	
-	if(keylist_init_iterator_from_generic(type_t, link, plist, it, pnode) == 0){
+	if(keylist_init_iterator_from_generic(type_t, lebs.link2, plist, it, pnode) == 0){
 		do{
-			pnode = keylist_iterator_ref_current_generic(type_t, link, it);
+			pnode = keylist_iterator_ref_current_generic(type_t, lebs.link2, it);
 			type_dbg_printf(pnode);
-		}while(keylist_iterator_forward_generic(type_t, link, it) != NULL);
+		}while(keylist_iterator_forward_generic(type_t, lebs.link2, it) != NULL);
 	}
 	
 	printf("\n\n");
 	printf("%s: popping from head\n", __func__);
-	pnodeC = keylist_pop_head_generic(type_t, link, plist);
+	pnodeC = keylist_pop_head_generic(type_t, lebs.link2, plist);
 	type_dbg_printf(pnodeC);
 	
 	i = NODENUM - 1 - (NODENUM / 3);
 	printf("%s: insert before %d th(below)\n", __func__, i);
-	pnode = keylist_ref_nth_generic(type_t, link, plist, i);
+	pnode = keylist_ref_nth_generic(type_t, lebs.link2, plist, i);
 	type_dbg_printf(pnode);
-	printf("%s: ret=%d\n", __func__, keylist_insert_before_generic(type_t, link, plist, pnode, pnodeC));
+	printf("%s: ret=%d\n", __func__, keylist_insert_before_generic(type_t, lebs.link2, plist, pnode, pnodeC));
 	
-	if(keylist_init_iterator_from_generic(type_t, link, plist, it, pnode) == 0){
+	if(keylist_init_iterator_from_generic(type_t, lebs.link2, plist, it, pnode) == 0){
 		do{
-			pnode = keylist_iterator_ref_current_generic(type_t, link, it);
+			pnode = keylist_iterator_ref_current_generic(type_t, lebs.link2, it);
 			type_dbg_printf(pnode);
-		}while(keylist_iterator_backward_generic(type_t, link, it) != NULL);
+		}while(keylist_iterator_backward_generic(type_t, lebs.link2, it) != NULL);
 	}
 	
 	printf("%s: check the situation\n", __func__);
-	for(pnode = keylist_ref_head_generic(type_t, link, plist); pnode != NULL; pnode = keylist_link_get_next_generic(type_t, link, pnode)){
+	for(pnode = keylist_ref_head_generic(type_t, lebs.link2, plist); pnode != NULL; pnode = keylist_link_get_next_generic(type_t, lebs.link2, pnode)){
 		type_dbg_printf(pnode);
 	}
-	for(pnode = keylist_ref_tail_generic(type_t, link, plist); pnode != NULL; pnode = keylist_link_get_prev_generic(type_t, link, pnode)){
+	for(pnode = keylist_ref_tail_generic(type_t, lebs.link2, plist); pnode != NULL; pnode = keylist_link_get_prev_generic(type_t, lebs.link2, pnode)){
 		type_dbg_printf(pnode);
-		printf("%s: belongs to %p\n", __func__, keylist_link_get_belong_generic(type_t, link, pnode));
+		printf("%s: belongs to %p\n", __func__, keylist_link_get_belong_generic(type_t, lebs.link2, pnode));
 	}
 	
 	printf("\n\n");
 	
 	printf("%s: test for iterate-delete-insert test\n", __func__);
-	keylist_init_iterator_generic(type_t, link, plist, it);
-	while(pnode = keylist_iterator_forward_generic(type_t, link, it)){
+	keylist_init_iterator_generic(type_t, lebs.link2, plist, it);
+	while(pnode = keylist_iterator_forward_generic(type_t, lebs.link2, it)){
 		type_dbg_printf(pnode);
 		if(pnode->a % 3 == 2){
 			printf("%s ->move to head.\n", __func__);
-			keylist_del_generic(type_t, link, plist, pnode);
-			keylist_add_head_generic(type_t, link, plist, pnode);
+			keylist_del_generic(type_t, lebs.link2, plist, pnode);
+			keylist_add_head_generic(type_t, lebs.link2, plist, pnode);
 		}
 	}
 	
 	printf("%s: check the situation\n", __func__);
-	for(pnode = keylist_ref_head_generic(type_t, link, plist); pnode != NULL; pnode = keylist_link_get_next_generic(type_t, link, pnode)){
+	for(pnode = keylist_ref_head_generic(type_t, lebs.link2, plist); pnode != NULL; pnode = keylist_link_get_next_generic(type_t, lebs.link2, pnode)){
 		type_dbg_printf(pnode);
 	}
-	for(pnode = keylist_ref_tail_generic(type_t, link, plist); pnode != NULL; pnode = keylist_link_get_prev_generic(type_t, link, pnode)){
+	for(pnode = keylist_ref_tail_generic(type_t, lebs.link2, plist); pnode != NULL; pnode = keylist_link_get_prev_generic(type_t, lebs.link2, pnode)){
 		type_dbg_printf(pnode);
 	}
 	
 	printf("\n\n");
 	
 	printf("%s: test for iterate-delete-insert test\n", __func__);
-	keylist_init_iterator_generic(type_t, link, plist, it);
-	while(pnode = keylist_iterator_backward_generic(type_t, link, it)){
+	keylist_init_iterator_generic(type_t, lebs.link2, plist, it);
+	while(pnode = keylist_iterator_backward_generic(type_t, lebs.link2, it)){
 		type_dbg_printf(pnode);
 		if(pnode->a % 2 == 0){
 			printf("%s ->move to tail.\n", __func__);
-			keylist_del_generic(type_t, link, plist, pnode);
-			keylist_add_tail_generic(type_t, link, plist, pnode);
+			keylist_del_generic(type_t, lebs.link2, plist, pnode);
+			keylist_add_tail_generic(type_t, lebs.link2, plist, pnode);
 		}
 	}
 	
 	printf("%s: check the situation\n", __func__);
 	/*
-	for(pnode = keylist_ref_head_generic(type_t, link, plist); pnode != NULL; pnode = keylist_link_get_next_generic(type_t, link, pnode)){
+	for(pnode = keylist_ref_head_generic(type_t, lebs.link2, plist); pnode != NULL; pnode = keylist_link_get_next_generic(type_t, lebs.link2, pnode)){
 		type_dbg_printf(pnode);
 	}
-	for(pnode = keylist_ref_tail_generic(type_t, link, plist); pnode != NULL; pnode = keylist_link_get_prev_generic(type_t, link, pnode)){
+	for(pnode = keylist_ref_tail_generic(type_t, lebs.link2, plist); pnode != NULL; pnode = keylist_link_get_prev_generic(type_t, lebs.link2, pnode)){
 		type_dbg_printf(pnode);
 	}
 	*/
-	keylist_foreach_forward_generic(type_t, link, pnode, plist){
+	keylist_foreach_forward_generic(type_t, lebs.link2, pnode, plist){
 		type_dbg_printf(pnode);
 	}
-	keylist_foreach_backward_generic(type_t, link, pnode, plist){
+	keylist_foreach_backward_generic(type_t, lebs.link2, pnode, plist){
 		type_dbg_printf(pnode);
 	}
 	
 	printf("\n\n");
 	
 	printf("%s: test for clearing iteration (pop tail)\n", __func__);
-	while(pnode = keylist_pop_tail_generic(type_t, link, plist)){
+	while(pnode = keylist_pop_tail_generic(type_t, lebs.link2, plist)){
 		type_dbg_printf(pnode);
 	}
 	
 	printf("%s: check the situation\n", __func__);
-	for(pnode = keylist_ref_head_generic(type_t, link, plist); pnode != NULL; pnode = keylist_link_get_next_generic(type_t, link, pnode)){
+	for(pnode = keylist_ref_head_generic(type_t, lebs.link2, plist); pnode != NULL; pnode = keylist_link_get_next_generic(type_t, lebs.link2, pnode)){
 		type_dbg_printf(pnode);
 	}
-	for(pnode = keylist_ref_tail_generic(type_t, link, plist); pnode != NULL; pnode = keylist_link_get_prev_generic(type_t, link, pnode)){
+	for(pnode = keylist_ref_tail_generic(type_t, lebs.link2, plist); pnode != NULL; pnode = keylist_link_get_prev_generic(type_t, lebs.link2, pnode)){
 		type_dbg_printf(pnode);
 	}
 	
@@ -516,21 +518,21 @@ static int generic_test(){
 		type_dbg_printf(pnode);
 		if(pnode->a & 0x01){
 			//奇数
-			printf("%s:odd[%d]\n", __func__, keylist_insert_before_generic(type_t, link, plist, NULL, pnode));
+			printf("%s:odd[%d]\n", __func__, keylist_insert_before_generic(type_t, lebs.link2, plist, NULL, pnode));
 		}
 		else{
 			//偶数
-			printf("%s:even[%d]\n", __func__, keylist_insert_after_generic(type_t, link, plist, NULL, pnode));
+			printf("%s:even[%d]\n", __func__, keylist_insert_after_generic(type_t, lebs.link2, plist, NULL, pnode));
 		}
-		printf("%s: list count is %d\n", __func__, keylist_get_count_generic(type_t, link, plist));
+		printf("%s: list count is %d\n", __func__, keylist_get_count_generic(type_t, lebs.link2, plist));
 	}
 	
 	printf("%s: check the situation\n", __func__);
 	
-	keylist_foreach_forward_generic(type_t, link, pnode, plist){
+	keylist_foreach_forward_generic(type_t, lebs.link2, pnode, plist){
 		type_dbg_printf(pnode);
 	}
-	keylist_foreach_backward_generic(type_t, link, pnode, plist){
+	keylist_foreach_backward_generic(type_t, lebs.link2, pnode, plist){
 		type_dbg_printf(pnode);
 	}
 	

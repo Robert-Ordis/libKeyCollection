@@ -3,6 +3,8 @@
  *  \brief		definitions for generic linked list determined by type, member
  *  \brief		1st arg is type of target structure.
  *  \brief		2nd arg is keylist_link_t member in the target determined as 1st arg.
+ *  \remarks	This is just experimental API.
+ *  \remarks	This is NOT usable for incomplete type.
  */
 #include <stddef.h>
 #include "./keylist.h"
@@ -281,7 +283,7 @@
  *  \remarks	This is for Fast Iterating. But NEVER EDIT THE LIST WHILE ITERATING BY THIS.
  */
 #define		keylist_link_get_next_generic(type, member, node)\
-	(type *)(keycollection_get_container_ptr(offsetof(type, member), node->member.next))
+	(type *)(keycollection_get_container_ptr(offsetof(type, member), ((type *)node)->member.next))
 
 /**
  *  \def		keylist_link_get_prev_generic
@@ -293,7 +295,7 @@
  *  \remarks	This is for Fast Iterating. But NEVER EDIT THE LIST WHILE ITERATING BY THIS.
  */
 #define		keylist_link_get_prev_generic(type, member, node)\
-	(type *)(keycollection_get_container_ptr(offsetof(type, member), node->member.prev))
+	(type *)(keycollection_get_container_ptr(offsetof(type, member), ((type *)node)->member.prev))
 
 /**
  *  \def		keylist_foreach_forward_generic

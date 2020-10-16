@@ -4,7 +4,6 @@
  */
 
 #include <stdint.h>
-#include <pthread.h>
 #ifndef	KEYLIST_FUNCTIONS_H_
 #define	KEYLIST_FUNCTIONS_H_
 
@@ -42,44 +41,44 @@
 #define	KEYLIST_GET_COUNT_(yourlist)	yourlist##_get_count
 
 /**
- *	\fn			yourlist_refer_first
+ *	\fn			yourlist_ref_head
  *	\brief		リスト中の最初のノードを参照する
  *	\param		self	(yourlist_t*)取り扱うリスト
  *	\return			(nodetype_t*)先頭ノードのポインタ。ない場合はNULL
  */
-#define	KEYLIST_REF_FIRST_(yourlist)	yourlist##_refer_first
+#define	KEYLIST_REF_HEAD_(yourlist)	yourlist##_ref_head
 
 /**
- *	\fn			yourlist_refer_last
+ *	\fn			yourlist_ref_tail
  *	\brief		リスト中の最後のノードを参照する
  *	\param		self	(yourlist_t*)取り扱うリスト
  *	\return			(nodetype_t*)末尾ノードのポインタ。ない場合はNULL
  */
-#define	KEYLIST_REF_LAST_(yourlist)		yourlist##_refer_last
+#define	KEYLIST_REF_TAIL_(yourlist)		yourlist##_ref_tail
 
 /**
- *	\fn			yourlist_pop_first
+ *	\fn			yourlist_pop_head
  *	\brief		リスト中の最初のノードを削除して取得する
  *	\param		self	(yourlist_t*)取り扱うリスト
  *	\return			(nodetype_t*)先頭ノードのポインタ。ない場合はNULL。このノードはリストから削除される。
  */
-#define	KEYLIST_POP_FIRST_(yourlist)	yourlist##_pop_first
+#define	KEYLIST_POP_HEAD_(yourlist)	yourlist##_pop_head
 
 /**
- *	\fn			yourlist_pop_last
+ *	\fn			yourlist_pop_tail
  *	\brief		リスト中の最後のノードを削除して取得する
  *	\param		self	(yourlist_t*)取り扱うリスト
  *	\return			(nodetype_t*)末尾ノードのポインタ。ない場合はNULL。このノードはリストから削除される。
  */
-#define	KEYLIST_POP_LAST_(yourlist)		yourlist##_pop_last
+#define	KEYLIST_POP_TAIL_(yourlist)		yourlist##_pop_tail
 
 /**
- *	\fn			yourlist_get_belonged
+ *	\fn			yourlist_get_belong
  *	\brief		ノードが所属するリストを参照する
  *	\param		node	(nodetype_t*)対象ノード
  *	\return			(yourlist_t*)所属するリストのポインタ。ない場合はNULL。
  */
-#define	KEYLIST_GET_BELONGED_(yourlist)	yourlist##_get_belonged
+#define	KEYLIST_GET_BELONG_(yourlist)	yourlist##_get_belong
 
 /**
  *	\fn			yourlist_add
@@ -89,6 +88,24 @@
  *	\return			(int)成功時0、失敗時マイナス
  */
 #define	KEYLIST_ADD_(yourlist)			yourlist##_add
+
+/**
+ *	\fn			yourlist_add_head
+ *	\brief		リストの先頭にノードを加える
+ *	\param		self	(yourlist_t*)取り扱うリスト
+ *	\param		node	(node_type_t*)対象ノード
+ *	\return			(int)成功時0、失敗時マイナス
+ */
+#define	KEYLIST_ADD_HEAD_(yourlist)			yourlist##_add_head
+
+/**
+ *	\fn			yourlist_add_tail
+ *	\brief		リストの末尾にノードを加える
+ *	\param		self	(yourlist_t*)取り扱うリスト
+ *	\param		node	(node_type_t*)対象ノード
+ *	\return			(int)成功時0、失敗時マイナス
+ */
+#define	KEYLIST_ADD_TAIL_(yourlist)			yourlist##_add_tail
 
 /**
  *	\fn			yourlist_del
@@ -143,24 +160,24 @@
 #define	KEYLIST_INIT_ITERATOR_FROM_(yourlist)	yourlist##_init_iterator_from
 
 /**
- *	\fn			yourlist_iterate_forward
+ *	\fn			yourlist_iterator_forward
  *	\brief		前方向イテレーションを行う
  *	\param		self		(yourlist_t*)取り扱うリスト
  *	\param		iterator	(yourlist_iterator_t*)イテレータ
  *	\return				(node_type_t*)取得できたもの。もう続かない場合はNULL
  *	\remarks	ループ中、returnされたノードは削除してもよい。
  */
-#define	KEYLIST_ITERATE_FORWARD_(yourlist)		yourlist##_iterate_forward
+#define	KEYLIST_ITERATOR_FORWARD_(yourlist)		yourlist##_iterator_forward
 
 /**
- *	\fn			yourlist_iterate_backward
+ *	\fn			yourlist_iterator_backward
  *	\brief		後方向イテレーションを行う
  *	\param		self		(yourlist_t*)取り扱うリスト
  *	\param		iterator	(yourlist_iterator_t*)イテレータ
  *	\return				(node_type_t*)取得できたもの。もう続かない場合はNULL
  *	\remarks	ループ中、returnされたノードは削除してもよい。
  */
-#define	KEYLIST_ITERATE_BACKWARD_(yourlist)		yourlist##_iterate_backward
+#define	KEYLIST_ITERATOR_BACKWARD_(yourlist)		yourlist##_iterator_backward
 
 /**
  *	\fn			yourlist_iterator_is_head
@@ -169,7 +186,7 @@
  *	\return				(int)先頭なら1。それ以外では0。
  *	\remarks	ループ中、returnされたノードは削除してもよい。
  */
-#define	KEYLIST_ITERATOR_IS_HEAD_(yourlist)		yourlist##_is_head_of_iterator
+#define	KEYLIST_ITERATOR_IS_HEAD_(yourlist)		yourlist##_iterator_is_head
 
 /**
  *	\fn			yourlist_iterator_is_tail
@@ -178,30 +195,34 @@
  *	\return				(int)末尾なら1。それ以外では0。
  *	\remarks	ループ中、returnされたノードは削除してもよい。
  */
-#define	KEYLIST_ITERATOR_IS_TAIL_(yourlist)		yourlist##_is_tail_of_iterator
+#define	KEYLIST_ITERATOR_IS_TAIL_(yourlist)		yourlist##_iterator_is_tail
 
 /**
- *	\fn			yourlist_get_next
+ *	\fn			yourlist_iterator_ref_current
+ *	\brief		イテレータが今指しているノードを返す
+ *	\param		iterator	(yourlist_iterator_t*)イテレータ
+ *	\return				(node_type_t*)ノード。yourlist_iterator_forward/backwardで出たノード。
+ *	\remarks	ループ中、returnされたノードは削除してもよい。
+ */
+#define	KEYLIST_ITERATOR_REF_CURRENT_(yourlist)		yourlist##_iterator_ref_current
+
+/**
+ *	\fn			yourlist_link_get_next
  *	\brief		指定ノードの「次」を取得する
- *	\param		self		(yourlist_t*)取り扱うリスト
  *	\param		node		(node_type_t*)前に扱ったノード。NULLで先頭を返す。
  *	\return				(node_type_t*)取得できたもの。もう続かない場合はNULL
  *	\remarks	これを用いたループ中、returnされたノードを削除/編集してはならない。
  */
-#define	KEYLIST_GET_NEXT_(yourlist)	yourlist##_get_next
+#define	KEYLIST_LINK_GET_NEXT_(yourlist)	yourlist##_link_get_next
 
 /**
- *	\fn			yourlist_get_prev
+ *	\fn			yourlist_link_get_prev
  *	\brief		指定ノードの「前」を取得する
- *	\param		self		(yourlist_t*)取り扱うリスト
  *	\param		node		(node_type_t*)前に扱ったノード。NULLで末尾を返す。
  *	\return				(node_type_t*)取得できたもの。もう続かない場合はNULL
  *	\remarks	これを用いたループ中、returnされたノードを削除/編集してはならない。
  */
-#define	KEYLIST_GET_PREV_(yourlist)	yourlist##_get_prev
-
-//一応非公開関数。削除処理が大体共通するのでロックなしのものを設置。
-#define	KEYLIST_DEL_INLOCK_(yourlist)			yourlist##_del_inlock
+#define	KEYLIST_LINK_GET_PREV_(yourlist)	yourlist##_link_get_prev
 
 
 

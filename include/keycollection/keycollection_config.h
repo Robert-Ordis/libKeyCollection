@@ -2,17 +2,19 @@
 #define	KEYCOLLECT_CONFIG_H_
 
 /**
- *	\def	KEYLIST_GENERATE_FUNCS_AS_WRAPPER
- *	\brief	(config) making the generated Doubly linked list functions as wrapper or not.
- *	\param	0 for defining by blackmagic directly.Otherwise for defining as wrapper. 
+ *  \def		KEYLIST_GENERATE_FUNCS_AS_WRAPPER
+ *  \brief		(config) making the generated Doubly linked list functions as wrapper or not.
+ *  \remarks	If this is undefed, the generated funcs code will be bit faster but enlarged.
+ *  \remarks	Because, in undefed case, code of funcs will be defined DIRECTLY.
  */
-#define	KEYLIST_GENERATE_FUNCS_AS_WRAPPER_	1
+#define	KEYLIST_GENERATE_FUNCS_AS_WRAPPER
 
 /**
- *	\def	KEYTREE_GENERATE_FUNCS_AS_WRAPPER
- *	\brief	(config) making the generated Binary tree functions as wrapper or not.
- *	\param	0 for defining by blackmagic directly.Otherwise for defining as wrapper. 
+ *  \def		KEYTREE_GENERATE_FUNCS_AS_WRAPPER
+ *  \brief		(config) making the generated Binary tree functions as wrapper or not.
+ *  \remarks	If this is undefed, the generated funcs code will be bit faster but enlarged.
+ *  \remarks	Because, in undefed case, code of funcs will be defined DIRECTLY.
  */
-#define	KEYTREE_DEFINE_AS_WRAPPER_	1
+#define	KEYTREE_GENERATE_FUNCS_AS_WRAPPER
 
 #endif	/* !KEYCOLLECT_CONFIG_H_ */

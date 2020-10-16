@@ -1,4 +1,12 @@
-#include "./keylist.h"
+/**
+ *  \file		keylist_raw.h
+ *  \brief		definitions for linked list determined by offset of member in struct.
+ *  \brief		1st arg is type of target structure.
+ *  \brief		2nd arg is keylist_link_t member in the target determined as 1st arg.
+ *  \remarks	This is just experimental API.
+ *  \remarks	This is NOT usable for incomplete type.
+ */
+
 #include "./private/keycollection_commons.h"
 
 #ifndef	KEYLIST_RAW_H_
@@ -16,9 +24,10 @@
 		(self)->head = NULL;\
 		(self)->tail = NULL;\
 		(self)->size = 0;\
+		(self)->ofst = offset;\
 	}while(0)\
 
-//数の取得など、「参照だけ」になるマクロは左辺値にできないようにする
+//数の取得など、変数を直接示すようなマクロは左辺にできないようにする
 /**
  *  \def		keylist_get_count_raw
  *  \brief		Get contained num on the List.
@@ -164,7 +173,7 @@ int			keylist_init_iterator_raw(size_t offset, keylist_t *self, keylist_iterator
 /**
  *  \fn			keylist_init_iterator_from_raw
  *  \brief		Initialize the keylist_iterator_t, which is already iterated to *index_node.
- *  \param		offset	offset length to link member of the node..
+ *  \param		offset	offset length to link member of the node.
  *  \param		*self	list instance.
  *  \param		*iterator	iterator instance.
  *  \param		*index_node	The node you want to set as the start point.
@@ -176,7 +185,7 @@ int			keylist_init_iterator_from_raw(size_t offset, keylist_t *self, keylist_ite
 /**
  *  \fn			keylist_iterator_forward_raw
  *  \brief		Iterate to the next node.
- *  \param		offset	offset length to link member of the node..
+ *  \param		offset	offset length to link member of the node.
  *  \param		*iterator	iterator instance.
  *  \return	Next node. If in the tail, NULL will be returned.
  *  \remarks	While iterating by this, You can safely delete the node from the list.
