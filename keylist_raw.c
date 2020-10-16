@@ -15,29 +15,29 @@
 
 void*			keylist_pop_head_raw(size_t offset, keylist_t *self){
 	keylist_link_t *link = NULL;
-	int ret;
+	int ret = 0;
 	KEYCOLLECT_LOCK_ACQUIRE_(self);{
 		//link = keylist_ref_head_raw(size_t offset, keylist_t *self);
-		link = self->head;
-		if(link != NULL){
+		if(self->head != NULL){
+			link = self->head;
 			KEYLIST_IMPL_DEL_(self, link, ret);
 		}
 	}KEYCOLLECT_LOCK_RELEASE_(self);
-	ret = ret;
+	
 	return keycollection_get_container_ptr(offset, link);
 }
 
 void*			keylist_pop_tail_raw(size_t offset, keylist_t *self){
 	keylist_link_t *link = NULL;
-	int ret;
+	int ret = 0;
 	KEYCOLLECT_LOCK_ACQUIRE_(self);{
 		//link = keylist_ref_tail_raw(size_t offset, keylist_t *self);
-		link = self->tail;
-		if(link != NULL){
+		if(self->tail != NULL){
+			link = self->tail;
 			KEYLIST_IMPL_DEL_(self, link, ret);
 		}
 	}KEYCOLLECT_LOCK_RELEASE_(self);
-	ret = ret;
+	
 	return keycollection_get_container_ptr(offset, link);
 }
 

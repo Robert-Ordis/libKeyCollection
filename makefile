@@ -18,11 +18,11 @@ SRC_PROGRAM		=\
 
 #### default compilers ####
 #CC	= gcc
-AR	= ar
 CC = clang
+AR	= ar
 
 ####build options####
-CFLAGS			= -Wall -O2
+CFLAGS			= -Wall -O0 -g
 DEFS			= 
 CROSS_PREFIX	= 
 

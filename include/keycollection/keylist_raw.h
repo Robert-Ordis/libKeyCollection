@@ -194,7 +194,7 @@ void*		keylist_iterator_forward_raw(size_t offset, keylist_iterator_t *iterator)
 void*		keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator);
 
 /**
- *  \def			keylist_iterator_ref_current_raw
+ *  \def		keylist_iterator_ref_current_raw
  *  \brief		Refer the current node on the iterator.
  *  \param		offset	offset length to link member of the node..
  *  \param		*iterator	iterator instance.
@@ -205,7 +205,7 @@ void*		keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator
 	(keycollection_get_container_ptr(offset, (iterator)->curr))
 
 /**
- *  \def			keylist_iterator_is_head_raw
+ *  \def		keylist_iterator_is_head_raw
  *  \brief		Check if the current node is the head.
  *  \param		offset	unused.
  *  \param		*iterator	iterator instance.
@@ -216,7 +216,7 @@ void*		keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator
 	((iterator)->head == (iterator)->curr)
 
 /**
- *  \def			keylist_iterator_is_tail_raw
+ *  \def		keylist_iterator_is_tail_raw
  *  \brief		Check if the current node is the tail.
  *  \param		offset	unused.
  *  \param		*iterator	iterator instance.
@@ -227,7 +227,7 @@ void*		keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator
 	((iterator)->tail == (iterator)->curr)
 
 /**
- *  \def			keylist_link_get_belong_raw
+ *  \def		keylist_link_get_belong_raw
  *  \brief		Get the list instance which the node belongs to.
  *  \param		offset	offset length to link member of the node.
  *  \param		*node	node instance.
@@ -237,7 +237,7 @@ void*		keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator
 	((keylist_t *)(((keylist_link_t *)keycollection_get_link_ptr(offset, node))->coll))
 
 /**
- *  \def			keylist_link_get_next_raw
+ *  \def		keylist_link_get_next_raw
  *  \brief		Get the next node of the node directly.
  *  \param		offset	offset length to link member of the node.
  *  \param		*node	node instance.
@@ -248,7 +248,7 @@ void*		keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator
 	(keycollection_get_container_ptr(offset, ((keylist_link_t *)keycollection_get_link_ptr(offset, node))->next))
 
 /**
- *  \def			keylist_link_get_prev_raw
+ *  \def		keylist_link_get_prev_raw
  *  \brief		Get the previous node of the node directly.
  *  \param		offset	offset length to link member of the node.
  *  \param		*node	node instance.
@@ -258,5 +258,32 @@ void*		keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator
 #define		keylist_link_get_prev_raw(offset, node)\
 	(keycollection_get_container_ptr(offset, ((keylist_link_t *)keycollection_get_link_ptr(offset, node))->prev))
 
+/**
+ *  \def		keylist_foreach_forward_raw
+ *  \brief		Syntax sugar for fast forward iterating
+ *	\param		offset	offset length to link member of the node
+ *	\param		*node	working pointer of picking node
+ *	\param		*self	list instance
+ */
+#define		keylist_foreach_forward_raw(offset, node, self)\
+	for(\
+		node = keylist_ref_head_raw(offset, self);\
+		node != NULL;\
+		node = keylist_link_get_next_raw(offset, node)\
+	)
+
+/**
+ *  \def		keylist_foreach_backward_raw
+ *  \brief		Syntax sugar for fast backward iterating
+ *	\param		offset	offset length to link member of the node
+ *	\param		*node	working pointer of picking node
+ *	\param		*self	list instance
+ */
+#define		keylist_foreach_backward_raw(offset, node, self)\
+	for(\
+		node = keylist_ref_tail_raw(offset, self);\
+		node != NULL;\
+		node = keylist_link_get_prev_raw(offset, node)\
+	)
 
 #endif	/* !KEYLIST_RAW_H_ */
