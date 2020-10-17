@@ -42,6 +42,8 @@
 	\
 	int				KEYLIST_DEL_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node);\
 	\
+	int				KEYLIST_HAS_NODE_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node);\
+	\
 	int				KEYLIST_INSERT_BEFORE_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *index_node, nodetype_s *node);\
 	\
 	int				KEYLIST_INSERT_AFTER_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *index_node, nodetype_s *node);\
@@ -60,11 +62,11 @@
 	\
 	int				KEYLIST_ITERATOR_REF_CURRENT_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator);\
 	\
-	nodetype_s*		KEYLIST_LINK_GET_NEXT_(yourlist)(nodetype_s *node);\
+	nodetype_s*		KEYLIST_GET_NEXT_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node);\
 	\
-	nodetype_s*		KEYLIST_LINK_GET_PREV_(yourlist)(nodetype_s *node);\
+	nodetype_s*		KEYLIST_GET_PREV_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node);\
 	\
-	KEYLIST_T_(yourlist)* KEYLIST_LINK_GET_BELONGED_(yourlist)(nodetype_s* node);\
+	KEYLIST_T_(yourlist)* KEYLIST_LINK_GET_BELONG_(yourlist)(nodetype_s* node);\
 	\
 
 /**

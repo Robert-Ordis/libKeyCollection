@@ -12,6 +12,7 @@ TARGET_SLIB		=
 
 SRC_LIBPART		=\
 				 keylist_raw.c\
+				 keylist.c\
 
 SRC_PROGRAM		=\
 				 main.c\

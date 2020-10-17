@@ -182,8 +182,8 @@
 		}\
 		if(next_link != NULL){\
 			/*イテレータを一つ進める*/\
-			(iterator)->prev = (iterator)->curr;\
 			(iterator)->curr = next_link;\
+			(iterator)->prev = (next_link)->prev;\
 			(iterator)->next = (next_link)->next;\
 			ret = next_link;\
 		}\
@@ -202,8 +202,8 @@
 		}\
 		if(prev_link != NULL){\
 			/*イテレータを一つ戻す*/\
-			(iterator)->next = (iterator)->curr;\
 			(iterator)->curr = prev_link;\
+			(iterator)->next = (prev_link)->next;\
 			(iterator)->prev = (prev_link)->prev;\
 			ret = prev_link;\
 		}\

@@ -73,14 +73,6 @@
 #define	KEYLIST_POP_TAIL_(yourlist)		yourlist##_pop_tail
 
 /**
- *	\fn			yourlist_get_belong
- *	\brief		ノードが所属するリストを参照する
- *	\param		node	(nodetype_t*)対象ノード
- *	\return			(yourlist_t*)所属するリストのポインタ。ない場合はNULL。
- */
-#define	KEYLIST_GET_BELONG_(yourlist)	yourlist##_get_belong
-
-/**
  *	\fn			yourlist_add
  *	\brief		リストの末尾にノードを加える
  *	\param		self	(yourlist_t*)取り扱うリスト
@@ -207,22 +199,37 @@
 #define	KEYLIST_ITERATOR_REF_CURRENT_(yourlist)		yourlist##_iterator_ref_current
 
 /**
- *	\fn			yourlist_link_get_next
+ *	\fn			yourlist_has_node
+ *	\brief		ノードをリストが持っているかをチェックする
+ *	\param		node	(nodetype_t*)対象ノード
+ *	\return			(int)所属してる場合で1、それ以外で0
+ */
+#define	KEYLIST_HAS_NODE_(yourlist)	yourlist##_has_node
+
+/**
+ *	\fn			yourlist_get_next
  *	\brief		指定ノードの「次」を取得する
  *	\param		node		(node_type_t*)前に扱ったノード。NULLで先頭を返す。
  *	\return				(node_type_t*)取得できたもの。もう続かない場合はNULL
  *	\remarks	これを用いたループ中、returnされたノードを削除/編集してはならない。
  */
-#define	KEYLIST_LINK_GET_NEXT_(yourlist)	yourlist##_link_get_next
+#define	KEYLIST_GET_NEXT_(yourlist)	yourlist##_get_next
 
 /**
- *	\fn			yourlist_link_get_prev
+ *	\fn			yourlist_get_prev
  *	\brief		指定ノードの「前」を取得する
  *	\param		node		(node_type_t*)前に扱ったノード。NULLで末尾を返す。
  *	\return				(node_type_t*)取得できたもの。もう続かない場合はNULL
  *	\remarks	これを用いたループ中、returnされたノードを削除/編集してはならない。
  */
-#define	KEYLIST_LINK_GET_PREV_(yourlist)	yourlist##_link_get_prev
+#define	KEYLIST_GET_PREV_(yourlist)	yourlist##_get_prev
+
+/**
+ *	\fn			yourlist_get_belong
+ *	\brief		ノードが所属するリストを参照する
+ *	\return			(yourlist_t*)所属するリストのポインタ。ない場合はNULL。
+ */
+#define	KEYLIST_GET_BELONG_(yourlist)	yourlist##_get_belong
 
 
 

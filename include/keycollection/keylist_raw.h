@@ -179,6 +179,7 @@ int			keylist_init_iterator_raw(size_t offset, keylist_t *self, keylist_iterator
  *  \param		*index_node	The node you want to set as the start point.
  *  \return	0: success
  *  \return	-2: error[*index_node doesn't belong to *self]
+ *  \remarks	After this, next "keylist_iterator_forward_raw/backward_raw" returns *index_node as you specified.
  */
 int			keylist_init_iterator_from_raw(size_t offset, keylist_t *self, keylist_iterator_t *iterator, void *index_node);
 

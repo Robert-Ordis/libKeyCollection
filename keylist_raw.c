@@ -145,9 +145,9 @@ int				keylist_init_iterator_from_raw(size_t offset, keylist_t *self, keylist_it
 	if(index_link->coll != self){
 		return -2;
 	}
-	iterator->curr = index_link;
-	iterator->next = index_link->next;
-	iterator->prev = index_link->prev;
+	iterator->curr = NULL;
+	iterator->next = index_link;
+	iterator->prev = index_link;
 	iterator->coll = (void*)self;
 	iterator->head = self->head;
 	iterator->tail = self->tail;
