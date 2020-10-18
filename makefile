@@ -20,8 +20,8 @@ SRC_PROGRAM		=\
 				 sampleCollection.c\
 
 #### default compilers ####
-CC	= gcc
-#CC = clang
+#CC	= gcc
+CC = clang
 AR	= ar
 
 ####build options####

@@ -10,6 +10,33 @@
 //ret: [-2]->参照用のノードは指定のリストとは違うものに所属している
 
 //該当リストからの消去。selfはリスト相当、linkはリンクメンバのポインタ、retは戻り値
+
+#define	KEYLIST_IMPL_REF_NTH_(self, link, i)\
+	do{\
+		link = NULL;\
+		if(i >= (self)->size){\
+			link = NULL;\
+			break;\
+		}\
+		if(i < ((self)->size * -1)){\
+			link = NULL;\
+			break;\
+		}\
+		if(i >= 0){\
+			link = (self)->head;\
+			for(; i > 0 && link != NULL; i--){\
+				link = (link)->next;\
+			}\
+		}\
+		\
+		if(i < 0){\
+			link = (self)->tail;\
+			for(; i < -1 && link != NULL; i++){\
+				link = (link)->prev;\
+			}\
+		}\
+	}while(0)
+
 #define	KEYLIST_IMPL_DEL_(self, link, ret)\
 	do{\
 		if((link)->coll != self){\

@@ -40,32 +40,11 @@ void*			keylist_pop_tail_raw(size_t offset, keylist_t *self){
 	return keycollection_get_container_ptr(offset, link);
 }
 
-//マイナスの場合は末尾から、かな？
 void*			keylist_ref_nth_raw(size_t offset, keylist_t *self, int nth){
-	keylist_link_t *link = NULL;
-	int i = nth;
-	if(i >= self->size){
-		return NULL;
-	}
-	if(i < (self->size * -1)){
-		return NULL;
-	}
+	keylist_link_t *link = NULL;\
+	int i = nth;\
 	KEYCOLLECT_LOCK_ACQUIRE_(self);{
-		
-		if(i >= 0){
-			link = self->head;
-			for(; i > 0 && link != NULL; i--){
-				link = link->next;
-			}
-		}
-		
-		if(i < 0){
-			link = self->tail;
-			for(; i < -1 && link != NULL; i++){
-				link = link->prev;
-			}
-		}
-		
+		KEYLIST_IMPL_REF_NTH_(self, link, i);
 	}KEYCOLLECT_LOCK_RELEASE_(self);
 	return keycollection_get_container_ptr(offset, link);
 }

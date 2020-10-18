@@ -5,6 +5,7 @@
  */
 
 #include <stdint.h>
+#include <stddef.h>
 #include "../keylist.h"
 #include "../keylist_raw.h"
 #include "../keylist_functions.h"
@@ -74,28 +75,8 @@
 	nodetype_s*		KEYLIST_REF_NTH_(yourlist)(KEYLIST_T_(yourlist) *self, int nth){\
 		keylist_link_t *link = NULL;\
 		int i = nth;\
-		if(i >= self->size){\
-			return NULL;\
-		}\
-		if(i < (self->size * -1)){\
-			return NULL;\
-		}\
 		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
-			\
-			if(i >= 0){\
-				link = self->head;\
-				for(; i > 0 && link != NULL; i--){\
-					link = link->next;\
-				}\
-			}\
-			\
-			if(i < 0){\
-				link = self->tail;\
-				for(; i < -1 && link != NULL; i++){\
-					link = link->prev;\
-				}\
-			}\
-			\
+			KEYLIST_IMPL_REF_NTH_(self, link, i);\
 		}KEYCOLLECT_LOCK_RELEASE_(self);\
 		return keycollection_get_container_ptr(offsetof(nodetype_s, link_member), link);\
 	}\

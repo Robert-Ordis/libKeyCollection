@@ -5,6 +5,7 @@
  */
 
 #include <stdint.h>
+#include <stddef.h>
 #include "../keylist.h"
 #include "../keylist_raw.h"
 #include "../keylist_functions.h"
