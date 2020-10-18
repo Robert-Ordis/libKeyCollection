@@ -1,10 +1,9 @@
 /**
  *  \file		keylist_raw.h
- *  \brief		definitions for linked list determined by offset of member in struct.
- *  \brief		1st arg is type of target structure.
- *  \brief		2nd arg is keylist_link_t member in the target determined as 1st arg.
+ *  \brief		definitions for linked list determines the linking-member's address by offset.
+ *  \brief		1st arg is the offset address distance for linking-member of the structure.
  *  \remarks	This is just experimental API.
- *  \remarks	This is NOT usable for incomplete type.
+ *  \remarks	This may NOT be usable for incomplete type.
  */
 
 #include "./private/keycollection_commons.h"
