@@ -1,20 +1,6 @@
 //generic版は使用が思ったよりめんどくさかったのでやめようかなと。
 
-//keylistに関しては、polymorphism版とgenerator版を書けばもう問題なく動くはずよ。
-//でもまあ、ここでしっかり立ち止まって、コード削減版と贅沢版の2つを作り分けられることを実証してあげなきゃ。
-
-#if defined(KEYLIST_GENERATE_FUNCS_AS_WRAPPER)
-
-#define	keylist_define_implements\
-	/*put codes as just wrapper.*/\
-	
-#else
-
-#define	keylist_define_implements\
-	/*put codes directly*/\
-
-#endif /* KEYLIST_GENERATE_FUNCS_AS_WRAPPER */
-	
+//keylistに関しては、やりたかったことひとまず全部実装完了。
 
 //keytree、だね。問題は。
 //keytree_xxx_rawでは、find_xx_valueが組めない。(VLAとかallocaにおんぶ抱っこは怖いお)

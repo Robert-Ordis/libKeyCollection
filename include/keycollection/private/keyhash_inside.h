@@ -1,9 +1,9 @@
 /**
- *  \file	keyhash_implementations.h
+ *  \file	private/keyhash_inside.h
  *  \brief	ハッシュに関する実装コードのパーツの寄せ集め
  */
-#ifndef	KEYHASH_IMPLEMENTATIONS_H_
-#define	KEYHASH_IMPLEMENTATIONS_H_
+#ifndef	PRIVATE_KEYHASH_INSIDE_H_
+#define	PRIVATE_KEYHASH_INSIDE_H_
 
 //ハッシュ値の計算
 #define			KEYHASH_IMPL_CALC_HASH_(self, node, ret)\
@@ -14,4 +14,4 @@
 		}\
 	}while(0)
 
-#endif	/* !KEYHASH_IMPLEMENTATIONS_H_ */
+#endif	/* !PRIVATE_KEYHASH_INSIDE_H_ */
