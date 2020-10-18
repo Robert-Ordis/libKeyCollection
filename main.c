@@ -1,11 +1,12 @@
 #include <keycollection/keylist.h>
 #include <keycollection/keylist_raw.h>
-#include <keycollection/keylist_witchcraft.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h>
 #include <time.h>
+
+#include "./sampleCollection.h"
 
 #define	NODENUM 10
 
@@ -13,26 +14,8 @@
 //コンセプト：めんどくさいキャストを排除。リストには常に一定の型しか入れない
 //コンセプト：イテレーションの実装
 
-typedef struct {
-	int			a;
-	double		b;
-	char		c;
-	uint64_t	d;
-	struct{
-		keylist_link_t	link;
-		keylist_link_t	link2;
-	}lebs;
-} type_t;
+int type_test();
 
-#define type_dbg_printf(pnode)\
-	do{\
-		if(pnode == NULL){\
-			printf("%s: nullptr\n", __func__);\
-			break;\
-		}\
-		printf("%s: [%p], a->%d, b->%f, c->0x%02x d->%llu\n", __func__, pnode, pnode->a, pnode->b, pnode->c, pnode->d);	\
-		printf("%s: [%p], lebs.link2->%p, lebs.link2.next->%p, lebs.link2.prev->%p, lebs.link2.coll->%p\n", __func__, pnode, &pnode->lebs.link2, pnode->lebs.link2.next, pnode->lebs.link2.prev, pnode->lebs.link2.coll);\
-	}while(0)
 
 static int poly_test(){
 	
@@ -62,7 +45,7 @@ static int poly_test(){
 		pnode->c = (char)i;
 		printf("[%p] start.\n", pnode);
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add(plist, pnode));
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("%s: size->%d, head->%p, tail->%p\n", 
@@ -81,7 +64,7 @@ static int poly_test(){
 	for(pnode = keylist_ref_head(plist); pnode != NULL; pnode = keylist_get_next(plist, pnode)){
 		printf("[%p] start.\n", pnode);
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add(plist, pnode));
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -92,7 +75,7 @@ static int poly_test(){
 	);
 	while((pnode = keylist_iterator_forward(it)) != NULL){
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add(plist, pnode));
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -100,7 +83,7 @@ static int poly_test(){
 	for(pnode = keylist_ref_tail(plist); pnode != NULL; pnode = keylist_get_prev(plist, pnode)){
 		printf("[%p] start.\n", pnode);
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add(plist, pnode));
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -111,7 +94,7 @@ static int poly_test(){
 	);
 	while((pnode = keylist_iterator_backward(it)) != NULL){
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add(plist, pnode));
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -120,43 +103,43 @@ static int poly_test(){
 	i = 0;
 	pnode = keylist_ref_nth(plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = NODENUM / 2;
 	pnode = keylist_ref_nth(plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = NODENUM + 1;
 	pnode = keylist_ref_nth(plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	
 	i = -1;
 	pnode = keylist_ref_nth(plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = -2;
 	pnode = keylist_ref_nth(plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = -9;
 	pnode = keylist_ref_nth(plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = -10;
 	pnode = keylist_ref_nth(plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = -20;
 	pnode = keylist_ref_nth(plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	printf("\n\n");
 	printf("%s: test for popping.\n", __func__);
@@ -164,43 +147,43 @@ static int poly_test(){
 	printf("%s: pop %dth node (shown as below)\n", __func__, i);
 	pnodeC = keylist_ref_nth(plist, i);
 	printf("%s: deleting %p[a->%d] = %d\n", __func__, pnodeC, pnodeC->a, keylist_del(plist, pnodeC));
-	type_dbg_printf(pnodeC);
+	type_dbg_printf(pnodeC, lebs.link2);
 	
 	i = NODENUM - 2;
 	printf("%s: insert after %dth(shown as below)\n", __func__, i);
 	pnode = keylist_ref_nth(plist, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	printf("%s: ret=%d\n", __func__, keylist_insert_after(plist, pnode, pnodeC));
 	
 	if(keylist_init_iterator_from(plist, it, pnode) == 0){
 		while((pnode = keylist_iterator_forward(it)) != NULL){
-			type_dbg_printf(pnode);
+			type_dbg_printf(pnode, lebs.link2);
 		}
 	}
 	
 	printf("\n\n");
 	printf("%s: popping from head\n", __func__);
 	pnodeC = keylist_pop_head(plist);
-	type_dbg_printf(pnodeC);
+	type_dbg_printf(pnodeC, lebs.link2);
 	
 	i = NODENUM - 1 - (NODENUM / 3);
 	printf("%s: insert before %d th(below)\n", __func__, i);
 	pnode = keylist_ref_nth(plist, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	printf("%s: ret=%d\n", __func__, keylist_insert_before(plist, pnode, pnodeC));
 	
 	if(keylist_init_iterator_from(plist, it, pnode) == 0){
 		while((pnode = keylist_iterator_backward(it)) != NULL){
-			type_dbg_printf(pnode);
+			type_dbg_printf(pnode, lebs.link2);
 		}
 	}
 	
 	printf("%s: check the situation\n", __func__);
 	for(pnode = keylist_ref_head(plist); pnode != NULL; pnode = keylist_get_next(plist, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	for(pnode = keylist_ref_tail(plist); pnode != NULL; pnode = keylist_get_prev(plist, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 		printf("%s: belongs to %p->%d\n", __func__, plist, keylist_has_node(plist, pnode));
 	}
 	
@@ -209,7 +192,7 @@ static int poly_test(){
 	printf("%s: test for iterate-delete-insert test\n", __func__);
 	keylist_init_iterator(plist, it);
 	while(pnode = keylist_iterator_forward(it)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 		if(pnode->a % 3 == 2){
 			printf("%s ->move to head.\n", __func__);
 			keylist_del(plist, pnode);
@@ -219,10 +202,10 @@ static int poly_test(){
 	
 	printf("%s: check the situation\n", __func__);
 	for(pnode = keylist_ref_head(plist); pnode != NULL; pnode = keylist_get_next(plist, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	for(pnode = keylist_ref_tail(plist); pnode != NULL; pnode = keylist_get_prev(plist, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -230,7 +213,7 @@ static int poly_test(){
 	printf("%s: test for iterate-delete-insert test\n", __func__);
 	keylist_init_iterator(plist, it);
 	while(pnode = keylist_iterator_backward(it)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 		if(pnode->a % 2 == 0){
 			printf("%s ->move to tail.\n", __func__);
 			keylist_del(plist, pnode);
@@ -241,32 +224,32 @@ static int poly_test(){
 	printf("%s: check the situation\n", __func__);
 	/*
 	for(pnode = keylist_ref_head(plist); pnode != NULL; pnode = keylist_link_get_next(pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	for(pnode = keylist_ref_tail(plist); pnode != NULL; pnode = keylist_link_get_prev(pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	*/
 	keylist_foreach_forward(pnode, plist){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	keylist_foreach_backward(pnode, plist){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
 	
 	printf("%s: test for clearing iteration (pop tail)\n", __func__);
 	while(pnode = keylist_pop_tail(plist)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("%s: check the situation\n", __func__);
 	for(pnode = keylist_ref_head(plist); pnode != NULL; pnode = keylist_get_next(plist, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	for(pnode = keylist_ref_tail(plist); pnode != NULL; pnode = keylist_get_prev(plist, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -276,7 +259,7 @@ static int poly_test(){
 	for(i = 0; i < NODENUM; i++){
 		pnode = &nodes[i];
 		printf("[%p] start.\n", pnode);
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 		if(pnode->a & 0x01){
 			//奇数
 			printf("%s:odd[%d]\n", __func__, keylist_insert_before(plist, NULL, pnode));
@@ -291,10 +274,10 @@ static int poly_test(){
 	printf("%s: check the situation\n", __func__);
 	
 	keylist_foreach_forward(pnode, plist){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	keylist_foreach_backward(pnode, plist){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	return 0;
@@ -328,7 +311,7 @@ static int raw_test(){
 		pnode->c = (char)i;
 		printf("[%p] start.\n", pnode);
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add_raw(offset, plist, pnode));
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("%s: size->%d, head->%p, tail->%p\n", 
@@ -347,7 +330,7 @@ static int raw_test(){
 	for(pnode = keylist_ref_head_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_next_raw(offset, pnode)){
 		printf("[%p] start.\n", pnode);
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add_raw(offset, plist, pnode));
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -358,7 +341,7 @@ static int raw_test(){
 	);
 	while((pnode = keylist_iterator_forward_raw(offset, it)) != NULL){
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add_raw(offset, plist, pnode));
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -366,7 +349,7 @@ static int raw_test(){
 	for(pnode = keylist_ref_tail_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_prev_raw(offset, pnode)){
 		printf("[%p] start.\n", pnode);
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add_raw(offset, plist, pnode));
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -377,7 +360,7 @@ static int raw_test(){
 	);
 	while((pnode = keylist_iterator_backward_raw(offset, it)) != NULL){
 		printf("%s: result of add_raw is %d\n", __func__, keylist_add_raw(offset, plist, pnode));
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -386,43 +369,43 @@ static int raw_test(){
 	i = 0;
 	pnode = keylist_ref_nth_raw(offset, plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = NODENUM / 2;
 	pnode = keylist_ref_nth_raw(offset, plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = NODENUM + 1;
 	pnode = keylist_ref_nth_raw(offset, plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	
 	i = -1;
 	pnode = keylist_ref_nth_raw(offset, plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = -2;
 	pnode = keylist_ref_nth_raw(offset, plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = -9;
 	pnode = keylist_ref_nth_raw(offset, plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = -10;
 	pnode = keylist_ref_nth_raw(offset, plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	i = -20;
 	pnode = keylist_ref_nth_raw(offset, plist, i);
 	printf("%s: index: %d\n", __func__, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	
 	printf("\n\n");
 	printf("%s: test for popping.\n", __func__);
@@ -430,43 +413,43 @@ static int raw_test(){
 	printf("%s: pop %dth node (shown as below)\n", __func__, i);
 	pnodeC = keylist_ref_nth_raw(offset, plist, i);
 	printf("%s: deleting %p[a->%d] = %d\n", __func__, pnodeC, pnodeC->a, keylist_del_raw(offset, plist, pnodeC));
-	type_dbg_printf(pnodeC);
+	type_dbg_printf(pnodeC, lebs.link2);
 	
 	i = NODENUM - 2;
 	printf("%s: insert after %dth(shown as below)\n", __func__, i);
 	pnode = keylist_ref_nth_raw(offset, plist, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	printf("%s: ret=%d\n", __func__, keylist_insert_after_raw(offset, plist, pnode, pnodeC));
 	
 	if(keylist_init_iterator_from_raw(offset, plist, it, pnode) == 0){
 		while((pnode = keylist_iterator_forward_raw(offset, it)) != NULL){
-			type_dbg_printf(pnode);
+			type_dbg_printf(pnode, lebs.link2);
 		}
 	}
 	
 	printf("\n\n");
 	printf("%s: popping from head\n", __func__);
 	pnodeC = keylist_pop_head_raw(offset, plist);
-	type_dbg_printf(pnodeC);
+	type_dbg_printf(pnodeC, lebs.link2);
 	
 	i = NODENUM - 1 - (NODENUM / 3);
 	printf("%s: insert before %d th(below)\n", __func__, i);
 	pnode = keylist_ref_nth_raw(offset, plist, i);
-	type_dbg_printf(pnode);
+	type_dbg_printf(pnode, lebs.link2);
 	printf("%s: ret=%d\n", __func__, keylist_insert_before_raw(offset, plist, pnode, pnodeC));
 	
 	if(keylist_init_iterator_from_raw(offset, plist, it, pnode) == 0){
 		while((pnode = keylist_iterator_backward_raw(offset, it)) != NULL){
-			type_dbg_printf(pnode);
+			type_dbg_printf(pnode, lebs.link2);
 		}
 	}
 	
 	printf("%s: check the situation\n", __func__);
 	for(pnode = keylist_ref_head_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_next_raw(offset, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	for(pnode = keylist_ref_tail_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_prev_raw(offset, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 		printf("%s: belongs to %p\n", __func__, keylist_link_get_belong_raw(offset, pnode));
 	}
 	
@@ -475,7 +458,7 @@ static int raw_test(){
 	printf("%s: test for iterate-delete-insert test\n", __func__);
 	keylist_init_iterator_raw(offset, plist, it);
 	while(pnode = keylist_iterator_forward_raw(offset, it)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 		if(pnode->a % 3 == 2){
 			printf("%s ->move to head.\n", __func__);
 			keylist_del_raw(offset, plist, pnode);
@@ -485,10 +468,10 @@ static int raw_test(){
 	
 	printf("%s: check the situation\n", __func__);
 	for(pnode = keylist_ref_head_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_next_raw(offset, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	for(pnode = keylist_ref_tail_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_prev_raw(offset, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -496,7 +479,7 @@ static int raw_test(){
 	printf("%s: test for iterate-delete-insert test\n", __func__);
 	keylist_init_iterator_raw(offset, plist, it);
 	while(pnode = keylist_iterator_backward_raw(offset, it)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 		if(pnode->a % 2 == 0){
 			printf("%s ->move to tail.\n", __func__);
 			keylist_del_raw(offset, plist, pnode);
@@ -507,32 +490,32 @@ static int raw_test(){
 	printf("%s: check the situation\n", __func__);
 	/*
 	for(pnode = keylist_ref_head_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_next_raw(offset, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	for(pnode = keylist_ref_tail_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_prev_raw(offset, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	*/
 	keylist_foreach_forward_raw(offset, pnode, plist){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	keylist_foreach_backward_raw(offset, pnode, plist){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
 	
 	printf("%s: test for clearing iteration (pop tail)\n", __func__);
 	while(pnode = keylist_pop_tail_raw(offset, plist)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("%s: check the situation\n", __func__);
 	for(pnode = keylist_ref_head_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_next_raw(offset, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	for(pnode = keylist_ref_tail_raw(offset, plist); pnode != NULL; pnode = keylist_link_get_prev_raw(offset, pnode)){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	printf("\n\n");
@@ -542,7 +525,7 @@ static int raw_test(){
 	for(i = 0; i < NODENUM; i++){
 		pnode = &nodes[i];
 		printf("[%p] start.\n", pnode);
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 		if(pnode->a & 0x01){
 			//奇数
 			printf("%s:odd[%d]\n", __func__, keylist_insert_before_raw(offset, plist, NULL, pnode));
@@ -557,10 +540,10 @@ static int raw_test(){
 	printf("%s: check the situation\n", __func__);
 	
 	keylist_foreach_forward_raw(offset, pnode, plist){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	keylist_foreach_backward_raw(offset, pnode, plist){
-		type_dbg_printf(pnode);
+		type_dbg_printf(pnode, lebs.link2);
 	}
 	
 	return 0;
@@ -572,5 +555,6 @@ static int raw_test(){
 int main(int argc, char *argv[]){
 	raw_test();
 	poly_test();
+	type_test();
 }
 

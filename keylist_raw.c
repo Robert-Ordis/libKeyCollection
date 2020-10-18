@@ -17,7 +17,6 @@ void*			keylist_pop_head_raw(size_t offset, keylist_t *self){
 	keylist_link_t *link = NULL;
 	int ret = 0;
 	KEYCOLLECT_LOCK_ACQUIRE_(self);{
-		//link = keylist_ref_head_raw(size_t offset, keylist_t *self);
 		if(self->head != NULL){
 			link = self->head;
 			KEYLIST_IMPL_DEL_(self, link, ret);

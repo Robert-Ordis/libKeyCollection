@@ -73,6 +73,15 @@
 #define	KEYLIST_POP_TAIL_(yourlist)		yourlist##_pop_tail
 
 /**
+ *	\fn			yourlist_ref_nth
+ *	\brief		N番目のノードを参照する
+ *	\param		self	(yourlist_t*)取り扱うリスト
+ *	\param		nth		(int)0を基準とした数。0で先頭、増えていってその後ろ。-1だと末尾。減っていってその前
+ */
+
+#define	KEYLIST_REF_NTH_(yourlist)		yourlist##_ref_nth
+
+/**
  *	\fn			yourlist_add
  *	\brief		リストの末尾にノードを加える
  *	\param		self	(yourlist_t*)取り扱うリスト

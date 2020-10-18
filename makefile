@@ -16,14 +16,17 @@ SRC_LIBPART		=\
 
 SRC_PROGRAM		=\
 				 main.c\
+				 test2.c\
+				 sampleCollection.c\
 
 #### default compilers ####
-#CC	= gcc
-CC = clang
+CC	= gcc
+#CC = clang
 AR	= ar
 
 ####build options####
-CFLAGS			= -Wall -O0 -g
+#CFLAGS			= -Wall -O0 -g
+CFLAGS			= -Wall -O2 -g
 DEFS			= 
 CROSS_PREFIX	= 
 
