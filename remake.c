@@ -31,6 +31,19 @@ yourtree_find_lt_value(ptree, value_ptr, value_len);
 
 //keytreeの乱数は普通にrandomで生成する。rand_rはなくなるそうだよ。
 
+//random関数がスレッドセーフなのかそうじゃないのか、はっきりさせてよ…。
+
+//mergeはひとまず没。あれはListでいうところのconcatなだけで順番を融合させるわけじゃ全然ない。
+//→そもそもの定義から言ってそうなんだもん…。
+//→もし順序立てて融合するのなら、かぶってる範囲を特定してsplit→片方は一個一個、もう片方でmergeって塩梅か。
+//int keytree_merge(keytree_t dst, keytree_t trash);
+//→trashの内容をdstに入れる。eq設定が違うものは不可。
+//→eq設定が同じ0(=同値不可)であるなら、売れ残った子はtrashに入る。
+//int keytree_split(keytree_t src, nodetype_t *border, keytree_t right);
+//→srcツリーを、borderを境界として切断。borderより後ろがrightに入る。
+
+//。。。まあ、split/mergeはひとまず置いておこう！
+
 //keyhashに関しては、旧来の生成方式じゃないと破綻どころかそもそも組めない…ｗ
 //→本当か？…せめて共通化できるところは共通化、っていう方針じゃねかなあ。
 //
