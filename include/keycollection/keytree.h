@@ -203,7 +203,7 @@ int			keytree_init_iterator(keytree_t *self, keytree_iterator_t *iterator);
 
 /**
  *  \fn			keytree_init_iterator_from
- *  \brief		Initialize the keytree_iterator_t, which is already iterated to *index_node.
+ *  \brief		Initialize the keytree_iterator_t, which is ready to iterate from *index_node.
  *  \param		*self	list instance.
  *  \param		*iterator	iterator instance.
  *  \param		*index_node	The node you want to set as the start point.

@@ -194,7 +194,7 @@ int			keylist_init_iterator(keylist_t *self, keylist_iterator_t *iterator);
 
 /**
  *  \fn			keylist_init_iterator_from
- *  \brief		Initialize the keylist_iterator_t, which is already iterated to *index_node.
+ *  \brief		Initialize the keylist_iterator_t, which is ready to iterate from *index_node.
  *  \param		*self	list instance.
  *  \param		*iterator	iterator instance.
  *  \param		*index_node	The node you want to set as the start point.
