@@ -29,7 +29,7 @@ yourtree_find_lt_value(ptree, value_ptr, value_len);
 //→KEYTREE_FIND_LT_NODE_(ptree, &vnode, ret_node);(贅沢高速版)
 //オペークポインタで触らせることを念頭に置くのなら、関数生成してAPI提供してあげてね。
 
-//keytreeの乱数は普通にrandomで生成する。rand_rはなくなるそうだよ。
+//keytreeの乱数はlong jrand48(unsigned short work[3])で生成する。rand_rはなくなるそうだよ。
 
 //keyhashに関しては、旧来の生成方式じゃないと破綻どころかそもそも組めない…ｗ
 //→本当か？…せめて共通化できるところは共通化、っていう方針じゃねかなあ。
@@ -38,3 +38,4 @@ yourtree_find_lt_value(ptree, value_ptr, value_len);
 yourhash_remap(self, node);
 yourhash_remap_all(self);
 //→全チェーンからノード根こそぎ徴収し、再分配する
+

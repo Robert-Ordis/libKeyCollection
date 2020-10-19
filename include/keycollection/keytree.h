@@ -50,7 +50,7 @@ struct keytree_link_s {
 	struct keytree_link_s	*up;			///pointer for the parent of this.
 
 	//平衡2分木機能用。/ For self-balancing.
-	int						h_pri;			///Priority on "Treap"
+	long					h_pri;			///Priority on "Treap"
 };
 
 /**
@@ -71,6 +71,7 @@ struct keytree_s {
 	//スレッドセーフティについては、外側から提供してください。
 	struct keytree_link_s*	root;		///Root node on the tree.
 	int						allow_eq;	///1 if allowing to insert the "Equals" node to "ge" pointer.
+	unsigned short			rng[3];		///work for reentrant RNG(jrand48)
 	keytree_comp_node_cb	comp;		///Node comparator
 	keytree_make_node_cb	make;		///Node value setter..
 };
