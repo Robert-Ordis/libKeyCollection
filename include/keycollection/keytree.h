@@ -19,7 +19,8 @@
  *  \brief		Callback for nodes comparison.
  *  \param		*node_a	A node.
  *  \param		*node_b B node.
- *  \return	(int) >=1 if A > B / 0 if A==B, / <= 1 if A < B. (Same as subtraction)
+ *  \return	(int) ret >= 1 if A > B / ret = 0 if A==B, / <= 1 if A < B.
+ *  \remarks	This function indicates A - B.
  */
 typedef int	(*keytree_comp_node_cb)(void *node_a, void *node_b);
 
