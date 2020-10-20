@@ -27,7 +27,7 @@ AR	= ar
 
 ####build options####
 #CFLAGS			= -Wall -O0 -g
-CFLAGS			= -Wall -Os
+CFLAGS			= -Wall -Os -g
 DEFS			= 
 CROSS_PREFIX	= 
 

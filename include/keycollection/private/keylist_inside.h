@@ -207,12 +207,20 @@
 				next_link = (iterator)->curr->next;\
 			}\
 		}\
+		if((iterator)->curr == (iterator)->tail){\
+			next_link = NULL;\
+		}\
 		if(next_link != NULL){\
 			/*イテレータを一つ進める*/\
 			(iterator)->curr = next_link;\
 			(iterator)->prev = (next_link)->prev;\
 			(iterator)->next = (next_link)->next;\
 			ret = next_link;\
+		}\
+		else{\
+			(iterator)->prev = (iterator)->curr;\
+			(iterator)->curr = next_link;\
+			(iterator)->next = NULL;\
 		}\
 	}while(0)
 	
@@ -227,12 +235,20 @@
 				prev_link = (iterator)->curr->prev;\
 			}\
 		}\
+		if((iterator)->curr == (iterator)->head){\
+			prev_link = NULL;\
+		}\
 		if(prev_link != NULL){\
 			/*イテレータを一つ戻す*/\
 			(iterator)->curr = prev_link;\
 			(iterator)->next = (prev_link)->next;\
 			(iterator)->prev = (prev_link)->prev;\
 			ret = prev_link;\
+		}\
+		else{\
+			(iterator)->next = (iterator)->curr;\
+			(iterator)->curr = prev_link;\
+			(iterator)->prev = NULL;\
 		}\
 	}while(0)
 
