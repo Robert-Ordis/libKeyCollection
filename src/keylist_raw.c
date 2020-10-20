@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-#include "./include/keycollection/keylist.h"
-#include "./include/keycollection/keylist_raw.h"
-#include "./include/keycollection/private/keylist_inside.h"
-#include "./include/keycollection/private/keycollection_lock.h"
+#include "keycollection/keylist.h"
+#include "keycollection/keylist_raw.h"
+#include "keycollection/private/keylist_inside.h"
+#include "keycollection/private/keycollection_lock.h"
 
 //void		keylist_init_raw(size_t offset, keylist_t *self);
 

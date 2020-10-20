@@ -9,8 +9,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-
-
 #ifndef	KEYTREE_H_
 #define	KEYTREE_H_
 

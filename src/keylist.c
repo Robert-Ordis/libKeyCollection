@@ -1,8 +1,8 @@
 #include <stdlib.h>
 
-#include "./include/keycollection/keylist.h"
-#include "./include/keycollection/private/keycollection_commons.h"
-#include "./include/keycollection/keylist_raw.h"
+#include "keycollection/keylist.h"
+#include "keycollection/private/keycollection_commons.h"
+#include "keycollection/keylist_raw.h"
 
 ///\todo	普通のkeylist_xxx関数を書く。（ただし、rawのlist->ofst指定版として）
 

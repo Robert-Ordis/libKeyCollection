@@ -7,7 +7,7 @@
  *  \remarks	If this is undefed, the generated funcs code will be bit faster but enlarged.
  *  \remarks	Because, in undefed case, code of funcs will be defined DIRECTLY.
  */
-//#define	KEYLIST_GENERATE_FUNCS_AS_WRAPPER
+#define	KEYLIST_GENERATE_FUNCS_AS_WRAPPER
 
 /**
  *  \def		KEYTREE_GENERATE_FUNCS_AS_WRAPPER

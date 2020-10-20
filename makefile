@@ -9,15 +9,16 @@ TARGET_ALIB		= libkeycollection.a
 TARGET_SLIB		=
 
 ####Source files####
+SRC_DIR			= ./src
+SRC_LIBPART		:=\
+				 $(SRC_DIR)/keylist_raw.c\
+				 $(SRC_DIR)/keylist.c\
 
-SRC_LIBPART		=\
-				 keylist_raw.c\
-				 keylist.c\
-
-SRC_PROGRAM		=\
-				 main.c\
-				 test2.c\
-				 sampleCollection.c\
+TST_DIR			= ./test
+SRC_PROGRAM		:=\
+				 $(TST_DIR)/main.c\
+				 $(TST_DIR)/test2.c\
+				 $(TST_DIR)/sampleCollection.c\
 
 #### default compilers ####
 #CC	= gcc
@@ -26,7 +27,7 @@ AR	= ar
 
 ####build options####
 #CFLAGS			= -Wall -O0 -g
-CFLAGS			= -Wall -O2 -g
+CFLAGS			= -Wall -Os
 DEFS			= 
 CROSS_PREFIX	= 
 
