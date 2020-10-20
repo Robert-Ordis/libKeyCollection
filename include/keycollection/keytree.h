@@ -71,8 +71,8 @@ struct keytree_s {
 	struct keytree_link_s*	root;		///Root node on the tree.
 	int						allow_eq;	///1 if allowing to insert the "Equals" node to "ge" pointer.
 	unsigned short			rng[3];		///work for reentrant RNG(jrand48)
-	keytree_comp_node_cb	comp;		///Node comparator
-	keytree_make_node_cb	make;		///Node value setter..
+	keytree_comp_node_cb	comp_node;	///Node comparator
+	keytree_make_node_cb	make_node;	///Node value setter..
 };
 
 /**

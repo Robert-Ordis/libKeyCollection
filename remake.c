@@ -2,6 +2,9 @@
 
 //keylistに関しては、やりたかったことひとまず全部実装完了。
 
+//keytree_iterator_tについて。
+//is_tailとis_head, ref_current共にたぶんいらないかな？
+
 //keytree、だね。問題は。
 //keytree_xxx_rawでは、find_xx_valueが組めない。(VLAとかallocaにおんぶ抱っこは怖いお)
 

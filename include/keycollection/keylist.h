@@ -3,28 +3,18 @@
  *  \brief		固定メンバ変数式リンクリストをマクロで定義するためのライブラリ
  *  \remarks	メンバを直接使うライブラリにつき、
  */
-
-#include "./keylist_functions.h"
-#include "./private/keycollection_commons.h"
+#ifndef	KEYLIST_H_
+#define	KEYLIST_H_
 
 #include <stdint.h>
 #include <stddef.h>
 
-
-
-#ifndef	KEYLIST_H_
-#define	KEYLIST_H_
-
 /**
  *  \struct	keylist_link_t
  *  \brief		Set of members for composing a doubly linked list.
+ *  \details	First, set this as a member of the struct you want to make Doubly Linked List.
  */
 typedef struct keylist_link_s keylist_link_t;
-struct keylist_link_s {
-	struct keylist_link_s	*prev;			///previous pointer
-	struct keylist_link_s	*next;			///next pointer.
-	struct keylist_s		*coll;			///pointer of container(e.g. keylist_t)
-};
 
 /**
  *  \struct	keylist_t
@@ -32,15 +22,6 @@ struct keylist_link_s {
  *
  */
 typedef struct keylist_s keylist_t;
-struct keylist_s {
-	struct keylist_link_s*	head;	///Pointer to head link.
-	struct keylist_link_s*	tail;	///Pointer to tail link.
-	int						size;	///Counter for having nodes.
-	size_t					ofst;	///DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL
-	//2020-10-04/KK: ロックの搭載を試みたものの、今のバージョンではやめた。
-	//コンセプトとしてdestroyを提供しない以上、init & destroyをAPIとして提供するﾓﾉとは相性が悪い。
-	//スレッドセーフティについては、外側から提供してください。
-};
 
 /**
  *  \struct	keylist_iterator_t
@@ -48,14 +29,6 @@ struct keylist_s {
  *  \brief		While iterating by this, the nearby node in the collection can be edited.
  */
 typedef struct keylist_iterator_s keylist_iterator_t;
-struct keylist_iterator_s {
-	struct keylist_link_s	*prev;
-	struct keylist_link_s	*curr;
-	struct keylist_link_s	*next;
-	struct keylist_link_s	*head;
-	struct keylist_link_s	*tail;
-	struct keylist_s		*coll;
-};
 
 /**
  *  \fn			keylist_init
@@ -323,6 +296,31 @@ void*		keylist_get_prev(keylist_t *self, void *node);
 		(self)->ofst = offsetof(type, member);\
 	}while(0)\
 		
+
+struct keylist_link_s {
+	struct keylist_link_s	*prev;			///previous pointer
+	struct keylist_link_s	*next;			///next pointer.
+	struct keylist_s		*coll;			///pointer of container(e.g. keylist_t)
+};
+
+struct keylist_s {
+	struct keylist_link_s*	head;	///Pointer to head link.
+	struct keylist_link_s*	tail;	///Pointer to tail link.
+	int						size;	///Counter for having nodes.
+	size_t					ofst;	///DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL
+	//2020-10-04/KK: ロックの搭載を試みたものの、今のバージョンではやめた。
+	//コンセプトとしてdestroyを提供しない以上、init & destroyをAPIとして提供するﾓﾉとは相性が悪い。
+	//スレッドセーフティについては、外側から提供してください。
+};
+
+struct keylist_iterator_s {
+	struct keylist_link_s	*prev;
+	struct keylist_link_s	*curr;
+	struct keylist_link_s	*next;
+	struct keylist_link_s	*head;
+	struct keylist_link_s	*tail;
+	struct keylist_s		*coll;
+};
 
 
 #endif	/* !KELIST_H_ */

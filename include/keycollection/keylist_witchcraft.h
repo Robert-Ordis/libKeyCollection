@@ -3,14 +3,14 @@
  *  \brief		witchcraft-like code generator macros.
  *  \remark	
  */
+#ifndef	KEYLIST_WITCHCRAFT_H_
+#define	KEYLIST_WITCHCRAFT_H_
 
 #include <stdint.h>
 #include "./keylist.h"
 #include "./keycollection_config.h"
 
-#ifndef	KEYLIST_WITCHCRAFT_H_
-#define	KEYLIST_WITCHCRAFT_H_
-
+#include "./keylist_functions.h"
 
 /**
  *  \def	keylist_define_prototypes
