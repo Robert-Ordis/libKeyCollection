@@ -18,7 +18,9 @@ TST_DIR			= ./test
 SRC_PROGRAM		:=\
 				 $(TST_DIR)/main.c\
 				 $(TST_DIR)/test2.c\
+				 $(TST_DIR)/test3.c\
 				 $(TST_DIR)/sampleCollection.c\
+				 $(TST_DIR)/sampleCollectionLarge.c\
 
 #### default compilers ####
 #CC	= gcc

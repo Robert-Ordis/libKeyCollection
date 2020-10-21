@@ -1,3 +1,3 @@
 #include "./sampleCollection.h"
 
-keylist_define_implements(typelink, type_t, lebs.link);
+keylist_define_implements_small(typelink, type_t, lebs.link);

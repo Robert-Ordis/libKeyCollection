@@ -142,11 +142,12 @@
 		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
 			KEYLIST_IMPL_INIT_ITERATOR_(self, iterator, ret);\
 		}KEYCOLLECT_LOCK_RELEASE_(self);\
+		return ret;\
 	}\
 	\
 	int				KEYLIST_ITERATOR_MOVE_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator, nodetype_s *index_node){\
 		int ret = 0;\
-		keylist_link_t *link = &((index_node)->link_member);\
+		keylist_link_t *link = (index_node == NULL) ? NULL : &((index_node)->link_member);\
 		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
 			KEYLIST_IMPL_ITERATOR_MOVE_(iterator, link, ret);\
 		}KEYCOLLECT_LOCK_RELEASE_(self);\

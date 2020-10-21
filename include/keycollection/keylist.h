@@ -156,6 +156,40 @@ int			keylist_insert_before(keylist_t *self, void *index_node, void *node);
 int			keylist_insert_after(keylist_t *self, void *index_node, void *node);
 
 /**
+ *  \fn			keylist_has_node
+ *  \brief		Get the next node of the node directly.
+ *  \param		*self	list instance
+ *  \param		*node	node instance.
+ *  \return	The next node. Or NULL if the node doesn't have.
+ *  \return	If node doesn't belong to self, this returns NULL.
+ *  \remarks	This is for Fast Iterating. But NEVER EDIT THE LIST WHILE ITERATING BY THIS.
+ */
+int			keylist_has_node(keylist_t *self, void *node);
+
+/**
+ *  \fn			keylist_get_next
+ *  \brief		Get the next node of the node directly.
+ *  \param		*self	list instance
+ *  \param		*node	node instance.
+ *  \return	The next node. Or NULL if the node doesn't have.
+ *  \return	If node doesn't belong to self, this returns NULL.
+ *  \remarks	This is for Fast Iterating. But NEVER EDIT THE LIST WHILE ITERATING BY THIS.
+ */
+void*		keylist_get_next(keylist_t *self, void *node);
+
+/**
+ *  \fn			keylist_get_prev
+ *  \brief		Get the previous node of the node directly.
+ *  \param		*self	list instance
+ *  \param		*node	node instance.
+ *  \return	The previous node. Or NULL if the node doesn't have.
+ *  \return	If node doesn't belong to self, this returns NULL.
+ *  \remarks	This is for Fast Iterating. But NEVER EDIT THE LIST WHILE ITERATING BY THIS.
+ */
+void*		keylist_get_prev(keylist_t *self, void *node);
+
+
+/**
  *  \fn			keylist_init_iterator
  *  \brief		Initialize the keylist_iterator_t.
  *  \param		*self	list instance.
@@ -195,36 +229,6 @@ void*		keylist_iterator_forward(keylist_iterator_t *iterator);
  */
 void*		keylist_iterator_backward(keylist_iterator_t *iterator);
 
-/**
- *  \fn		keylist_has_node
- *  \brief		Check if the list has node specified in arg.
- *  \param		*self	list instance
- *  \param		*node	node instance.
- *  \return	The list instance which the node belongs to.
- */
-keylist_t*	keylist_link_get_belong(void *node);
-
-/**
- *  \fn			keylist_get_next
- *  \brief		Get the next node of the node directly.
- *  \param		*self	list instance
- *  \param		*node	node instance.
- *  \return	The next node. Or NULL if the node doesn't have.
- *  \return	If node doesn't belong to self, this returns NULL.
- *  \remarks	This is for Fast Iterating. But NEVER EDIT THE LIST WHILE ITERATING BY THIS.
- */
-void*		keylist_get_next(keylist_t *self, void *node);
-
-/**
- *  \fn			keylist_get_prev
- *  \brief		Get the previous node of the node directly.
- *  \param		*self	list instance
- *  \param		*node	node instance.
- *  \return	The previous node. Or NULL if the node doesn't have.
- *  \return	If node doesn't belong to self, this returns NULL.
- *  \remarks	This is for Fast Iterating. But NEVER EDIT THE LIST WHILE ITERATING BY THIS.
- */
-void*		keylist_get_prev(keylist_t *self, void *node);
 
 /**
  *  \def		keylist_foreach_forward
