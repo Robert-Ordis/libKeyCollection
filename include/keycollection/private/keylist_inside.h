@@ -5,12 +5,12 @@
  */
 #ifndef	PRIVATE_KEYLIST_INSIDE_H_
 #define	PRIVATE_KEYLIST_INSIDE_H_
+/*
+ *ret: [-1]->既に所属済みのノードを加えようとした
+ *ret: [-2]->参照用のノードは指定のリストとは違うものに所属している
+ */
 
-//ret: [-1]->既に所属済みのノードを加えようとした
-//ret: [-2]->参照用のノードは指定のリストとは違うものに所属している
-
-//該当リストからの消去。selfはリスト相当、linkはリンクメンバのポインタ、retは戻り値
-
+/*該当リストのN番目参照*/
 #define	KEYLIST_IMPL_REF_NTH_(self, link, i)\
 	do{\
 		link = NULL;\
@@ -37,6 +37,7 @@
 		}\
 	}while(0)
 
+/*該当リストからの消去。selfはリスト相当、linkはリンクメンバのポインタ、retは戻り値*/
 #define	KEYLIST_IMPL_DEL_(self, link, ret)\
 	do{\
 		if((link)->coll != self){\
@@ -69,7 +70,7 @@
 		ret = 0;\
 	}while(0)
 
-//該当リストの末尾へ追加。
+/*該当リストの末尾へ追加。*/
 #define	KEYLIST_IMPL_ADD_TAIL_(self, link, ret)\
 	do{\
 		if((link)->coll != NULL){\
@@ -94,7 +95,7 @@
 		ret = 0;\
 	}while(0)
 	
-//該当リストの先頭へ追加。
+/*該当リストの先頭へ追加。*/
 #define	KEYLIST_IMPL_ADD_HEAD_(self, link, ret)\
 	do{\
 		if((link)->coll != NULL){\
@@ -119,7 +120,7 @@
 		ret = 0;\
 	}while(0)
 
-//指定ノードの前への挿入。「index_linkの前」として挿入する。NULLなら末尾として。
+/*指定ノードの前への挿入。「index_linkの前」として挿入する。NULLなら末尾として。*/
 #define	KEYLIST_IMPL_INSERT_BEFORE_(self, index_link, link, ret)\
 	do{\
 		if((index_link) == NULL){\
@@ -155,7 +156,7 @@
 		ret = 0;\
 	}while(0)
 
-//指定ノードの後への挿入。index_nodeの後に挿入する。NULLなら先頭として。
+/*指定ノードの後への挿入。index_nodeの後に挿入する。NULLなら先頭として。*/
 #define	KEYLIST_IMPL_INSERT_AFTER_(self, index_link, link, ret)\
 	do{\
 		if((index_link) == NULL){\
@@ -191,10 +192,12 @@
 		ret = 0;\
 	}while(0)
 
-//イテレーションのパーツ。
-//型不定につき、(next|prev)_nodeを別途外部で定義しなければラナイ
-
-//イテレータ初期化
+/*
+ *イテレーションのパーツ。
+ *型不定につき、(next|prev)_nodeを別途外部で定義しなければラナイ
+ */
+ 
+/*イテレータ初期化*/
 #define	KEYLIST_IMPL_INIT_ITERATOR_(self, iterator, ret)\
 	do{\
 		(iterator)->prev = (self)->tail;\
@@ -204,7 +207,7 @@
 		ret = 0;\
 	}while(0)\
 
-//特定の場所にイテレータを動かす
+/*特定の場所にイテレータを動かす*/
 #define	KEYLIST_IMPL_ITERATOR_MOVE_(iterator, index_link, ret)\
 	do{\
 		if(index_link == NULL){\
@@ -221,7 +224,7 @@
 		ret = 0;\
 	}while(0)
 
-//前方イテレーションのパーツ。retに「次のノード」を入れる。
+/*前方イテレーションのパーツ。retに「次のノード」を入れる。*/
 #define	KEYLIST_IMPL_ITERATE_FORWARD_(iterator, next_link, ret)\
 	do{\
 		ret = NULL;\
@@ -246,7 +249,7 @@
 		}\
 	}while(0)
 	
-//後方イテレーションのパーツ。retに「前のノード」を入れる。
+/*後方イテレーションのパーツ。retに「前のノード」を入れる。*/
 #define	KEYLIST_IMPL_ITERATE_BACKWARD_(iterator, prev_link, ret)\
 	do{\
 		ret = NULL;\

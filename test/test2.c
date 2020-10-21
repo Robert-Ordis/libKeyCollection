@@ -7,11 +7,6 @@
 
 #include "./sampleCollection.h"
 
-#define	NODENUM 10
-
-
-//コンセプト：めんどくさいキャストを排除。リストには常に一定の型しか入れない
-//コンセプト：イテレーションの実装
 
 
 int type_test(){
@@ -258,11 +253,11 @@ int type_test(){
 		db_printf("[%p] start.\n", pnode);
 		type_dbg_printf(pnode, lebs.link);
 		if(pnode->a & 0x01){
-			//奇数
+			/*奇数*/
 			db_printf("%s:odd[%d]\n", __func__, typelink_insert_before(plist, NULL, pnode));
 		}
 		else{
-			//偶数
+			/*偶数*/
 			db_printf("%s:even[%d]\n", __func__, typelink_insert_after(plist, NULL, pnode));
 		}
 		db_printf("%s: list count is %d\n", __func__, typelink_get_count(plist));

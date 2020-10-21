@@ -4,14 +4,17 @@
 #include "keycollection/keylist_raw.h"
 #include "keycollection/private/keylist_inside.h"
 #include "keycollection/private/keycollection_lock.h"
+/*
 
-//void		keylist_init_raw(size_t offset, keylist_t *self);
+void		keylist_init_raw(size_t offset, keylist_t *self);
 
-//int		keylist_get_count_raw(size_t offset, keylist_t *self);
+int		keylist_get_count_raw(size_t offset, keylist_t *self);
 
-//void*		keylist_ref_head_raw(size_t offset, keylist_t *self);
+void*		keylist_ref_head_raw(size_t offset, keylist_t *self);
 
-//void*		keylist_ref_tail_raw(size_t offset, keylist_t *self);
+void*		keylist_ref_tail_raw(size_t offset, keylist_t *self);
+
+*/
 
 void*			keylist_pop_head_raw(size_t offset, keylist_t *self){
 	keylist_link_t *link = NULL;
@@ -30,7 +33,6 @@ void*			keylist_pop_tail_raw(size_t offset, keylist_t *self){
 	keylist_link_t *link = NULL;
 	int ret = 0;
 	KEYCOLLECT_LOCK_ACQUIRE_(self);{
-		//link = keylist_ref_tail_raw(size_t offset, keylist_t *self);
 		if(self->tail != NULL){
 			link = self->tail;
 			KEYLIST_IMPL_DEL_(self, link, ret);
@@ -140,16 +142,16 @@ void*			keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterato
 	return keycollection_get_container_ptr(offset, ret_link);
 }
 
-//int			keylist_iterator_is_head_raw(size_t offset, iterator);
+/*
+int			keylist_iterator_is_head_raw(size_t offset, iterator);
 
+int			keylist_iterator_is_tail_raw(size_t offset, iterator);
 
-//int			keylist_iterator_is_tail_raw(size_t offset, iterator);
+keylist_t*	keylist_link_get_belonged_raw(offset, node);
 
-//keylist_t*	keylist_link_get_belonged_raw(offset, node);
+void*			keylist_link_get_next_raw(offset, node);
 
-//void*			keylist_link_get_next_raw(offset, node);
-
-//void*			keylist_link_get_prev_raw(offset, node);
-
+void*			keylist_link_get_prev_raw(offset, node);
+*/
 
 

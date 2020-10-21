@@ -6,7 +6,11 @@
 #ifndef	SAMPLE_COLLECTION_H_
 #define	SAMPLE_COLLECTION_H_
 
-typedef struct {
+#define LOOP_COUNT 1
+#define NODENUM 1000
+#define PRINT_WHILE_TEST 1
+
+typedef struct type_s{
 	int			a;
 	double		b;
 	char		c;
@@ -17,9 +21,8 @@ typedef struct {
 	}lebs;
 } type_t;
 
-//#define db_printf printf
 #define db_printf(...)\
-	do{if(1){printf(__VA_ARGS__);}}while(0)
+	do{if(PRINT_WHILE_TEST){printf(__VA_ARGS__);}}while(0)
 
 #define type_dbg_printf(pnode, link_member)\
 	do{\
@@ -35,7 +38,7 @@ typedef struct {
 		);\
 		\
 	}while(0)
-		
+	
 
 keylist_define_prototypes(typelink, type_t, lebs.link);
 keylist_define_prototypes(typelinkl, type_t, lebs.link2);

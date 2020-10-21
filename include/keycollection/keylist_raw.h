@@ -26,7 +26,7 @@
 		(self)->ofst = offset;\
 	}while(0)\
 
-//数の取得など、変数を直接示すようなマクロは左辺にできないようにする
+/*数の取得など、変数を直接示すようなマクロは左辺にできないようにする*/
 /**
  *  \def		keylist_get_count_raw
  *  \brief		Get contained num on the List.

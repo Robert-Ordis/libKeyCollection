@@ -4,8 +4,6 @@
 #include "keycollection/private/keycollection_commons.h"
 #include "keycollection/keylist_raw.h"
 
-///\todo	普通のkeylist_xxx関数を書く。（ただし、rawのlist->ofst指定版として）
-
 void		keylist_init(keylist_t *self){
 	keylist_init_raw(0, self);
 }

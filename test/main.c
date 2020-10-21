@@ -8,12 +8,11 @@
 
 #include "./sampleCollection.h"
 
-#define	NODENUM 10
 
-
-//コンセプト：めんどくさいキャストを排除。リストには常に一定の型しか入れない
-//コンセプト：イテレーションの実装
-
+/*
+コンセプト：めんどくさいキャストを排除。リストには常に一定の型しか入れない
+コンセプト：イテレーションの実装
+*/
 int type_test();
 int large_type_test_large();
 
@@ -261,11 +260,11 @@ static int poly_test(){
 		db_printf("[%p] start.\n", pnode);
 		type_dbg_printf(pnode, lebs.link2);
 		if(pnode->a & 0x01){
-			//奇数
+			/*奇数*/
 			db_printf("%s:odd[%d]\n", __func__, keylist_insert_before(plist, NULL, pnode));
 		}
 		else{
-			//偶数
+			/*偶数*/
 			db_printf("%s:even[%d]\n", __func__, keylist_insert_after(plist, NULL, pnode));
 		}
 		db_printf("%s: list count is %d\n", __func__, keylist_get_count(plist));
@@ -527,11 +526,11 @@ static int raw_test(){
 		db_printf("[%p] start.\n", pnode);
 		type_dbg_printf(pnode, lebs.link2);
 		if(pnode->a & 0x01){
-			//奇数
+			/*奇数*/
 			db_printf("%s:odd[%d]\n", __func__, keylist_insert_before_raw(offset, plist, NULL, pnode));
 		}
 		else{
-			//偶数
+			/*偶数*/
 			db_printf("%s:even[%d]\n", __func__, keylist_insert_after_raw(offset, plist, NULL, pnode));
 		}
 		db_printf("%s: list count is %d\n", __func__, keylist_get_count_raw(offset, plist));
@@ -555,23 +554,24 @@ static int raw_test(){
 int main(int argc, char *argv[]){
 	raw_test();
 	poly_test();
-	int i = 1;
-	int j;
+	int i = 0;
 	clock_t start, end;
 	clock_t large, small;
 	start = clock();
-	for(j = 0; j < i; j++){
+	for(i = 0; i < LOOP_COUNT; i++){
 		type_test();
 	}
 	end = clock();
 	small = end - start;
 	
 	start = clock();
-	for(j = 0; j < i; j++){
+	for(i = 0; i < LOOP_COUNT; i++){
 		type_test_large();
 	}
 	end = clock();
 	large = end - start;
 	printf("%d times. large:%ju, small:%ju\n", i, (uintmax_t)large, (uintmax_t)small);
+	
+	return 0;
 }
 

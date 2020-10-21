@@ -38,7 +38,6 @@ typedef struct keylist_iterator_s keylist_iterator_t;
  */
 void		keylist_init(keylist_t *self);
 
-//数の取得など、変数を直接示すようなマクロは左辺にできないようにする
 /**
  *  \fn			keylist_get_count
  *  \brief		Get contained num on the List.
@@ -275,19 +274,21 @@ void*		keylist_iterator_backward(keylist_iterator_t *iterator);
 		
 
 struct keylist_link_s {
-	struct keylist_link_s	*prev;			///previous pointer
-	struct keylist_link_s	*next;			///next pointer.
-	struct keylist_s		*coll;			///pointer of container(e.g. keylist_t)
+	struct keylist_link_s	*prev;			/**previous pointer*/
+	struct keylist_link_s	*next;			/**next pointer.*/
+	struct keylist_s		*coll;			/**pointer of container(e.g. keylist_t)*/
 };
 
 struct keylist_s {
-	struct keylist_link_s*	head;	///Pointer to head link.
-	struct keylist_link_s*	tail;	///Pointer to tail link.
-	int						size;	///Counter for having nodes.
-	size_t					ofst;	///DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL
-	//2020-10-04/KK: ロックの搭載を試みたものの、今のバージョンではやめた。
-	//コンセプトとしてdestroyを提供しない以上、init & destroyをAPIとして提供するﾓﾉとは相性が悪い。
-	//スレッドセーフティについては、外側から提供してください。
+	struct keylist_link_s*	head;	/**Pointer to head link.*/
+	struct keylist_link_s*	tail;	/**Pointer to tail link.*/
+	int						size;	/**Counter for having nodes.*/
+	size_t					ofst;	/**DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL*/
+	/*
+	2020-10-04/KK: ロックの搭載を試みたものの、今のバージョンではやめた。
+	コンセプトとしてdestroyを提供しない以上、init & destroyをAPIとして提供するﾓﾉとは相性が悪い。
+	スレッドセーフティについては、外側から提供してください。
+	*/
 };
 
 struct keylist_iterator_s {
