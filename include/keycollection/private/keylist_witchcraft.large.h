@@ -1,7 +1,7 @@
 /**
  *  \file		keylist_witchcraft.large.h
  *  \brief		witchcraft-like code generator macros.
- *  \remark	This is an implementation part defined by raw implementation.
+ *  \remark	This is an implementation part defined as raw implementation.
  */
 
 #include <stdint.h>
@@ -18,18 +18,18 @@
 #error	NEVER INCLUDE THIS DIRECTLY
 #endif
 
-#ifndef	KEYLIST_WITCHCRAFT_LARGE_H_
-#define	KEYLIST_WITCHCRAFT_LARGE_H_
+#ifndef	PRIVATE_KEYLIST_WITCHCRAFT_LARGE_H_
+#define	PRIVATE_KEYLIST_WITCHCRAFT_LARGE_H_
 
 /**
- *  \def	keylist_define_implements
+ *  \def	keylist_define_implements_large
  *  \brief	Withcraft used in source code(*.c)
  *  \brief	By this macro, implementation of functions(yourlist_add/_del/...) are generated.
  *  \param	yourlist		Defining the types and functions based on this arg.(yourlist_t and yourlist_add, e.g.)
  *  \param	nodetype_s		Target type you want to treat.
  *  \param	link_member		Target link member you want to use for making link on this definitions.
  */
-#define	keylist_define_implements(yourlist, nodetype_s, link_member)\
+#define	keylist_define_implements_large(yourlist, nodetype_s, link_member)\
 	void			KEYLIST_INIT_(yourlist)(KEYLIST_T_(yourlist) *self){\
 		keylist_init_raw(offsetof(nodetype_s, link_member), self);\
 	}\
@@ -190,4 +190,4 @@
 		return (node)->link_member.coll;\
 	}\
 	
-#endif	/* !KEYLIST_WITCHCRAFT_LARGE_H_ */
+#endif	/* !PRIVATE_KEYLIST_WITCHCRAFT_LARGE_H_ */

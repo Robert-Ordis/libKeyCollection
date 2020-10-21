@@ -1,7 +1,7 @@
 /**
  *  \file		keylist_witchcraft.small.h
  *  \brief		witchcraft-like code generator macros.
- *  \remark	This is an implementation part define by calling raw-funcations.
+ *  \remark	This is an implementation part defined as raw-funcations caller.
  */
 
 #include <stdint.h>
@@ -15,8 +15,8 @@
 #error	NEVER INCLUDE THIS DIRECTLY
 #endif
 
-#ifndef	KEYLIST_WITCHCRAFT_SMALL_H_
-#define	KEYLIST_WITCHCRAFT_SMALL_H_
+#ifndef	PRIVATE_KEYLIST_WITCHCRAFT_SMALL_H_
+#define	PRIVATE_KEYLIST_WITCHCRAFT_SMALL_H_
 
 /**
  *  \def	keylist_define_implements
@@ -26,7 +26,7 @@
  *  \param	nodetype_s		Target type you want to treat.
  *  \param	link_member		Target link member you want to use for making link on this definitions.
  */
-#define	keylist_define_implements(yourlist, nodetype_s, link_member)\
+#define	keylist_define_implements_small(yourlist, nodetype_s, link_member)\
 	void			KEYLIST_INIT_(yourlist)(KEYLIST_T_(yourlist) *self){\
 		keylist_init_raw(offsetof(nodetype_s, link_member), self);\
 	}\
@@ -117,4 +117,4 @@
 	}\
 	
 
-#endif	/* !KEYLIST_WITCHCRAFT_SMALL_H_ */
+#endif	/* !PRIVATE_KEYLIST_WITCHCRAFT_SMALL_H_ */

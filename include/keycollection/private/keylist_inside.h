@@ -194,6 +194,7 @@
 //イテレーションのパーツ。
 //型不定につき、(next|prev)_nodeを別途外部で定義しなければラナイ
 
+//イテレータ初期化
 #define	KEYLIST_IMPL_INIT_ITERATOR_(self, iterator, ret)\
 	do{\
 		(iterator)->prev = (self)->tail;\
@@ -203,6 +204,7 @@
 		ret = 0;\
 	}while(0)\
 
+//特定の場所にイテレータを動かす
 #define	KEYLIST_IMPL_ITERATOR_MOVE_(iterator, index_link, ret)\
 	do{\
 		if(index_link == NULL){\

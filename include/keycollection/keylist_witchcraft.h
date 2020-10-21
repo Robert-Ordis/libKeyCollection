@@ -9,8 +9,9 @@
 #include <stdint.h>
 #include "./keylist.h"
 #include "./keycollection_config.h"
-
 #include "./keylist_functions.h"
+#include "./private/keylist_witchcraft.small.h"
+#include "./private/keylist_witchcraft.large.h"
 
 /**
  *  \def	keylist_define_prototypes
@@ -81,9 +82,9 @@
 #ifndef	keylist_define_implements
 
 	#if defined(KEYLIST_GENERATE_FUNCS_AS_WRAPPER)
-		#include "./private/keylist_witchcraft.small.h"
+		#define keylist_define_implements keylist_define_implements_small
 	#else
-		#include "./private/keylist_witchcraft.large.h"
+		#define keylist_define_implements keylist_define_implements_large
 	#endif
 
 #endif
