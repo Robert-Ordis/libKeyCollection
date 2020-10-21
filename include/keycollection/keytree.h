@@ -28,6 +28,7 @@ typedef int	(*keytree_comp_node_cb)(void *node_a, void *node_b);
  *  \param		*node		Node for searching. (Will not be NULL).
  *  \param		*value		Value pointer.
  *  \param		value_len	Byte length of *value.
+ *  \remarks	This is only used in xxx_find_*_value codes that are generated with witchcraft macro.
  */
 typedef void	(*keytree_make_node_cb)(void *node, void *value, size_t value_len);
 
@@ -37,19 +38,21 @@ typedef void	(*keytree_make_node_cb)(void *node, void *value, size_t value_len);
  */
 typedef struct keytree_link_s keytree_link_t;
 struct keytree_link_s {
-	//KEYLISTのマクロを流用するので、メンバ名は共通
-	//For reusing KEYLIST macros, some member names are same as keylist_link_t.
-	struct keytree_link_s	*prev;			///previous pointer
-	struct keytree_link_s	*next;			///next pointer.
-	struct keytree_s		*coll;			///pointer of container(e.g. keytree_t)
+	/*
+		KEYLISTのマクロを流用するので、メンバ名は共通
+		For reusing KEYLIST macros, some member names are same as keylist_link_t.
+	 */
+	struct keytree_link_s	*prev;			/**previous pointer*/
+	struct keytree_link_s	*next;			/**next pointer.*/
+	struct keytree_s		*coll;			/**pointer of container(e.g. keytree_t)*/
 
-	//以下はツリー用。/ Belows are for keytree.
-	struct keytree_link_s	*ge;			///pointer for value evaled as "Greater Equal" this.
-	struct keytree_link_s	*lt;			///pointer for value evaled as "Lesser than" this.
-	struct keytree_link_s	*up;			///pointer for the parent of this.
+	/*以下はツリー用。/ Belows are for keytree.*/
+	struct keytree_link_s	*ge;			/**pointer for value evaled as "Greater Equal" this.*/
+	struct keytree_link_s	*lt;			/**pointer for value evaled as "Lesser than" this.*/
+	struct keytree_link_s	*up;			/**pointer for the parent of this.*/
 
-	//平衡2分木機能用。/ For self-balancing.
-	long					h_pri;			///Priority on "Treap"
+	/*平衡2分木機能用。/ For self-balancing.*/
+	long					h_pri;			/**Priority on "Treap"*/
 };
 
 /**
@@ -59,20 +62,24 @@ struct keytree_link_s {
  */
 typedef struct keytree_s keytree_t;
 struct keytree_s {
-	//KEYLISTのマクロを流用するので、メンバ名は共通
-	//For reusing KEYLIST macros, some member names are same as keylist_t.
-	struct keytree_link_s*	head;	///Pointer to head link.
-	struct keytree_link_s*	tail;	///Pointer to tail link.
-	int						size;	///Counter for having nodes.
-	size_t					ofst;	///DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL
-	//2020-10-04/KK: ロックの搭載を試みたものの、今のバージョンではやめた。
-	//コンセプトとしてdestroyを提供しない以上、init & destroyをAPIとして提供するﾓﾉとは相性が悪い。
-	//スレッドセーフティについては、外側から提供してください。
-	struct keytree_link_s*	root;		///Root node on the tree.
-	int						allow_eq;	///1 if allowing to insert the "Equals" node to "ge" pointer.
-	unsigned short			rng[3];		///work for reentrant RNG(jrand48)
-	keytree_comp_node_cb	comp_node;	///Node comparator
-	keytree_make_node_cb	make_node;	///Node value setter..
+	/*
+		KEYLISTのマクロを流用するので、メンバ名は共通
+		For reusing KEYLIST macros, some member names are same as keylist_link_t.
+	*/
+	struct keytree_link_s*	head;	/**Pointer to head link.*/
+	struct keytree_link_s*	tail;	/**Pointer to tail link.*/
+	int						size;	/**Counter for having nodes.*/
+	size_t					ofst;	/**DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL*/
+	/*
+		2020-10-04/KK: ロックの搭載を試みたものの、今のバージョンではやめた。
+		コンセプトとしてdestroyを提供しない以上、init & destroyをAPIとして提供するﾓﾉとは相性が悪い。
+		スレッドセーフティについては、外側から提供してください。
+	 */
+	struct keytree_link_s*	root;		/**Root node on the tree.*/
+	int						allow_eq;	/**1 if allowing to insert the "Equals" node to "ge" pointer.*/
+	unsigned short			rng[3];		/**work for reentrant RNG(jrand48)*/
+	keytree_comp_node_cb	comp_node;	/**Node comparator*/
+	keytree_make_node_cb	make_node;	/**Node value setter*/..
 };
 
 /**
@@ -82,12 +89,20 @@ struct keytree_s {
  */
 typedef struct keytree_iterator_s keytree_iterator_t;
 struct keytree_iterator_s {
+	/*
+		KEYLISTのマクロを流用するので、メンバ名は共通
+		For reusing KEYLIST macros, some member names are same as keylist_link_t.
+	*/
 	struct keytree_link_s	*prev;
 	struct keytree_link_s	*curr;
 	struct keytree_link_s	*next;
+	struct keytree_s		*coll;
+	/*
+		
+		For reusing KEYLIST macros, some member names are same as keylist_link_t.
+	*/
 	struct keytree_link_s	*head;
 	struct keytree_link_s	*tail;
-	struct keytree_s		*coll;
 };
 
 /**

@@ -7,7 +7,7 @@
 #define	SAMPLE_COLLECTION_H_
 
 #define LOOP_COUNT 1
-#define NODENUM 1000
+#define NODENUM 10
 #define PRINT_WHILE_TEST 1
 
 typedef struct type_s{

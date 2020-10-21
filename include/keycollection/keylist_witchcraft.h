@@ -15,7 +15,7 @@
 
 /**
  *  \def	keylist_define_prototypes
- *  \brief	Withcraft used in public header.
+ *  \brief	Witchcraft used in public header.
  *  \brief	By this macro, yourlist_t and related functions(yourlist_add/_del/...) are generated.
  *  \param	yourlist		Defining the types and functions based on this arg.(yourlist_t and yourlist_add, e.g.)
  *  \param	nodetype_s		Target type you want to treat.

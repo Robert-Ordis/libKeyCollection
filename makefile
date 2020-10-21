@@ -29,8 +29,8 @@ AR	= ar
 
 ####build options####
 #CFLAGS			= -Wall -O0 -g -ansi
-#CFLAGS			= -Wall -Os -g -ansi
-CFLAGS			= -Wall -O2 -g -ansi
+CFLAGS			= -Wall -Os -g -ansi
+#CFLAGS			= -Wall -O2 -g -ansi
 DEFS			= 
 CROSS_PREFIX	= 
 
