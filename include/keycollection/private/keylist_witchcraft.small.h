@@ -86,9 +86,8 @@
 	int				KEYLIST_INIT_ITERATOR_(yourlist)(KEYLIST_T_(yourlist) *self, KEYLIST_ITERATOR_T_(yourlist) *iterator){\
 		return keylist_init_iterator_raw(offsetof(nodetype_s, link_member), self, iterator);\
 	}\
-	\
-	int				KEYLIST_INIT_ITERATOR_FROM_(yourlist)(KEYLIST_T_(yourlist) *self, KEYLIST_ITERATOR_T_(yourlist) *iterator, nodetype_s *node){\
-		return keylist_init_iterator_from_raw(offsetof(nodetype_s, link_member), self, iterator, node);\
+	int				KEYLIST_ITERATOR_MOVE_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator, nodetype_s *index_node){\
+		return keylist_iterator_move_raw(offsetof(nodetype_s, link_member), iterator, index_node);\
 	}\
 	\
 	nodetype_s*		KEYLIST_ITERATOR_FORWARD_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
@@ -97,17 +96,6 @@
 	\
 	nodetype_s*		KEYLIST_ITERATOR_BACKWARD_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
 		return (nodetype_s *)keylist_iterator_backward_raw(offsetof(nodetype_s, link_member), iterator);\
-	}\
-	\
-	nodetype_s*		KEYLIST_ITERATOR_REF_CURRENT_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
-		return (nodetype_s *)keylist_iterator_ref_current_raw(offsetof(nodetype_s, link_member), iterator);\
-	}\
-	int				KEYLIST_ITERATOR_IS_HEAD_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
-		return keylist_iterator_is_head_raw(offsetof(nodetype_s, link_member), iterator);\
-	}\
-	\
-	int				KEYLIST_ITERATOR_IS_TAIL_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
-		return keylist_iterator_is_tail_raw(offsetof(nodetype_s, link_member), iterator);\
 	}\
 	\
 	nodetype_s*		KEYLIST_GET_NEXT_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){\

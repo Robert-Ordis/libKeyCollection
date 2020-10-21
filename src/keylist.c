@@ -62,8 +62,8 @@ int			keylist_init_iterator(keylist_t *self, keylist_iterator_t *iterator){
 	return keylist_init_iterator_raw(self->ofst, self, iterator);
 }
 
-int			keylist_init_iterator_from(keylist_t *self, keylist_iterator_t *iterator, void *index_node){
-	return keylist_init_iterator_from_raw(self->ofst, self, iterator, index_node);
+int			keylist_iterator_move(keylist_iterator_t *iterator, void *index_node){
+	return keylist_iterator_move_raw(iterator->coll->ofst, iterator, index_node);
 }
 
 void*		keylist_iterator_forward(keylist_iterator_t *iterator){
@@ -72,18 +72,6 @@ void*		keylist_iterator_forward(keylist_iterator_t *iterator){
 
 void*		keylist_iterator_backward(keylist_iterator_t *iterator){
 	return keylist_iterator_backward_raw(iterator->coll->ofst, iterator);
-}
-
-void*		keylist_iterator_ref_current(keylist_iterator_t *iterator){
-	return keylist_iterator_ref_current_raw(iterator->coll->ofst, iterator);
-}
-
-int			keylist_iterator_is_head(keylist_iterator_t *iterator){
-	return keylist_iterator_is_head_raw(iterator->coll->ofst, iterator);
-}
-
-int			keylist_iterator_is_tail(keylist_iterator_t *iterator){
-	return keylist_iterator_is_tail_raw(iterator->coll->ofst, iterator);
 }
 
 int			keylist_has_node(keylist_t *self, void *node){

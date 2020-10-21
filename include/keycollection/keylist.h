@@ -161,21 +161,21 @@ int			keylist_insert_after(keylist_t *self, void *index_node, void *node);
  *  \param		*self	list instance.
  *  \param		*iterator	iterator instance.
  *  \return	0: success
- *  \remarks	This can start from the both of tail and top.But once done, cannot reversely iterate to the other side.
+ *  \remarks	This can start from the both of tail and top.But once done, cannot reversely iterate to the other edge.
  */
 int			keylist_init_iterator(keylist_t *self, keylist_iterator_t *iterator);
 
 /**
- *  \fn			keylist_init_iterator_from
- *  \brief		Initialize the keylist_iterator_t, which is ready to iterate from *index_node.
- *  \param		*self	list instance.
- *  \param		*iterator	iterator instance.
- *  \param		*index_node	The node you want to set as the start point.
- *  \return	0: success
- *  \return	-2: error[*index_node doesn't belong to *self]
+ *  \fn			keylist_iterator_move
+ *  \brief		Move the iterator to one step before the specified node.
+ *  \param		*iterator	iterator instance
+ *  \param		*index_node	The node you want to set as the first point.
+ *  \return	0: success.
+ *  \return	-2: error[*index_node doesn't belong to the list which is src of iterator].
  *  \remarks	After this, next "keylist_iterator_forward/backward" returns *index_node as you specified.
+ *  \remarks	index_node == NULL means to make iterator th the state after keylist_init_iterator(keylist_t*, keylist_iterator_t*)
  */
-int			keylist_init_iterator_from(keylist_t *self, keylist_iterator_t *iterator, void *index_node);
+int			keylist_iterator_move(keylist_iterator_t *iterator, void *index_node);
 
 /**
  *  \fn			keylist_iterator_forward
@@ -194,33 +194,6 @@ void*		keylist_iterator_forward(keylist_iterator_t *iterator);
  *  \remarks	While iterating by this, You can safely delete the node from the list.
  */
 void*		keylist_iterator_backward(keylist_iterator_t *iterator);
-
-/**
- *  \fn		keylist_iterator_ref_current
- *  \brief		Refer the current node on the iterator.
- *  \param		*iterator	iterator instance.
- *  \return	Current node. If in the tail, NULL will be returned.
- *  \remarks	While iterating by this, You can safely delete the node from the list.
- */
-void*		keylist_iterator_ref_current(keylist_iterator_t *iterator);
-
-/**
- *  \fn		keylist_iterator_is_head
- *  \brief		Check if the current node is the head.
- *  \param		*iterator	iterator instance.
- *  \return	1 if the current is in the head.
- *  \remarks	MAY NOT BE NEEDED.
- */
-int			keylist_iterator_is_head(keylist_iterator_t *iterator);
-
-/**
- *  \fn		keylist_iterator_is_tail
- *  \brief		Check if the current node is the tail.
- *  \param		*iterator	iterator instance.
- *  \return	1 if the current is in the tail.
- *  \remarks	MAY NOT BE NEEDED.
- */
-int			keylist_iterator_is_tail(keylist_iterator_t *iterator);
 
 /**
  *  \fn		keylist_has_node
@@ -317,8 +290,6 @@ struct keylist_iterator_s {
 	struct keylist_link_s	*prev;
 	struct keylist_link_s	*curr;
 	struct keylist_link_s	*next;
-	struct keylist_link_s	*head;
-	struct keylist_link_s	*tail;
 	struct keylist_s		*coll;
 };
 

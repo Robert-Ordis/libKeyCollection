@@ -149,16 +149,14 @@
 #define	KEYLIST_INIT_ITERATOR_(yourlist)	yourlist##_init_iterator
 
 /**
- *	\fn			yourlist_init_iterator_from
- *	\brief		リストループのイテレータを、ループ開始ノードを指定して初期化する
- *	\param		self		(yourlist_t*)取り扱うリスト
+ *	\fn			yourlist_iterator_move
+ *	\brief		指定されたノードが次の起点になるようイテレータを移動させる
  *	\param		iterator	(yourlist_iterator_t*)イテレータ
- *	\param		node_from	(node_type_t*)開始位置の指定。
- *	\return				(int)成功で0、失敗でマイナス
- *	\remarks	node_from=NULLでtype_init_iteratorと等価
- *	\remarks	node_fromは必ずselfに所属してなければならない
+ *	\param		index_node	(node_type_t*)対象ノード。
+ *	\return				(int)0:成功、-2:所属リストが違う
+ *	\remarks	ここからtype_iterator_forward/backwardで指定ノードからループが回る。
  */
-#define	KEYLIST_INIT_ITERATOR_FROM_(yourlist)	yourlist##_init_iterator_from
+#define	KEYLIST_ITERATOR_MOVE_(yourlist)	yourlist##_iterator_move
 
 /**
  *	\fn			yourlist_iterator_forward
@@ -179,33 +177,6 @@
  *	\remarks	ループ中、returnされたノードは削除してもよい。
  */
 #define	KEYLIST_ITERATOR_BACKWARD_(yourlist)		yourlist##_iterator_backward
-
-/**
- *	\fn			yourlist_iterator_is_head
- *	\brief		イテレーションが「初期化時における」先頭かどうかを判定する。
- *	\param		iterator	(yourlist_iterator_t*)取り扱うイテレータ
- *	\return				(int)先頭なら1。それ以外では0。
- *	\remarks	ループ中、returnされたノードは削除してもよい。
- */
-#define	KEYLIST_ITERATOR_IS_HEAD_(yourlist)		yourlist##_iterator_is_head
-
-/**
- *	\fn			yourlist_iterator_is_tail
- *	\brief		イテレーションが「初期化時における」末尾かどうかを判定する。
- *	\param		iterator	(yourlist_iterator_t*)イテレータ
- *	\return				(int)末尾なら1。それ以外では0。
- *	\remarks	ループ中、returnされたノードは削除してもよい。
- */
-#define	KEYLIST_ITERATOR_IS_TAIL_(yourlist)		yourlist##_iterator_is_tail
-
-/**
- *	\fn			yourlist_iterator_ref_current
- *	\brief		イテレータが今指しているノードを返す
- *	\param		iterator	(yourlist_iterator_t*)イテレータ
- *	\return				(node_type_t*)ノード。yourlist_iterator_forward/backwardで出たノード。
- *	\remarks	ループ中、returnされたノードは削除してもよい。
- */
-#define	KEYLIST_ITERATOR_REF_CURRENT_(yourlist)		yourlist##_iterator_ref_current
 
 /**
  *	\fn			yourlist_has_node

@@ -106,30 +106,20 @@ int				keylist_insert_after_raw(size_t offset, keylist_t *self, void *index_node
 }
 
 int				keylist_init_iterator_raw(size_t offset, keylist_t *self, keylist_iterator_t *iterator){
-	iterator->prev = self->tail;
-	iterator->next = self->head;
-	iterator->curr = NULL;
-	iterator->coll = self;
-	iterator->head = self->head;
-	iterator->tail = self->tail;
-	return 0;
+	int ret = 0;
+	KEYCOLLECT_LOCK_ACQUIRE_(self);{
+		KEYLIST_IMPL_INIT_ITERATOR_(self, iterator, ret);
+	}KEYCOLLECT_LOCK_RELEASE_(self);
+	return ret;
 }
 
-int				keylist_init_iterator_from_raw(size_t offset, keylist_t *self, keylist_iterator_t *iterator, void *index_node){
+int				keylist_iterator_move_raw(size_t offset, keylist_iterator_t *iterator, void *index_node){
+	int ret = 0;
 	keylist_link_t *index_link = (keylist_link_t *)keycollection_get_link_ptr(offset, index_node);
-	if(index_link == NULL){
-		return keylist_init_iterator_raw(offset, self, iterator);
-	}
-	if(index_link->coll != self){
-		return -2;
-	}
-	iterator->curr = NULL;
-	iterator->next = index_link;
-	iterator->prev = index_link;
-	iterator->coll = (void*)self;
-	iterator->head = self->head;
-	iterator->tail = self->tail;
-	return 0;
+	KEYCOLLECT_LOCK_ACQUIRE_(self);{
+		KEYLIST_IMPL_ITERATOR_MOVE_(iterator, index_link, ret);
+	}KEYCOLLECT_LOCK_RELEASE_(self);
+	return ret;
 }
 
 void*			keylist_iterator_forward_raw(size_t offset, keylist_iterator_t *iterator){

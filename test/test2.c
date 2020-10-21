@@ -152,7 +152,7 @@ int type_test(){
 	type_dbg_printf(pnode, lebs.link);
 	printf("%s: ret=%d\n", __func__, typelink_insert_after(plist, pnode, pnodeC));
 	
-	if(typelink_init_iterator_from(plist, it, pnode) == 0){
+	if(typelink_iterator_move(it, pnode) == 0){
 		while((pnode = typelink_iterator_forward(it)) != NULL){
 			type_dbg_printf(pnode, lebs.link);
 		}
@@ -169,7 +169,7 @@ int type_test(){
 	type_dbg_printf(pnode, lebs.link);
 	printf("%s: ret=%d\n", __func__, typelink_insert_before(plist, pnode, pnodeC));
 	
-	if(typelink_init_iterator_from(plist, it, pnode) == 0){
+	if(typelink_iterator_move(it, pnode) == 0){
 		while((pnode = typelink_iterator_backward(it)) != NULL){
 			type_dbg_printf(pnode, lebs.link);
 		}

@@ -119,8 +119,6 @@
 		ret = 0;\
 	}while(0)
 
-
-
 //指定ノードの前への挿入。「index_linkの前」として挿入する。NULLなら末尾として。
 #define	KEYLIST_IMPL_INSERT_BEFORE_(self, index_link, link, ret)\
 	do{\
@@ -196,6 +194,31 @@
 //イテレーションのパーツ。
 //型不定につき、(next|prev)_nodeを別途外部で定義しなければラナイ
 
+#define	KEYLIST_IMPL_INIT_ITERATOR_(self, iterator, ret)\
+	do{\
+		(iterator)->prev = (self)->tail;\
+		(iterator)->next = (self)->head;\
+		(iterator)->curr = NULL;\
+		(iterator)->coll = self;\
+		ret = 0;\
+	}while(0)\
+
+#define	KEYLIST_IMPL_ITERATOR_MOVE_(iterator, index_link, ret)\
+	do{\
+		if(index_link == NULL){\
+			KEYLIST_IMPL_INIT_ITERATOR_((iterator)->coll, iterator, ret);\
+			break;\
+		}\
+		else if((index_link)->coll != (iterator)->coll){\
+			ret = -2;\
+			break;\
+		}\
+		(iterator)->prev = index_link;\
+		(iterator)->next = index_link;\
+		(iterator)->curr = NULL;\
+		ret = 0;\
+	}while(0)
+
 //前方イテレーションのパーツ。retに「次のノード」を入れる。
 #define	KEYLIST_IMPL_ITERATE_FORWARD_(iterator, next_link, ret)\
 	do{\
@@ -207,9 +230,6 @@
 				next_link = (iterator)->curr->next;\
 			}\
 		}\
-		if((iterator)->curr == (iterator)->tail){\
-			next_link = NULL;\
-		}\
 		if(next_link != NULL){\
 			/*イテレータを一つ進める*/\
 			(iterator)->curr = next_link;\
@@ -217,7 +237,7 @@
 			(iterator)->next = (next_link)->next;\
 			ret = next_link;\
 		}\
-		else{\
+		else if((iterator)->curr != NULL){\
 			(iterator)->prev = (iterator)->curr;\
 			(iterator)->curr = next_link;\
 			(iterator)->next = NULL;\
@@ -235,9 +255,6 @@
 				prev_link = (iterator)->curr->prev;\
 			}\
 		}\
-		if((iterator)->curr == (iterator)->head){\
-			prev_link = NULL;\
-		}\
 		if(prev_link != NULL){\
 			/*イテレータを一つ戻す*/\
 			(iterator)->curr = prev_link;\
@@ -245,7 +262,7 @@
 			(iterator)->prev = (prev_link)->prev;\
 			ret = prev_link;\
 		}\
-		else{\
+		else if((iterator)->curr != NULL){\
 			(iterator)->next = (iterator)->curr;\
 			(iterator)->curr = prev_link;\
 			(iterator)->prev = NULL;\

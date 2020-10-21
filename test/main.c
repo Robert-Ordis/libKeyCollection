@@ -155,7 +155,7 @@ static int poly_test(){
 	type_dbg_printf(pnode, lebs.link2);
 	printf("%s: ret=%d\n", __func__, keylist_insert_after(plist, pnode, pnodeC));
 	
-	if(keylist_init_iterator_from(plist, it, pnode) == 0){
+	if(keylist_iterator_move(it, pnode) == 0){
 		while((pnode = keylist_iterator_forward(it)) != NULL){
 			type_dbg_printf(pnode, lebs.link2);
 		}
@@ -172,7 +172,7 @@ static int poly_test(){
 	type_dbg_printf(pnode, lebs.link2);
 	printf("%s: ret=%d\n", __func__, keylist_insert_before(plist, pnode, pnodeC));
 	
-	if(keylist_init_iterator_from(plist, it, pnode) == 0){
+	if(keylist_iterator_move(it, pnode) == 0){
 		while((pnode = keylist_iterator_backward(it)) != NULL){
 			type_dbg_printf(pnode, lebs.link2);
 		}
@@ -421,7 +421,7 @@ static int raw_test(){
 	type_dbg_printf(pnode, lebs.link2);
 	printf("%s: ret=%d\n", __func__, keylist_insert_after_raw(offset, plist, pnode, pnodeC));
 	
-	if(keylist_init_iterator_from_raw(offset, plist, it, pnode) == 0){
+	if(keylist_iterator_move_raw(offset, it, pnode) == 0){
 		while((pnode = keylist_iterator_forward_raw(offset, it)) != NULL){
 			type_dbg_printf(pnode, lebs.link2);
 		}
@@ -438,7 +438,7 @@ static int raw_test(){
 	type_dbg_printf(pnode, lebs.link2);
 	printf("%s: ret=%d\n", __func__, keylist_insert_before_raw(offset, plist, pnode, pnodeC));
 	
-	if(keylist_init_iterator_from_raw(offset, plist, it, pnode) == 0){
+	if(keylist_iterator_move_raw(offset, it, pnode) == 0){
 		while((pnode = keylist_iterator_backward_raw(offset, it)) != NULL){
 			type_dbg_printf(pnode, lebs.link2);
 		}

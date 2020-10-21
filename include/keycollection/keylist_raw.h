@@ -170,17 +170,17 @@ int			keylist_insert_after_raw(size_t offset, keylist_t *self, void *index_node,
 int			keylist_init_iterator_raw(size_t offset, keylist_t *self, keylist_iterator_t *iterator);
 
 /**
- *  \fn			keylist_init_iterator_from_raw
- *  \brief		Initialize the keylist_iterator_t, which is already iterated to *index_node.
- *  \param		offset	offset length to link member of the node.
- *  \param		*self	list instance.
- *  \param		*iterator	iterator instance.
- *  \param		*index_node	The node you want to set as the start point.
- *  \return	0: success
- *  \return	-2: error[*index_node doesn't belong to *self]
- *  \remarks	After this, next "keylist_iterator_forward_raw/backward_raw" returns *index_node as you specified.
+ *  \fn			keylist_iterator_move
+ *  \brief		Move the iterator to one step before the specified node.
+ *  \param		offset		offset length to link member of the node
+ *  \param		*iterator	iterator instance
+ *  \param		*index_node	The node you want to set as the first point.
+ *  \return	0: success.
+ *  \return	-2: error[*index_node doesn't belong to the list which is src of iterator].
+ *  \remarks	After this, next "keylist_iterator_forward/backward" returns *index_node as you specified.
+ *  \remarks	index_node == NULL means to make iterator th the state after keylist_init_iterator(keylist_t*, keylist_iterator_t*)
  */
-int			keylist_init_iterator_from_raw(size_t offset, keylist_t *self, keylist_iterator_t *iterator, void *index_node);
+int			keylist_iterator_move_raw(size_t offset, keylist_iterator_t *self, void *index_node);
 
 /**
  *  \fn			keylist_iterator_forward_raw
@@ -201,39 +201,6 @@ void*		keylist_iterator_forward_raw(size_t offset, keylist_iterator_t *iterator)
  *  \remarks	While iterating by this, You can safely delete the node from the list.
  */
 void*		keylist_iterator_backward_raw(size_t offset, keylist_iterator_t *iterator);
-
-/**
- *  \def		keylist_iterator_ref_current_raw
- *  \brief		Refer the current node on the iterator.
- *  \param		offset	offset length to link member of the node..
- *  \param		*iterator	iterator instance.
- *  \return	Current node. If in the tail, NULL will be returned.
- *  \remarks	While iterating by this, You can safely delete the node from the list.
- */
-#define		keylist_iterator_ref_current_raw(offset, iterator)\
-	(keycollection_get_container_ptr(offset, (iterator)->curr))
-
-/**
- *  \def		keylist_iterator_is_head_raw
- *  \brief		Check if the current node is the head.
- *  \param		offset	unused.
- *  \param		*iterator	iterator instance.
- *  \return	1 if the current is in the head.
- *  \remarks	MAY NOT BE NEEDED.
- */
-#define		keylist_iterator_is_head_raw(offset, iterator)\
-	((iterator)->head == (iterator)->curr)
-
-/**
- *  \def		keylist_iterator_is_tail_raw
- *  \brief		Check if the current node is the tail.
- *  \param		offset	unused.
- *  \param		*iterator	iterator instance.
- *  \return	1 if the current is in the tail.
- *  \remarks	MAY NOT BE NEEDED.
- */
-#define		keylist_iterator_is_tail_raw(offset, iterator)\
-	((iterator)->tail == (iterator)->curr)
 
 /**
  *  \def		keylist_link_get_belong_raw

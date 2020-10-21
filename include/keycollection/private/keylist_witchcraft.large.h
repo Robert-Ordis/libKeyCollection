@@ -138,29 +138,19 @@
 	}\
 	\
 	int				KEYLIST_INIT_ITERATOR_(yourlist)(KEYLIST_T_(yourlist) *self, KEYLIST_ITERATOR_T_(yourlist) *iterator){\
-		iterator->prev = self->tail;\
-		iterator->next = self->head;\
-		iterator->curr = NULL;\
-		iterator->coll = self;\
-		iterator->head = self->head;\
-		iterator->tail = self->tail;\
-		return 0;\
+		int ret = 0;\
+		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
+			KEYLIST_IMPL_INIT_ITERATOR_(self, iterator, ret);\
+		}KEYCOLLECT_LOCK_RELEASE_(self);\
 	}\
 	\
-	int				KEYLIST_INIT_ITERATOR_FROM_(yourlist)(KEYLIST_T_(yourlist) *self, KEYLIST_ITERATOR_T_(yourlist) *iterator, nodetype_s *index_node){\
-		if(index_node == NULL){\
-			return keylist_init_iterator_raw(offsetof(nodetype_s, link_member), self, iterator);\
-		}\
-		if((index_node)->link_member.coll != self){\
-			return -2;\
-		}\
-		iterator->curr = NULL;\
-		iterator->next = &((index_node)->link_member);\
-		iterator->prev = &((index_node)->link_member);\
-		iterator->coll = (void*)self;\
-		iterator->head = self->head;\
-		iterator->tail = self->tail;\
-		return 0;\
+	int				KEYLIST_ITERATOR_MOVE_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator, nodetype_s *index_node){\
+		int ret = 0;\
+		keylist_link_t *link = &((index_node)->link_member);\
+		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
+			KEYLIST_IMPL_ITERATOR_MOVE_(iterator, link, ret);\
+		}KEYCOLLECT_LOCK_RELEASE_(self);\
+		return ret;\
 	}\
 	\
 	nodetype_s*		KEYLIST_ITERATOR_FORWARD_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
@@ -181,17 +171,6 @@
 		return keycollection_get_container_ptr(offsetof(nodetype_s, link_member), ret_link);\
 	}\
 	/*----------------ここ以降は全部マクロ…----------------*/\
-	\
-	nodetype_s*		KEYLIST_ITERATOR_REF_CURRENT_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
-		return (nodetype_s *)keylist_iterator_ref_current_raw(offsetof(nodetype_s, link_member), iterator);\
-	}\
-	int				KEYLIST_ITERATOR_IS_HEAD_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
-		return keylist_iterator_is_head_raw(offsetof(nodetype_s, link_member), iterator);\
-	}\
-	\
-	int				KEYLIST_ITERATOR_IS_TAIL_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
-		return keylist_iterator_is_tail_raw(offsetof(nodetype_s, link_member), iterator);\
-	}\
 	\
 	nodetype_s*		KEYLIST_GET_NEXT_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){\
 		if((node)->link_member.coll != self){\
