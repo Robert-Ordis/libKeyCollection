@@ -1,7 +1,8 @@
 /**
  *  \file		keylist.h
- *  \brief		固定メンバ変数式リンクリストをマクロで定義するためのライブラリ
- *  \remarks	メンバを直接使うライブラリにつき、
+ *  \brief		A doubly linked list library using the defined member-field.
+ *  \remarks	Due to treating a specified member-field to making link, 
+ *				these functions are NOT restrictly type-safe.
  */
 #ifndef	KEYLIST_H_
 #define	KEYLIST_H_
@@ -10,21 +11,21 @@
 #include <stddef.h>
 
 /**
- *  \struct	keylist_link_t
+ *  \typedef	keylist_link_t
  *  \brief		Set of members for composing a doubly linked list.
  *  \details	First, set this as a member of the struct you want to make Doubly Linked List.
  */
 typedef struct keylist_link_s keylist_link_t;
 
 /**
- *  \struct	keylist_t
+ *  \typedef	keylist_t
  *  \brief		Doubly linked list container(Generic/Raw type)
  *
  */
 typedef struct keylist_s keylist_t;
 
 /**
- *  \struct	keylist_iterator_t
+ *  \typedef	keylist_iterator_t
  *  \brief		Iterator for doubly linked list.(may be same in binary tree)
  *  \brief		While iterating by this, the nearby node in the collection can be edited.
  */
@@ -156,12 +157,10 @@ int			keylist_insert_after(keylist_t *self, void *index_node, void *node);
 
 /**
  *  \fn			keylist_has_node
- *  \brief		Get the next node of the node directly.
+ *  \brief		Check if *self has the node specified as *node.
  *  \param		*self	list instance
  *  \param		*node	node instance.
- *  \return	The next node. Or NULL if the node doesn't have.
- *  \return	If node doesn't belong to self, this returns NULL.
- *  \remarks	This is for Fast Iterating. But NEVER EDIT THE LIST WHILE ITERATING BY THIS.
+ *  \return	1 if has. 0 if doesn't.
  */
 int			keylist_has_node(keylist_t *self, void *node);
 
@@ -259,16 +258,14 @@ void*		keylist_iterator_backward(keylist_iterator_t *iterator);
 
 /**
  *  \def		keylist_init_for
- *  \brief		Initialize the keylist for treating the specified structure and member.
+ *  \brief		Initialize the keylist for treating the specified structure and link-member.
  *  \param		*self	list instance
  *  \param		type	target structure type
  *  \param		member	link member for making linked list.
  */
 #define		keylist_init_for(self, type, member)\
 	do{\
-		(self)->head = NULL;\
-		(self)->tail = NULL;\
-		(self)->size = 0;\
+		keylist_init(self);\
 		(self)->ofst = offsetof(type, member);\
 	}while(0)\
 		
