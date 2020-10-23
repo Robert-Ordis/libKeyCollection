@@ -1,5 +1,5 @@
 /**
- *  \file		keylist.h
+ *  \file		keytree.h
  *  \brief		A binary search tree library using the defined member-field.
  *  \remarks	Due to treating a specified member-field to making link, 
  *				these functions are NOT restrictly type-safe.
@@ -15,7 +15,7 @@
 
 /**
  *  \typedef	keytree_link_t
- *  \brief		Set of members for composing a doubly linked list.
+ *  \brief		Set of members for composing a doubly linked tree.
  */
 typedef struct keytree_link_s keytree_link_t;
 
@@ -28,7 +28,7 @@ typedef struct keytree_s keytree_t;
 
 /**
  *  \typedef	keytree_iterator_t
- *  \brief		Iterator for Binary search tree.(Same in my Doubly linked list.)
+ *  \brief		Iterator for Binary search tree.(Same in my Doubly linked tree.)
  *  \brief		While iterating by this, the nearby node in the collection can be edited.
  */
 typedef struct keytree_iterator_s keytree_iterator_t;
@@ -55,8 +55,8 @@ typedef void	(*keytree_make_node_cb)(void *node, void *value, size_t value_len);
 
 /**
  *  \fn			keytree_init
- *  \brief		Initialize the list.
- *  \param		*self	list instance.
+ *  \brief		Initialize the tree.
+ *  \param		*self	tree instance.
  *  \param		allow_eq	0 if you don't want to add same-valued node in the tree. Otherwise if you allow.
  *  \param		comp_node	Comparator for the nodes on this tree.
  *  \remarks	If you  use this func, target struct must contains keytree_link_t as the first member.
@@ -66,50 +66,50 @@ void		keytree_init(keytree_t *self, int allow_eq, keytree_comp_node_cb comp_node
 /**
  *  \fn			keytree_get_count
  *  \brief		Get contained num on the List.
- *  \param		*self	list instance.
- *  \return	Number of nodes in the list.
+ *  \param		*self	tree instance.
+ *  \return	Number of nodes in the tree.
  *  \remarks	Experimental implementation with macro.
  */
 int			keytree_get_count(keytree_t *self);
 
 /**
  *  \fn			keytree_ref_head
- *  \brief		Get top node in the list.
- *  \param		*self	list instance.
- *  \return	Top node in the list.
+ *  \brief		Get top node in the tree.
+ *  \param		*self	tree instance.
+ *  \return	Top node in the tree.
  */
 void*		keytree_ref_head(keytree_t *self);
 
 /**
  *  \fn			keytree_ref_tail
- *  \brief		Get last node in the list.
- *  \param		*self	list instance.
- *  \return	Last node in the list.
+ *  \brief		Get last node in the tree.
+ *  \param		*self	tree instance.
+ *  \return	Last node in the tree.
  */
 void*		keytree_ref_tail(keytree_t *self);
 
 /**
  *  \fn			keytree_pop_head
- *  \brief		Get and delete the top node from the list.
+ *  \brief		Get and delete the top node from the tree.
  *  \param		offset	offset length to link member of the node.
- *  \param		*self	list instance.
- *  \return	Top node in the list.(It is already removed from *self);
+ *  \param		*self	tree instance.
+ *  \return	Top node in the tree.(It is already removed from *self);
  */
 void*		keytree_pop_head(keytree_t *self);
 
 /**
  *  \fn			keytree_pop_tail
- *  \brief		Get and delete the last node from the list.
+ *  \brief		Get and delete the last node from the tree.
  *  \param		offset	offset length to link member of the node.
- *  \param		*self	list instance.
- *  \return	Last node in the list.(It is already removed from *self);
+ *  \param		*self	tree instance.
+ *  \return	Last node in the tree.(It is already removed from *self);
  */
 void*		keytree_pop_tail(keytree_t *self);
 
 /**
  *  \fn			keytree_ref_nth
- *  \brief		Get the nth(Top = 0th) node from the list.
- *  \param		*self	list instance.
+ *  \brief		Get the nth(Top = 0th) node from the tree.
+ *  \param		*self	tree instance.
  *  \param		nth		number which you want to get. minus indicates the count from the last.(last is -1)
  *  \return	The node in the number shown as nth. If out of bounds, this will return NULL.
  *  \remarks	Minus number is an experimental implementation.
@@ -121,14 +121,14 @@ void*		keytree_ref_nth(keytree_t *self, int nth);
  *  \brief		Add a node to the tree.
  *  \param		*self	tree instance.
  *  \param		*node	The node you want to add to *self.
- *  \return	0: success, -1: error[tried to add the node already belongin in some list]
+ *  \return	0: success, -1: error[tried to add the node already belongin in some tree]
  */
 int			keytree_add(keytree_t *self, void *node);
 
 /**
  *  \fn			keytree_del
  *  \brief		Delete the node from the tree.
- *  \param		*self	list instance.
+ *  \param		*self	tree instance.
  *  \param		*node	The node you want to remove from *self.
  *  \return	0: success.
  *  \return	-2: error[*node doesn't belongs in *self]
@@ -146,14 +146,14 @@ int			keytree_del(keytree_t *self, void *node);
  *  \param		*node	node instance.
  *  \return	1 if has. 0 if doesn't..
  */
-int			keytree_has_node(keylist_t *self, void *node);
+int			keytree_has_node(keytree_t *self, void *node);
 
 /*keytree_get_belong(void *node);*/
 
 /**
  *  \fn			keytree_get_next
  *  \brief		Get the next node of the node directly.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		*node	node instance.
  *  \return	The next node. Or NULL if the node doesn't have.
  *  \return	If node doesn't belong to self, this returns NULL.
@@ -164,7 +164,7 @@ void*		keytree_get_next(keytree_t *self, void *node);
 /**
  *  \fn			keytree_get_prev
  *  \brief		Get the previous node of the node directly.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		*node	node instance.
  *  \return	The previous node. Or NULL if the node doesn't have.
  *  \return	If node doesn't belong to self, this returns NULL.
@@ -175,7 +175,7 @@ void*		keytree_get_prev(keytree_t *self, void *node);
 /**
  *  \fn			keytree_find_eq_node
  *  \brief		Get the left edge node having value equals to specified node's.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		*index_node	node instance.
  *  \return	The node explained in the above brief.
  *  \return	NULL if no one has the value.
@@ -187,7 +187,7 @@ void*		keytree_find_eq_node(keytree_t *self, void *index_node);
 /**
  *  \fn			keytree_find_eq_node_end
  *  \brief		Get the right edge node having value equals to specified node's.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		*index_node	node instance.
  *  \return	The node explained in the above brief.
  *  \return	NULL if no one has the value.
@@ -199,7 +199,7 @@ void*		keytree_find_eq_node_end(keytree_t *self, void *index_node);
 /**
  *  \fn			keytree_find_lt_node
  *  \brief		Get the right edge node having value lesser than specified node's.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		*index_node	node instance.
  *  \return	The node explained in the above brief.
  *  \return	NULL if no one has the value.
@@ -211,7 +211,7 @@ void*		keytree_find_lt_node(keytree_t *self, void *index_node);
 /**
  *  \fn			keytree_find_ge_node
  *  \brief		Get the left edge node having value greater than or equals to specified node's.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		*index_node	node instance.
  *  \return	The node explained in the above brief.
  *  \return	NULL if no one has the value.
@@ -223,7 +223,7 @@ void*		keytree_find_ge_node(keytree_t *self, void *index_node);
 /**
  *  \fn			keytree_init_iterator
  *  \brief		Initialize the keytree_iterator_t.
- *  \param		*self	list instance.
+ *  \param		*self	tree instance.
  *  \param		*iterator	iterator instance.
  *  \return	0: success
  *  \remarks	This can start from the both of tail and top. 
@@ -234,7 +234,7 @@ int			keytree_init_iterator(keytree_t *self, keytree_iterator_t *iterator);
 /**
  *  \fn			keytree_init_iterator_ranged
  *  \brief		Initialize the range-limited keytree_iterator_t.
- *  \param		*self	list instance.
+ *  \param		*self	tree instance.
  *  \param		*iterator	iterator instance.
  *  \param		*head	Head for the iterator.Start from this on forward, End at this on backward.
  *  \param		*tail	Tail for the iterator.Start from this on backward, End at this on forward.
@@ -251,11 +251,11 @@ int			keytree_init_iterator_ranged(keytree_t *self, keytree_iterator_t *iterator
  *  \param		*iterator	iterator instance
  *  \param		*index_node	The node you want to set as the first point.
  *  \return	0: success.
- *  \return	-2: error[*index_node doesn't belong to the list which is src of iterator].
- *  \remarks	After this, next "keylist_iterator_forward/backward" returns *index_node as you specified.
+ *  \return	-2: error[*index_node doesn't belong to the tree which is src of iterator].
+ *  \remarks	After this, next "keytree_iterator_forward/backward" returns *index_node as you specified.
  *  \remarks	index_node == NULL means to make the iterator to the state on initiated.
  */
-int			keytree_iterator_move(keylist_iterator_t *iterator, void *index_node);
+int			keytree_iterator_move(keytree_iterator_t *iterator, void *index_node);
 
 /**
  *  \fn			keytree_iterator_forward
@@ -280,7 +280,7 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
  *  \brief		Syntax sugar for fast forward iterating
  *	\param		offset	offset length to link member of the node
  *	\param		*node	working pointer of picking node
- *	\param		*self	list instance
+ *	\param		*self	tree instance
  */
 #define		keytree_foreach_forward(node, self)\
 	for(\
@@ -294,7 +294,7 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
  *  \brief		Syntax sugar for fast backward iterating
  *	\param		offset	offset length to link member of the node
  *	\param		*node	working pointer of picking node
- *	\param		*self	list instance
+ *	\param		*self	tree instance
  */
 #define		keytree_foreach_backward(node, self)\
 	for(\
@@ -306,9 +306,9 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
 /**
  *  \def		keytree_init_for
  *  \brief		Initialize the keytree for treating the specified structure and member.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		type	target structure type
- *  \param		member	link member for making linked list.
+ *  \param		member	link member for making linked tree.
  */
 #define		keytree_init_for(self, type, member)\
 	do{\
@@ -320,7 +320,7 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
 struct keytree_link_s {
 	/*
 		KEYLISTのマクロを流用するので、メンバ名は共通
-		For reusing KEYLIST macros, some member names are same as keylist_link_t.
+		For reusing KEYLIST macros, some member names are same as keytree_link_t.
 	 */
 	struct keytree_link_s	*prev;			/**previous pointer*/
 	struct keytree_link_s	*next;			/**next pointer.*/
@@ -338,7 +338,7 @@ struct keytree_link_s {
 struct keytree_s {
 	/*
 		KEYLISTのマクロを流用するので、メンバ名は共通
-		For reusing KEYLIST macros, some member names are same as keylist_link_t.
+		For reusing KEYLIST macros, some member names are same as keytree_link_t.
 	*/
 	struct keytree_link_s*	head;	/**Pointer to head link.*/
 	struct keytree_link_s*	tail;	/**Pointer to tail link.*/
@@ -362,7 +362,7 @@ struct keytree_s {
 struct keytree_iterator_s {
 	/*
 		KEYLISTのマクロを流用するので、メンバ名は共通
-		For reusing KEYLIST macros, some member names are same as keylist_link_t.
+		For reusing KEYLIST macros, some member names are same as keytree_link_t.
 	*/
 	struct keytree_link_s	*prev;
 	struct keytree_link_s	*curr;

@@ -20,7 +20,7 @@
  */
 #define		keytree_init_raw(offset, self, allowEq, compNode)\
 	do{\
-		/*some members are same as keylist.*/\
+		/*some members are same as keytree.*/\
 		(self)->head = NULL;\
 		(self)->tail = NULL;\
 		(self)->size = 0;\
@@ -152,7 +152,7 @@ int			keytree_insert_after_raw(size_t offset, keytree_t *self, void *index_node,
  *  \fn			keytree_find_eq_node_raw
  *  \brief		Get the left edge node having value equals to specified node's.
  *  \param		offset	offset length to link member of the node.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		*index_node	node instance.
  *  \return	The node explained in the above brief.
  *  \return	NULL if no one has the value.
@@ -164,7 +164,7 @@ void*		keytree_find_eq_node_raw(size_t offset, keytree_t *self, void *index_node
  *  \fn			keytree_find_eq_node_end_raw
  *  \brief		Get the right edge node having value equals to specified node's.
  *  \param		offset	offset length to link member of the node.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		*index_node	node instance.
  *  \return	The node explained in the above brief.
  *  \return	NULL if no one has the value.
@@ -176,7 +176,7 @@ void*		keytree_find_eq_node_end_raw(size_t offset, keytree_t *self, void *index_
  *  \fn			keytree_find_lt_node_raw
  *  \brief		Get the right edge node having value lesser than specified node's.
  *  \param		offset	offset length to link member of the node.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		*index_node	node instance.
  *  \return	The node explained in the above brief.
  *  \return	NULL if no one has the value.
@@ -188,7 +188,7 @@ void*		keytree_find_lt_node_raw(size_t offset, keytree_t *self, void *index_node
  *  \fn			keytree_find_ge_node_raw
  *  \brief		Get the left edge node having value greater than or equals to specified node's.
  *  \param		offset	offset length to link member of the node.
- *  \param		*self	list instance
+ *  \param		*self	tree instance
  *  \param		*index_node	node instance.
  *  \return	The node explained in the above brief.
  *  \return	NULL if no one has the value.
@@ -211,7 +211,7 @@ int			keytree_init_iterator_raw(size_t offset, keytree_t *self, keytree_iterator
  *  \fn			keytree_init_iterator_ranged_raw
  *  \brief		Initialize the range-limited keytree_iterator_t.
  *  \param		offset	offset length to link member of the node.
- *  \param		*self	list instance.
+ *  \param		*self	tree instance.
  *  \param		*iterator	iterator instance.
  *  \param		*head	Head for the iterator.Start from this on forward, End at this on backward.
  *  \param		*tail	Tail for the iterator.Start from this on backward, End at this on forward.
@@ -273,7 +273,7 @@ void*		keytree_iterator_backward_raw(size_t offset, keytree_iterator_t *iterator
  *  \return	The next node. Or NULL if the node doesn't have.
  *  \remarks	This is for Fast Iterating. But NEVER EDIT THE TREE WHILE ITERATING BY THIS.
  */
-void*		keytree_link_get_next_raw(offset, node);
+void*		keytree_link_get_next_raw(size_t offset, void* node);
 
 /**
  *  \fn			keytree_link_get_prev_raw
@@ -283,7 +283,7 @@ void*		keytree_link_get_next_raw(offset, node);
  *  \return	The previous node. Or NULL if the node doesn't have.
  *  \remarks	This is for Fast Iterating. But NEVER EDIT THE TREE WHILE ITERATING BY THIS.
  */
-void*		keytree_link_get_prev_raw(offset, node);
+void*		keytree_link_get_prev_raw(size_t offset, void* node);
 
 /**
  *  \def		keytree_foreach_forward_raw

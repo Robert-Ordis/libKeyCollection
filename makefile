@@ -13,6 +13,7 @@ SRC_DIR			= ./src
 SRC_LIBPART		:=\
 				 $(SRC_DIR)/keylist_raw.c\
 				 $(SRC_DIR)/keylist.c\
+				 $(SRC_DIR)/keytree_raw.c\
 
 TST_DIR			= ./test
 SRC_PROGRAM		:=\
@@ -29,7 +30,7 @@ AR	= ar
 
 ####build options####
 #CFLAGS			= -Wall -O0 -g -ansi
-CFLAGS			= -Wall -Os -g -ansi
+CFLAGS			= -Wall -Os -g -std=c99
 #CFLAGS			= -Wall -O2 -g -ansi
 DEFS			= 
 CROSS_PREFIX	= 

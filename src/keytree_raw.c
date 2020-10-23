@@ -1,3 +1,4 @@
+#define _XOPEN_SOURCE
 #include <stdlib.h>
 #include <limits.h>
 
@@ -28,7 +29,7 @@ static int		keytree_link_rotate_right_(keytree_t *self, keytree_link_t *link){
 		up_cursor = &(self->root);
 	}
 	
-	if(*(up_cursor) != node){
+	if(*(up_cursor) != link){
 		/*nodeを指しているべきポインタがnodeを刺していない場合。assertでもするべき？*/
 		return -2;
 	}
@@ -68,7 +69,7 @@ static int		keytree_link_rotate_left_(keytree_t *self, keytree_link_t *link){
 		up_cursor = &(self->root);
 	}
 	
-	if(*(up_cursor) != node){
+	if(*(up_cursor) != link){
 		/*nodeを指しているべきポインタがnodeを刺していない場合。assertでもするべき？*/
 		return -2;
 	}
@@ -90,26 +91,27 @@ static int		keytree_link_rotate_left_(keytree_t *self, keytree_link_t *link){
 }
 
 /*linkを、上方向に上げるように回転する*/
-static inline int		keytree_link_rotate_up_(keytree_t *self, keytree_link_t *link){
-	if(link.up == NULL){
+inline static  int		keytree_link_rotate_up_(keytree_t *self, keytree_link_t *link){
+	if(link->up == NULL){
 		/*そもそも上がいないのならこの話はなし*/
 		return -1;
 	}
 	
-	if(node->up->lt == link){
+	if(link->up->lt == link){
 		/*親から見て左の子なら、親を起点に右回転*/
-		return keytree_rotate_right_(self, link->up);
+		return keytree_link_rotate_right_(self, link->up);
 	}
 	
-	if(node->up->ge == link){
+	if(link->up->ge == link){
 		/*親から見て右の子なら、親を起点に左回転*/
-		return keytree_rotate_left_(self, link->up);
+		return keytree_link_rotate_left_(self, link->up);
 	}
+	return -2;
 }
 
-static int		keytree_del_inside_(size_t offset, keytree_t *self, keytree_link_t *link){
+static int		keytree_del_inside_(keytree_t *self, keytree_link_t *link){
 	/*どちらかいる方の子ノードを指定。これをもとに削除後の後始末をつける*/
-	keytree_link_t	child_link;
+	keytree_link_t	*child;
 	/*指定したノードの子が実質どれだけいるかを把握*/
 	int				child_num;
 	
@@ -118,7 +120,6 @@ static int		keytree_del_inside_(size_t offset, keytree_t *self, keytree_link_t *
 	keytree_link_t	*search;	/*兄弟持ち削除時の代替ノード*/
 	keytree_link_t	**search_cursor;	/*兄弟持ち削除時の親のlt/ge書き換えカーソル*/
 	keytree_link_t	*search_subtree;	/*兄弟持ち削除時の代替ノードの元サブツリー*/
-	int promote_right;
 	
 	if(self->comp_node == NULL){
 		/*そもそも比較関数を持たせてもらっていないならこの話は終わり*/
@@ -126,42 +127,45 @@ static int		keytree_del_inside_(size_t offset, keytree_t *self, keytree_link_t *
 	}
 	
 #ifndef	KEYTREE_ROUGHLY_TREAP_DELETION
-	/*treep実装*/
-	while(1){
-		/*linkが葉になるまで回転を続ける*/
-		/*ただし、方向は「優先度値が小さい＝高い方の子が新しい親になる」もの*/
-		if(link->lt != NULL && link->ge != NULL){
-			/*右の優先度値が小さい＝高い場合は右を昇格*/
-			promote_right = link->lt->h_pri > link->ge->h_pri;
+	{
+		int promote_right;
+		/*treep実装*/
+		while(1){
+			/*linkが葉になるまで回転を続ける*/
+			/*ただし、方向は「優先度値が小さい＝高い方の子が新しい親になる」もの*/
+			if(link->lt != NULL && link->ge != NULL){
+				/*右の優先度値が小さい＝高い場合は右を昇格*/
+				promote_right = link->lt->h_pri > link->ge->h_pri;
+			}
+			else if(link->lt == NULL && link->ge == NULL){
+				/*どっちもいない場合、linkは葉ノードなので回転終わり。*/
+				break;
+			}
+			else{
+				/*どっちか片方ならば、存在する方を昇格させる*/
+				promote_right = (link->ge != NULL);
+			}
+			if(promote_right){
+				/*右を昇格＝自分は左子へ降格*/
+				keytree_link_rotate_left_(self, link);
+			}
+			else{
+				/*左を昇格＝自分は右子へ降格*/
+				keytree_link_rotate_right_(self, link);
+			}
 		}
-		else if(link->lt == NULL && link->ge == NULL){
-			/*どっちもいない場合、linkは葉ノードなので回転終わり。*/
-			break;
+		
+		parent = link->up;
+		if(parent != NULL){
+			cursor = (parent->lt == link) ? &(parent->lt) : &(parent->ge);
 		}
-		else{
-			/*どっちか片方ならば、存在する方を昇格させる*/
-			promote_right = (link->ge != NULL);
+		if(*(cursor) != link){
+			/* must assert ? */
+			return -3;
 		}
-		if(promote_right){
-			/*右を昇格＝自分は左子へ降格*/
-			keytree_link_rotate_left_(self, link);
-		}
-		else{
-			/*左を昇格＝自分は右子へ降格*/
-			keytree_link_rotate_right_(self, link);
-		}
+		*cursor = NULL;
+		link->up = link->lt = link->ge = NULL;
 	}
-	
-	parent = link->up;
-	if(parent != NULL){
-		cursor = (parent->lt == link) ? &(parent->lt) : &(parent->ge);
-	}
-	if(*(cursor) != link){
-		/* must assert ? */
-		return -3;
-	}
-	*cursor = NULL;
-	link->up = link->lt = link->ge = NULL;
 	return 0;
 	
 #endif	/* !KEYTREE_ROUGHLY_TREAP_DELETION*/
@@ -227,11 +231,11 @@ static int		keytree_del_inside_(size_t offset, keytree_t *self, keytree_link_t *
 	return 0;
 }
 
-static inline keytree_link_t*	keytree_link_get_prev_(keytree_link_t *link){
+inline static keytree_link_t*	keytree_link_get_prev_(keytree_link_t *link){
 	return link->prev;
 }
 
-static inline keytree_link_t*	keytree_link_get_next_(keytree_link_t *link){
+inline static keytree_link_t*	keytree_link_get_next_(keytree_link_t *link){
 	return link->next;
 }
 /*
@@ -469,7 +473,7 @@ void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_nod
 	void			*curr_node;
 	void			*ret;
 	int				comp_ret;
-	if(self->count <= 0){
+	if(self->size <= 0){
 		return NULL;
 	}
 	KEYCOLLECT_LOCK_ACQUIRE_(self);{
@@ -513,7 +517,7 @@ void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_nod
 			while(ret != NULL){
 				curr_link = keytree_link_get_next_(curr_link);
 				ret = keycollection_get_container_ptr(offset, curr_link);
-				if(ret == NULL || self->comp(ret, index_node) >= 0){
+				if(ret == NULL || self->comp_node(ret, index_node) >= 0){
 					break;
 				}
 			}
@@ -528,7 +532,7 @@ void*			keytree_find_lt_node_raw(size_t offset, keytree_t *self, void *index_nod
 	void			*curr_node;
 	void			*ret;
 	int				comp_ret;
-	if(self->count <= 0){
+	if(self->size <= 0){
 		return NULL;
 	}
 	KEYCOLLECT_LOCK_ACQUIRE_(self);{
@@ -591,8 +595,8 @@ int				keytree_init_iterator_raw(size_t offset, keytree_t *self, keytree_iterato
 
 int			keytree_init_iterator_ranged_raw(size_t offset, keytree_t *self, keytree_iterator_t *iterator, void *head, void *tail){
 	/*ちょっとした遊び心を搭載してみるテスト*/
-	keytree_link_t	head_link = keycollection_get_link_ptr(offset, head);
-	keytree_link_t	tail_link = keycollection_get_link_ptr(offset, tail);
+	keytree_link_t	*head_link = keycollection_get_link_ptr(offset, head);
+	keytree_link_t	*tail_link = keycollection_get_link_ptr(offset, tail);
 	
 	if(head_link != NULL && head_link->coll != self){
 		return -2;
@@ -626,9 +630,9 @@ int			keytree_init_iterator_ranged_raw(size_t offset, keytree_t *self, keytree_i
 int				keytree_iterator_move_raw(size_t offset, keytree_iterator_t *iterator, void *index_node){
 	int ret = 0;
 	keytree_link_t *index_link = (keytree_link_t *)keycollection_get_link_ptr(offset, index_node);
-	KEYCOLLECT_LOCK_ACQUIRE_(self);{
+	KEYCOLLECT_LOCK_ACQUIRE_(iterator->coll);{
 		KEYLIST_IMPL_ITERATOR_MOVE_(iterator, index_link, ret);
-	}KEYCOLLECT_LOCK_RELEASE_(self);
+	}KEYCOLLECT_LOCK_RELEASE_(iterator->coll);
 	return ret;
 }
 
@@ -636,9 +640,9 @@ int				keytree_iterator_move_raw(size_t offset, keytree_iterator_t *iterator, vo
 void*			keytree_iterator_forward_raw(size_t offset, keytree_iterator_t *iterator){
 	keytree_link_t	*tmp_link = iterator->next;
 	keytree_link_t	*ret_link;
-	KEYCOLLECT_LOCK_ACQUIRE_(self);{
+	KEYCOLLECT_LOCK_ACQUIRE_(iterator->coll);{
 		KEYLIST_IMPL_ITERATE_FORWARD_(iterator, tmp_link, ret_link);
-		if(iterator->tail != NULL)
+		if(iterator->tail != NULL){
 			if(ret_link ==iterator->tail){
 				/*範囲定義時の終端にぶち当たったらループ終わり*/
 				iterator->next = NULL;
@@ -648,16 +652,16 @@ void*			keytree_iterator_forward_raw(size_t offset, keytree_iterator_t *iterator
 				iterator->next = iterator->coll->head;
 			}
 		}
-	}KEYCOLLECT_LOCK_RELEASE_(self);
+	}KEYCOLLECT_LOCK_RELEASE_(iterator->coll);
 	return keycollection_get_container_ptr(offset, ret_link);
 }
 
 void*			keytree_iterator_backward_raw(size_t offset, keytree_iterator_t *iterator){
 	keytree_link_t	*tmp_link = iterator->prev;
 	keytree_link_t	*ret_link;
-	KEYCOLLECT_LOCK_ACQUIRE_(self);{
+	KEYCOLLECT_LOCK_ACQUIRE_(iterator->coll);{
 		KEYLIST_IMPL_ITERATE_BACKWARD_(iterator, tmp_link, ret_link);
-		if(iterator->head != NULL)
+		if(iterator->head != NULL){
 			if(ret_link == iterator->head){
 				/*範囲定義時の終端にぶち当たったらループ終わり*/
 				iterator->prev = NULL;
@@ -667,7 +671,7 @@ void*			keytree_iterator_backward_raw(size_t offset, keytree_iterator_t *iterato
 				iterator->prev = iterator->coll->tail;
 			}
 		}
-	}KEYCOLLECT_LOCK_RELEASE_(self);
+	}KEYCOLLECT_LOCK_RELEASE_(iterator->coll);
 	return keycollection_get_container_ptr(offset, ret_link);
 }
 
@@ -675,7 +679,7 @@ void*			keytree_iterator_backward_raw(size_t offset, keytree_iterator_t *iterato
 keytree_t*	keytree_link_get_belonged_raw(offset, node);
 */
 
-void*			keytree_link_get_next_raw(offset, node){
+void*			keytree_link_get_next_raw(size_t offset, void* node){
 	return keycollection_get_container_ptr(offset,
 		keytree_link_get_next_(
 			(keytree_link_t *)keycollection_get_link_ptr(offset, node)
@@ -683,7 +687,7 @@ void*			keytree_link_get_next_raw(offset, node){
 	);
 }
 
-void*			keytree_link_get_next_raw(offset, node){
+void*			keytree_link_get_prev_raw(size_t offset, void* node){
 	return keycollection_get_container_ptr(offset,
 		keytree_link_get_prev_(
 			(keytree_link_t *)keycollection_get_link_ptr(offset, node)
