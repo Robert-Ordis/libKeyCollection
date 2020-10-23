@@ -10,11 +10,13 @@
 #define	KEYLIST_GENERATE_FUNCS_AS_WRAPPER
 
 /**
- *  \def		KEYTREE_GENERATE_FUNCS_AS_WRAPPER
- *  \brief		(config) making the generated Binary tree functions as wrapper or not.
- *  \remarks	If this is undefed, the generated funcs code will be bit faster but enlarged.
- *  \remarks	Because, in undefed case, code of funcs will be defined DIRECTLY.
+ *  \def		KEYTREE_ROUGHLY_TREAP_DELETION
+ *  \brief		(config) Config for determine deletion algorithm
+ *  \remarks	If this is defined, Do belows at delete.
+ *  			1: Delete with the original method of binary tree.
+ *  			2: Copy the priority of the deleted on the heap will copied to the proxy node.
+ *
  */
-#define	KEYTREE_GENERATE_FUNCS_AS_WRAPPER
+#define	KEYTREE_ROUGHLY_TREAP_DELETION
 
 #endif	/* !KEYCOLLECT_CONFIG_H_ */

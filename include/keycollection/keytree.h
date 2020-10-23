@@ -39,7 +39,7 @@ typedef struct keytree_iterator_s keytree_iterator_t;
  *  \param		*node_a	A node.
  *  \param		*node_b B node.
  *  \return	(int) ret >= 1 if A > B / ret = 0 if A==B, / <= 1 if A < B.
- *  \remarks	This function indicates A - B.
+ *  \remarks	This function must indicates A - B.
  */
 typedef int	(*keytree_comp_node_cb)(void *node_a, void *node_b);
 
@@ -255,7 +255,7 @@ int			keytree_init_iterator_ranged(keytree_t *self, keytree_iterator_t *iterator
  *  \remarks	After this, next "keylist_iterator_forward/backward" returns *index_node as you specified.
  *  \remarks	index_node == NULL means to make the iterator to the state on initiated.
  */
-int			keylist_iterator_move(keylist_iterator_t *iterator, void *index_node);
+int			keytree_iterator_move(keylist_iterator_t *iterator, void *index_node);
 
 /**
  *  \fn			keytree_iterator_forward
@@ -327,12 +327,12 @@ struct keytree_link_s {
 	struct keytree_s		*coll;			/**pointer of container(e.g. keytree_t)*/
 
 	/*以下はツリー用。/ Belows are for keytree.*/
-	struct keytree_link_s	*ge;			/**pointer for value evaled as "Greater Equal" this.*/
+	struct keytree_link_s	*ge;			/**pointer for value evaled as "Greater than/Equals to" this.*/
 	struct keytree_link_s	*lt;			/**pointer for value evaled as "Lesser than" this.*/
-	struct keytree_link_s	*up;			/**pointer for the parent of this.*/
+	struct keytree_link_s	*up;			/**pointer for the parent of this. If the struct is root, this is NULL.*/
 
 	/*平衡2分木機能用。/ For self-balancing.*/
-	long					h_pri;			/**Priority on "Treap"*/
+	long int				h_pri;			/**Priority on "Treap". Parent->h_pri <= Child->h_pri on promotive rotation.*/
 };
 
 struct keytree_s {
@@ -369,7 +369,7 @@ struct keytree_iterator_s {
 	struct keytree_link_s	*next;
 	struct keytree_s		*coll;
 	/*
-		
+		KEYTREEで範囲制限付きイテレータが生きると考え、導入
 	*/
 	struct keytree_link_s	*head;
 	struct keytree_link_s	*tail;
