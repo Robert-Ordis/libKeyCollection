@@ -129,7 +129,6 @@ static int		keytree_del_inside_(keytree_t *self, keytree_link_t *link){
 		/*そもそも比較関数を持たせてもらっていないならこの話は終わり*/
 		return 0;
 	}
-#if 0
 #ifndef	KEYTREE_ROUGHLY_TREAP_DELETION
 	{
 		int promote_right;
@@ -139,7 +138,7 @@ static int		keytree_del_inside_(keytree_t *self, keytree_link_t *link){
 			/*ただし、方向は「優先度値が小さい＝高い方の子が新しい親になる」もの*/
 			if(link->lt != NULL && link->ge != NULL){
 				/*右の優先度値が小さい＝高い場合は右を昇格*/
-				promote_right = link->lt->h_pri > link->ge->h_pri;
+				promote_right = (link->lt->h_pri > link->ge->h_pri);
 			}
 			else if(link->lt == NULL && link->ge == NULL){
 				/*どっちもいない場合、linkは葉ノードなので回転終わり。*/
@@ -163,6 +162,9 @@ static int		keytree_del_inside_(keytree_t *self, keytree_link_t *link){
 		if(parent != NULL){
 			cursor = (parent->lt == link) ? &(parent->lt) : &(parent->ge);
 		}
+		else{
+			cursor = &(self->root);
+		}
 		if(*(cursor) != link){
 			/* must assert ? */
 			return -3;
@@ -173,7 +175,6 @@ static int		keytree_del_inside_(keytree_t *self, keytree_link_t *link){
 	return 0;
 	
 #endif	/* !KEYTREE_ROUGHLY_TREAP_DELETION*/
-#endif	
 	/*本来、Treap実装ならば要らない部分ではあるが…*/
 	/*どちらかいる方の子ノードを指定。削除後の後始末をつけるためのもの*/
 	child = (link->lt == NULL) ? link->ge : link->lt;
