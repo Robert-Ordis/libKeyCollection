@@ -642,6 +642,12 @@ int				keytree_iterator_move_raw(size_t offset, keytree_iterator_t *iterator, vo
 	keytree_link_t *index_link = (keytree_link_t *)keycollection_get_link_ptr(offset, index_node);
 	KEYCOLLECT_LOCK_ACQUIRE_(iterator->coll);{
 		KEYLIST_IMPL_ITERATOR_MOVE_(iterator, index_link, ret);
+		if(iterator->head != NULL){
+			iterator->next = iterator->head;
+		}
+		if(iterator->tail != NULL){
+			iterator->prev = iterator->tail;
+		}
 	}KEYCOLLECT_LOCK_RELEASE_(iterator->coll);
 	return ret;
 }
