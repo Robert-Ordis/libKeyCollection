@@ -27,7 +27,7 @@
 		(self)->ofst = offset;\
 		/*tree*/\
 		(self)->root = NULL;\
-		(self)->allow_eq = alloeEq;\
+		(self)->allow_eq = allowEq;\
 		(self)->comp_node = compNode;\
 		(self)->make_node = NULL;\
 		/*treap*/\

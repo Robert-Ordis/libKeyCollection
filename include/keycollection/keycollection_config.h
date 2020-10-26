@@ -17,6 +17,6 @@
  *  			2: Copy the priority of the deleted on the heap will copied to the proxy node.
  *
  */
-#define	KEYTREE_ROUGHLY_TREAP_DELETION
+//#define	KEYTREE_ROUGHLY_TREAP_DELETION
 
 #endif	/* !KEYCOLLECT_CONFIG_H_ */

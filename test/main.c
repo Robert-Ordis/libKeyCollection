@@ -15,6 +15,7 @@
 */
 int type_test();
 int large_type_test_large();
+int raw_tree_test();
 
 static int poly_test(){
 	
@@ -571,6 +572,14 @@ int main(int argc, char *argv[]){
 	end = clock();
 	large = end - start;
 	printf("%d times. large:%ju, small:%ju\n", i, (uintmax_t)large, (uintmax_t)small);
+	
+	start = clock();
+	for(i = 0; i < LOOP_COUNT; i++){
+		raw_tree_test();
+	}
+	end = clock();
+	large = end - start;
+	printf("%d times. raw_tree:%ju, small:%ju\n", i, (uintmax_t)large, (uintmax_t)small);
 	
 	return 0;
 }

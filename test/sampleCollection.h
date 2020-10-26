@@ -1,14 +1,14 @@
 #include <keycollection/keylist.h>
 #include <keycollection/keylist_raw.h>
 #include <keycollection/keylist_witchcraft.h>
+
+#include "./test_config.h"
+
 #include <inttypes.h>
 
 #ifndef	SAMPLE_COLLECTION_H_
 #define	SAMPLE_COLLECTION_H_
 
-#define LOOP_COUNT 1
-#define NODENUM 10
-#define PRINT_WHILE_TEST 1
 
 typedef struct type_s{
 	int			a;
@@ -21,8 +21,6 @@ typedef struct type_s{
 	}lebs;
 } type_t;
 
-#define db_printf(...)\
-	do{if(PRINT_WHILE_TEST){printf(__VA_ARGS__);}}while(0)
 
 #define type_dbg_printf(pnode, link_member)\
 	do{\

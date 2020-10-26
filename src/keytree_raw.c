@@ -10,7 +10,7 @@
 #include "keycollection/private/keycollection_lock.h"
 
 /*static関数群。*/
-/*linkを、左方向に下げるように回転する*/
+/*linkを、右方向に下げるように回転する*/
 static int		keytree_link_rotate_right_(keytree_t *self, keytree_link_t *link){
 	keytree_link_t *pivot = link->lt;		/*回転後のlinkの親。linkが右に降りるので元左子が昇格*/
 	keytree_link_t **up_cursor;				/*linkを子としていたポインタ*/
@@ -45,12 +45,12 @@ static int		keytree_link_rotate_right_(keytree_t *self, keytree_link_t *link){
 	*up_cursor = pivot;
 	/*最後に、pivotの右の子をnodeとする*/
 	pivot->ge = link;
-	pivot->up = pivot;
+	link->up = pivot;
 	/*終わり*/
 	return 0;
 }
 
-/*linkを、右方向に下げるように回転する*/
+/*linkを、左方向に下げるように回転する*/
 static int		keytree_link_rotate_left_(keytree_t *self, keytree_link_t *link){
 	keytree_link_t *pivot = link->ge;		/*回転後のlinkの親。linkが左に降りるので元右子が昇格*/
 	keytree_link_t **up_cursor;				/*linkを子としていたポインタ*/
@@ -74,7 +74,7 @@ static int		keytree_link_rotate_left_(keytree_t *self, keytree_link_t *link){
 		return -2;
 	}
 	
-	/*右回転開始*/
+	/*左回転開始*/
 	/*pivotの左をlinkの右の里子へ出す*/
 	link->ge = pivot->lt;
 	if(link->ge != NULL){
@@ -85,7 +85,7 @@ static int		keytree_link_rotate_left_(keytree_t *self, keytree_link_t *link){
 	*up_cursor = pivot;
 	/*最後に、pivotの左の子をnodeとする*/
 	pivot->lt = link;
-	pivot->up = pivot;
+	link->up = pivot;
 	/*終わり*/
 	return 0;
 }
@@ -121,11 +121,15 @@ static int		keytree_del_inside_(keytree_t *self, keytree_link_t *link){
 	keytree_link_t	**search_cursor;	/*兄弟持ち削除時の親のlt/ge書き換えカーソル*/
 	keytree_link_t	*search_subtree;	/*兄弟持ち削除時の代替ノードの元サブツリー*/
 	
+	if(link->coll != self){
+		return -1;
+	}
+	
 	if(self->comp_node == NULL){
 		/*そもそも比較関数を持たせてもらっていないならこの話は終わり*/
 		return 0;
 	}
-	
+#if 0
 #ifndef	KEYTREE_ROUGHLY_TREAP_DELETION
 	{
 		int promote_right;
@@ -169,7 +173,7 @@ static int		keytree_del_inside_(keytree_t *self, keytree_link_t *link){
 	return 0;
 	
 #endif	/* !KEYTREE_ROUGHLY_TREAP_DELETION*/
-	
+#endif	
 	/*本来、Treap実装ならば要らない部分ではあるが…*/
 	/*どちらかいる方の子ノードを指定。削除後の後始末をつけるためのもの*/
 	child = (link->lt == NULL) ? link->ge : link->lt;
@@ -296,9 +300,14 @@ int				keytree_add_raw(size_t offset, keytree_t *self, void *node){
 	keytree_link_t		*parent;		/*nodeの親になるノードのリンク*/
 	int comp_ret = 1;					/*比較結果。nodeof(*cursor) - nodeに相当する*/
 	KEYCOLLECT_LOCK_ACQUIRE_(self);{
+		if(link->coll != NULL){
+			KEYCOLLECT_LOCK_RELEASE_(self);
+			return -1;
+		}
 		if(self->comp_node != NULL){
 			cursor = &(self->root);
 			parent = NULL;
+			
 			while(*cursor != NULL){
 				/*葉に落ち着くまでカーソルを操作する*/
 				parent = *cursor;
@@ -322,9 +331,9 @@ int				keytree_add_raw(size_t offset, keytree_t *self, void *node){
 			else{
 				KEYLIST_IMPL_INSERT_BEFORE_(self, parent, link, ret);
 			}
-			
 			/*ここからtreap実装*/
 			link->h_pri = nrand48(self->rng);
+			printf("%s: h_pri:%d\n", __func__, link->h_pri);
 			while(1){
 				/*親の優先度 = 子の優先度でヒープを作る*/
 				if(link->up == NULL){
