@@ -657,7 +657,7 @@ void*			keytree_iterator_forward_raw(size_t offset, keytree_iterator_t *iterator
 				/*範囲定義時の終端にぶち当たったらループ終わり*/
 				iterator->next = NULL;
 			}
-			else{
+			else if(iterator->curr == iterator->coll->tail){
 				/*範囲定義時の終端ではないが、コレクションの終端ならばコレクションの始端に移動*/
 				iterator->next = iterator->coll->head;
 			}
@@ -676,7 +676,7 @@ void*			keytree_iterator_backward_raw(size_t offset, keytree_iterator_t *iterato
 				/*範囲定義時の終端にぶち当たったらループ終わり*/
 				iterator->prev = NULL;
 			}
-			else{
+			else if(iterator->curr == iterator->coll->head){
 				/*範囲定義時の始端ではないが、コレクションの始端に当たったらコレクションの終端に移動*/
 				iterator->prev = iterator->coll->tail;
 			}

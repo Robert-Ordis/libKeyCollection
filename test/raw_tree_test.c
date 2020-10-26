@@ -302,5 +302,22 @@ int raw_tree_test(){
 		tree_type_dbg_printf(pnode, lebs.link2);
 	}
 	
+	ret = keytree_init_iterator_ranged_raw(
+		offset,
+		ptree,
+		it,
+		keytree_ref_nth_raw(offset, ptree, 0),
+		keytree_ref_nth_raw(offset, ptree, 2)
+	);
+	
+	keytree_iterator_move_raw(offset, it, keytree_ref_nth_raw(offset, ptree, 3));
+	
+	db_printf("%s: test for ranged iteration: %d\n", __func__, ret);
+	if(ret == 0){
+		while((pnode = keytree_iterator_forward_raw(offset, it)) != NULL){
+			tree_type_dbg_printf(pnode, lebs.link2);
+		}
+	}
+	
 	return 0;
 }
