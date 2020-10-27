@@ -488,12 +488,12 @@ void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_nod
 	}
 	KEYCOLLECT_LOCK_ACQUIRE_(self);{
 		curr_link = self->root;
-		curr_node = keycollection_get_container_ptr(offset, curr_link);
+		//curr_node = keycollection_get_container_ptr(offset, curr_link);
 		ret = NULL;
 		while(curr_link != NULL){
 			/*curr_node >= index_nodeを求めて探索開始*/
-			ret = curr_node;
 			curr_node = keycollection_get_container_ptr(offset, curr_link);
+			ret = curr_node;
 			comp_ret = self->comp_node(curr_node, index_node);
 			if(comp_ret > 0){
 				/*current > index: より小さなcurrentを求める*/
@@ -515,6 +515,7 @@ void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_nod
 			while(ret != NULL){
 				curr_link = keytree_link_get_prev_(curr_link);
 				curr_node = keycollection_get_container_ptr(offset, curr_link);
+								printf("%s: curr->%p, ret->%p\n", __func__, curr_node, ret);
 				if(curr_link == NULL || self->comp_node(curr_node, index_node) < 0){
 					break;
 				}
@@ -533,7 +534,7 @@ void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_nod
 			}
 		}
 	}KEYCOLLECT_LOCK_RELEASE_(self);
-	
+	printf("%s: return is %p\n", __func__, ret);
 	return ret;
 }
 
@@ -547,12 +548,11 @@ void*			keytree_find_lt_node_raw(size_t offset, keytree_t *self, void *index_nod
 	}
 	KEYCOLLECT_LOCK_ACQUIRE_(self);{
 		curr_link = self->root;
-		curr_node = keycollection_get_container_ptr(offset, curr_link);
 		ret = NULL;
 		while(curr_link != NULL){
 			/*curr_node >= index_nodeを求めて探索開始*/
-			ret = curr_node;
 			curr_node = keycollection_get_container_ptr(offset, curr_link);
+			ret = curr_node;
 			comp_ret = self->comp_node(curr_node, index_node);
 			if(comp_ret > 0){
 				/*current > index: より小さなcurrentを求める*/
