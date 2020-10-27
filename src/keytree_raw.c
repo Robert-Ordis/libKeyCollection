@@ -480,9 +480,9 @@ void*			keytree_find_eq_node_end_raw(size_t offset, keytree_t *self, void *index
 
 void*			keytree_find_le_node_raw(size_t offset, keytree_t *self, void *index_node){
 	keytree_link_t	*curr_link;
-	void			*curr_node;
+	void			*curr_node = NULL;
 	void			*ret;
-	int				comp_ret;
+	int				comp_ret = 0;
 	if(self->size <= 0){
 		return NULL;
 	}
@@ -538,9 +538,9 @@ void*			keytree_find_le_node_raw(size_t offset, keytree_t *self, void *index_nod
 
 void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_node){
 	keytree_link_t	*curr_link;
-	void			*curr_node;
+	void			*curr_node = NULL;
 	void			*ret;
-	int				comp_ret;
+	int				comp_ret = 0;
 	if(self->size <= 0){
 		return NULL;
 	}
@@ -598,7 +598,7 @@ void*			keytree_find_lt_node_raw(size_t offset, keytree_t *self, void *index_nod
 	keytree_link_t	*curr_link;
 	void			*curr_node;
 	void			*ret;
-	int				comp_ret;
+	int				comp_ret = 0;
 	if(self->size <= 0){
 		return NULL;
 	}
@@ -652,7 +652,7 @@ void*			keytree_find_gt_node_raw(size_t offset, keytree_t *self, void *index_nod
 	keytree_link_t	*curr_link;
 	void			*curr_node;
 	void			*ret;
-	int				comp_ret;
+	int				comp_ret = 0;
 	if(self->size <= 0){
 		return NULL;
 	}

@@ -25,8 +25,8 @@ SRC_PROGRAM		:=\
 				 $(TST_DIR)/raw_tree_test.c\
 
 #### default compilers ####
-#CC	= gcc
-CC = clang
+CC	= gcc
+#CC = clang
 AR	= ar
 
 ####build options####
