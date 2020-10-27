@@ -725,11 +725,6 @@ int			keytree_init_iterator_ranged_raw(size_t offset, keytree_t *self, keytree_i
 		return -2;
 	}
 	
-	/*headとtailで同じだったら、tailをheadの一歩後ろにつける*/
-	if(head_link == tail_link && head_link != NULL){
-		tail_link = (head_link != self->head) ? keytree_link_get_prev_(head_link) : self->tail;
-	}
-	
 	/*forwardで出てくるのはhead指定したノード。もしくは生来のhead*/
 	iterator->next = (head_link != NULL) ? head_link : self->head;
 	

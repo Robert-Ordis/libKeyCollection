@@ -396,6 +396,30 @@ int raw_tree_test(){
 	pnode = keytree_find_ge_node_raw(offset, ptree, &v);
 	tree_type_dbg_printf(pnode, lebs.link2);
 	
+	tmp = 5;
+	db_printf("%s: test for searching.: num: %d\n", __func__, tmp);
+	tree_type_make_node(&v, &tmp, sizeof(int));
+	
+	ret = keytree_init_iterator_ranged_raw(
+		offset,
+		ptree,
+		it,
+		keytree_find_ge_node_raw(offset, ptree, &v),
+		keytree_find_lt_node_raw(offset, ptree, &v)
+	);
+	
+	db_printf("%s: test for search and ranged-iteration: %d\n", __func__, ret);
+	
+	
+	if(ret == 0){
+		while((pnode = keytree_iterator_forward_raw(offset, it)) != NULL){
+			tree_type_dbg_printf(pnode, lebs.link2);
+		}
+		keytree_iterator_move_raw(offset, it, NULL);
+		while((pnode = keytree_iterator_backward_raw(offset, it)) != NULL){
+			tree_type_dbg_printf(pnode, lebs.link2);
+		}
+	}
 	
 	return 0;
 }
