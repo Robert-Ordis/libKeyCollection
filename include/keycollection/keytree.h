@@ -209,6 +209,30 @@ void*		keytree_find_lt_node(keytree_t *self, void *index_node);
 /*void*		keytree_find_lt_value(keytree_t *self, void *value, size_t value_len);*/
 
 /**
+ *  \fn			keytree_find_gt_node
+ *  \brief		Get the right edge node having value greater than specified node's.
+ *  \param		*self	tree instance
+ *  \param		*index_node	node instance.
+ *  \return	The node explained in the above brief.
+ *  \return	NULL if no one has the value.
+ *  \remarks	This is not usable for opaque pointer which doesn't have API for manipulating data.
+ */
+void*		keytree_find_gt_node(keytree_t *self, void *index_node);
+/*void*		keytree_find_gt_node(keytree_t *self, void *value, size_t value_len);*/
+
+/**
+ *  \fn			keytree_find_le_node
+ *  \brief		Get the left edge node having value lesser than or equals to specified node's.
+ *  \param		*self	tree instance
+ *  \param		*index_node	node instance.
+ *  \return	The node explained in the above brief.
+ *  \return	NULL if no one has the value.
+ *  \remarks	This is not usable for opaque pointer which doesn't have API for manipulating data.
+ */
+void*		keytree_find_le_node_raw(keytree_t *self, void *index_node);
+/*void*		keytree_find_le_value(keytree_t *self, void *value, size_t value_len);*/
+
+/**
  *  \fn			keytree_find_ge_node
  *  \brief		Get the left edge node having value greater than or equals to specified node's.
  *  \param		*self	tree instance
@@ -278,7 +302,6 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
 /**
  *  \def		keytree_foreach_forward
  *  \brief		Syntax sugar for fast forward iterating
- *	\param		offset	offset length to link member of the node
  *	\param		*node	working pointer of picking node
  *	\param		*self	tree instance
  */
@@ -292,7 +315,6 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
 /**
  *  \def		keytree_foreach_backward
  *  \brief		Syntax sugar for fast backward iterating
- *	\param		offset	offset length to link member of the node
  *	\param		*node	working pointer of picking node
  *	\param		*self	tree instance
  */
