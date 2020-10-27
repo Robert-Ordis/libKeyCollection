@@ -51,22 +51,24 @@ int raw_tree_test(){
 	keytree_iterator_t iterator;
 	keytree_iterator_t *it = &iterator;
 	
-	tree_type_t	nodes[NODENUM];
+	tree_type_t	nodes[NODENUM * SAME_VALUE_RATIO_TREE];
 	tree_type_t	*pnode, *pnodeC;
 	size_t	offset = offsetof(tree_type_t, lebs.link2);
+	
+	size_t	nodes_num = NODENUM * SAME_VALUE_RATIO_TREE;
 	
 	int i, ret;
 	
 	
 	keytree_init_raw(offset, ptree, 1, tree_type_compare_a);
 	
-	memset(nodes, 0, sizeof(tree_type_t) * NODENUM);
+	memset(nodes, 0, sizeof(tree_type_t) * nodes_num);
 	
 	db_printf("%s: test of keytree_xxx_raw. Make nodes\n", __func__);
-	for(i = 0; i < NODENUM; i++){
+	for(i = 0; i < nodes_num; i++){
 		pnode = &nodes[i];
-		pnode->a = i;
-		pnode->d = (uint64_t)(NODENUM - i);
+		pnode->a = i / SAME_VALUE_RATIO_TREE;
+		pnode->d = (uint64_t)(NODENUM - (i / SAME_VALUE_RATIO_TREE));
 		pnode->b = (double)i / 2.0;
 		pnode->c = (char)i;
 		db_printf("[%p] start.\n", pnode);
@@ -214,7 +216,7 @@ int raw_tree_test(){
 	}
 	
 	db_printf("\n\n");
-	
+	/*
 	db_printf("%s: test for iterate-delete-insert test\n", __func__);
 	keytree_init_iterator_raw(offset, ptree, it);
 	while((pnode = keytree_iterator_forward_raw(offset, it)) != NULL){
@@ -234,9 +236,9 @@ int raw_tree_test(){
 	for(pnode = keytree_ref_tail_raw(offset, ptree); pnode != NULL; pnode = keytree_link_get_prev_raw(offset, pnode)){
 		tree_type_dbg_printf(pnode, lebs.link2);
 	}
-	
+	*/
 	db_printf("\n\n");
-	
+	/*
 	db_printf("%s: test for iterate-delete-insert test\n", __func__);
 	keytree_init_iterator_raw(offset, ptree, it);
 	while((pnode = keytree_iterator_backward_raw(offset, it)) != NULL){
@@ -250,21 +252,13 @@ int raw_tree_test(){
 	}
 	
 	db_printf("%s: check the situation\n", __func__);
-	/*
-	for(pnode = keytree_ref_head_raw(offset, ptree); pnode != NULL; pnode = keytree_link_get_next_raw(offset, pnode)){
-		tree_type_dbg_printf(pnode, lebs.link2);
-	}
-	for(pnode = keytree_ref_tail_raw(offset, ptree); pnode != NULL; pnode = keytree_link_get_prev_raw(offset, pnode)){
-		tree_type_dbg_printf(pnode, lebs.link2);
-	}
-	*/
 	keytree_foreach_forward_raw(offset, pnode, ptree){
 		tree_type_dbg_printf(pnode, lebs.link2);
 	}
 	keytree_foreach_backward_raw(offset, pnode, ptree){
 		tree_type_dbg_printf(pnode, lebs.link2);
 	}
-	
+	*/
 	db_printf("\n\n");
 	
 	db_printf("%s: test for clearing iteration (pop tail)\n", __func__);
@@ -284,7 +278,7 @@ int raw_tree_test(){
 	
 	db_printf("%s: test for inserting before/after NULL\n", __func__);
 	db_printf("%s: odd->before NULL(as tail), even->after(as head)\n", __func__);
-	for(i = 0; i < NODENUM; i++){
+	for(i = 0; i < nodes_num; i++){
 		pnode = &nodes[i];
 		db_printf("[%p] start.\n", pnode);
 		tree_type_dbg_printf(pnode, lebs.link2);
@@ -349,16 +343,24 @@ int raw_tree_test(){
 	
 	tree_type_make_node(&v, &tmp, sizeof(int));
 	
-	db_printf("%s: find eq\n", __func__);
+	db_printf("%s: find left edge of eq\n", __func__);
 	pnode = keytree_find_eq_node_raw(offset, ptree, &v);
 	tree_type_dbg_printf(pnode, lebs.link2);
 	
-	db_printf("%s: find eq(right edge)\n", __func__);
+	db_printf("%s: find right edge of eq\n", __func__);
 	pnode = keytree_find_eq_node_end_raw(offset, ptree, &v);
 	tree_type_dbg_printf(pnode, lebs.link2);
 	
 	db_printf("%s: find right edge of lt\n", __func__);
 	pnode = keytree_find_lt_node_raw(offset, ptree, &v);
+	tree_type_dbg_printf(pnode, lebs.link2);
+	
+	db_printf("%s: find left edge of gt\n", __func__);
+	pnode = keytree_find_gt_node_raw(offset, ptree, &v);
+	tree_type_dbg_printf(pnode, lebs.link2);
+	
+	db_printf("%s: find right edge of le\n", __func__);
+	pnode = keytree_find_le_node_raw(offset, ptree, &v);
 	tree_type_dbg_printf(pnode, lebs.link2);
 	
 	db_printf("%s: find left edge of ge\n", __func__);
@@ -370,11 +372,11 @@ int raw_tree_test(){
 	
 	tree_type_make_node(&v, &tmp, sizeof(int));
 	
-	db_printf("%s: find eq\n", __func__);
+	db_printf("%s: find left edge of eq\n", __func__);
 	pnode = keytree_find_eq_node_raw(offset, ptree, &v);
 	tree_type_dbg_printf(pnode, lebs.link2);
 	
-	db_printf("%s: find eq(right edge)\n", __func__);
+	db_printf("%s: find right edge of eq\n", __func__);
 	pnode = keytree_find_eq_node_end_raw(offset, ptree, &v);
 	tree_type_dbg_printf(pnode, lebs.link2);
 	
@@ -382,9 +384,18 @@ int raw_tree_test(){
 	pnode = keytree_find_lt_node_raw(offset, ptree, &v);
 	tree_type_dbg_printf(pnode, lebs.link2);
 	
+	db_printf("%s: find left edge of gt\n", __func__);
+	pnode = keytree_find_gt_node_raw(offset, ptree, &v);
+	tree_type_dbg_printf(pnode, lebs.link2);
+	
+	db_printf("%s: find right edge of le\n", __func__);
+	pnode = keytree_find_le_node_raw(offset, ptree, &v);
+	tree_type_dbg_printf(pnode, lebs.link2);
+	
 	db_printf("%s: find left edge of ge\n", __func__);
 	pnode = keytree_find_ge_node_raw(offset, ptree, &v);
 	tree_type_dbg_printf(pnode, lebs.link2);
+	
 	
 	return 0;
 }

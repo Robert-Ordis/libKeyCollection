@@ -332,6 +332,7 @@ int				keytree_add_raw(size_t offset, keytree_t *self, void *node){
 			else{
 				KEYLIST_IMPL_INSERT_BEFORE_(self, parent, link, ret);
 			}
+			
 			/*ここからtreap実装*/
 			link->h_pri = nrand48(self->rng);
 			printf("%s: h_pri:%ld\n", __func__, link->h_pri);
@@ -477,6 +478,63 @@ void*			keytree_find_eq_node_end_raw(size_t offset, keytree_t *self, void *index
 	return ret;
 }
 
+void*			keytree_find_le_node_raw(size_t offset, keytree_t *self, void *index_node){
+	keytree_link_t	*curr_link;
+	void			*curr_node;
+	void			*ret;
+	int				comp_ret;
+	if(self->size <= 0){
+		return NULL;
+	}
+	KEYCOLLECT_LOCK_ACQUIRE_(self);{
+		curr_link = self->root;
+		//curr_node = keycollection_get_container_ptr(offset, curr_link);
+		ret = NULL;
+		while(curr_link != NULL){
+			/*curr_node >= index_nodeを求めて探索開始*/
+			curr_node = keycollection_get_container_ptr(offset, curr_link);
+			ret = curr_node;
+			comp_ret = self->comp_node(curr_node, index_node);
+			if(comp_ret > 0){
+				/*current > index: より小さなcurrentを求める*/
+				curr_link = curr_link->lt;
+			}
+			else if(comp_ret < 0){
+				/*current < index: より大きなnodeを求める*/
+				curr_link = curr_link->ge;
+			}
+			else{
+				/*一致: 「以上」を求めるので第1段階終わり*/
+				break;
+			}
+		}
+		
+		/*探索を抜けた時のcurrentがindex「以下」なら、「超過」になる直前までcurr_nodeを進めていく*/
+		if(comp_ret <= 0){
+			curr_link = keycollection_get_link_ptr(offset, curr_node);
+			while(ret != NULL){
+				curr_link = keytree_link_get_next_(curr_link);
+				curr_node = keycollection_get_container_ptr(offset, curr_link);
+				if(curr_link == NULL || self->comp_node(curr_node, index_node) > 0){
+					break;
+				}
+				ret = curr_node;
+			}
+		}
+		/*探索を抜けた時のcurrentがindex「超過」なら、「以下」になるまでcurr_nodeを戻していく*/
+		else{
+			curr_link = keycollection_get_link_ptr(offset, ret);
+			while(ret != NULL){
+				curr_link = keytree_link_get_prev_(curr_link);
+				ret = keycollection_get_container_ptr(offset, curr_link);
+				if(ret == NULL || self->comp_node(ret, index_node) <= 0){
+					break;
+				}
+			}
+		}
+	}KEYCOLLECT_LOCK_RELEASE_(self);
+	return ret;
+}
 
 void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_node){
 	keytree_link_t	*curr_link;
@@ -509,7 +567,7 @@ void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_nod
 			}
 		}
 		
-		/*探索を抜けた時のnodeがvalue「以上」なら、「未満」になる直前までcurr_nodeを戻っていく*/
+		/*探索を抜けた時のcurrentがindex「以上」なら、「未満」になる直前までcurr_nodeを戻っていく*/
 		if(comp_ret >= 0){
 			curr_link = keycollection_get_link_ptr(offset, curr_node);
 			while(ret != NULL){
@@ -521,7 +579,7 @@ void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_nod
 				ret = curr_node;
 			}
 		}
-		/*探索を抜けた時のnodeがvalue「未満」なら、「以上」になる直前までcurr_nodeを進めていく*/
+		/*探索を抜けた時のcurrentがindex「未満」なら、「以上」になるまでcurr_nodeを進めていく*/
 		else{
 			curr_link = keycollection_get_link_ptr(offset, ret);
 			while(ret != NULL){
@@ -562,7 +620,7 @@ void*			keytree_find_lt_node_raw(size_t offset, keytree_t *self, void *index_nod
 			}
 		}
 		
-		/*探索を抜けた時のnodeがvalue「以上」なら、「未満」になる直前までcurr_nodeを戻っていく*/
+		/*探索を抜けた時のcurrentがindex「以上」なら、「未満」になるまでcurr_nodeを戻っていく*/
 		if(comp_ret >= 0){
 			curr_link = keycollection_get_link_ptr(offset, ret);
 			while(ret != NULL){
@@ -573,7 +631,7 @@ void*			keytree_find_lt_node_raw(size_t offset, keytree_t *self, void *index_nod
 				}
 			}
 		}
-		/*探索を抜けた時のnodeがvalue「未満」なら、「以上」になる直前までcurr_nodeを進めていく*/
+		/*探索を抜けた時のcurrentがindex「未満」なら、「以上」になる直前までcurr_nodeを進めていく*/
 		else{
 			curr_node = ret;
 			curr_link = keycollection_get_link_ptr(offset, curr_node);
@@ -587,7 +645,60 @@ void*			keytree_find_lt_node_raw(size_t offset, keytree_t *self, void *index_nod
 			}
 		}
 	}KEYCOLLECT_LOCK_RELEASE_(self);
-	
+	return ret;
+}
+
+void*			keytree_find_gt_node_raw(size_t offset, keytree_t *self, void *index_node){
+	keytree_link_t	*curr_link;
+	void			*curr_node;
+	void			*ret;
+	int				comp_ret;
+	if(self->size <= 0){
+		return NULL;
+	}
+	KEYCOLLECT_LOCK_ACQUIRE_(self);{
+		curr_link = self->root;
+		ret = NULL;
+		while(curr_link != NULL){
+			/*curr_node >= index_nodeを求めて探索開始*/
+			curr_node = keycollection_get_container_ptr(offset, curr_link);
+			ret = curr_node;
+			comp_ret = self->comp_node(curr_node, index_node);
+			if(comp_ret > 0){
+				/*current > index: より小さなcurrentを求める*/
+				curr_link = curr_link->lt;
+			}
+			else if(comp_ret <= 0){
+				/*current <= index: より大きなnodeを求める*/
+				curr_link = curr_link->ge;
+			}
+		}
+		
+		/*探索を抜けた時のcurrentがindex「以下」なら、「超過」になるまでcurr_nodeを進めていく*/
+		if(comp_ret <= 0){
+			curr_link = keycollection_get_link_ptr(offset, ret);
+			while(ret != NULL){
+				curr_link = keytree_link_get_next_(curr_link);
+				ret = keycollection_get_container_ptr(offset, curr_link);
+				if(ret == NULL || self->comp_node(ret, index_node) > 0){
+					break;
+				}
+			}
+		}
+		/*探索を抜けた時のcurrentがindex「超過」なら、「以下」になる直前までcurr_nodeを戻していく*/
+		else{
+			curr_node = ret;
+			curr_link = keycollection_get_link_ptr(offset, curr_node);
+			while(ret != NULL){
+				curr_link = keytree_link_get_prev_(curr_link);
+				curr_node = keycollection_get_container_ptr(offset, curr_link);
+				if(curr_node == NULL || self->comp_node(curr_node, index_node) <= 0){
+					break;
+				}
+				ret = curr_node;
+			}
+		}
+	}KEYCOLLECT_LOCK_RELEASE_(self);
 	return ret;
 }
 

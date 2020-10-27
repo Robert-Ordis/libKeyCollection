@@ -185,6 +185,30 @@ void*		keytree_find_eq_node_end_raw(size_t offset, keytree_t *self, void *index_
 void*		keytree_find_lt_node_raw(size_t offset, keytree_t *self, void *index_node);
 
 /**
+ *  \fn			keytree_find_gt_node_raw
+ *  \brief		Get the right edge node having value greater than specified node's.
+ *  \param		offset	offset length to link member of the node.
+ *  \param		*self	tree instance
+ *  \param		*index_node	node instance.
+ *  \return	The node explained in the above brief.
+ *  \return	NULL if no one has the value.
+ *  \remarks	This is not usable for opaque pointer which doesn't have API for manipulating data.
+ */
+void*		keytree_find_gt_node_raw(size_t offset, keytree_t *self, void *index_node);
+
+/**
+ *  \fn			keytree_find_le_node_raw
+ *  \brief		Get the left edge node having value lesser than or equals to specified node's.
+ *  \param		offset	offset length to link member of the node.
+ *  \param		*self	tree instance
+ *  \param		*index_node	node instance.
+ *  \return	The node explained in the above brief.
+ *  \return	NULL if no one has the value.
+ *  \remarks	This is not usable for opaque pointer which doesn't have API for manipulating data.
+ */
+void*		keytree_find_le_node_raw(size_t offset, keytree_t *self, void *index_node);
+
+/**
  *  \fn			keytree_find_ge_node_raw
  *  \brief		Get the left edge node having value greater than or equals to specified node's.
  *  \param		offset	offset length to link member of the node.
