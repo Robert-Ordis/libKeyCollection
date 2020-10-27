@@ -12,7 +12,7 @@ static int tree_type_compare_a(void *node_a, void *node_b){
 	tree_type_t *a = (tree_type_t *)node_a;
 	tree_type_t *b = (tree_type_t *)node_b;
 	
-	printf("%s: a[%d] vs b[%d]\n", __func__, a->a, b->a);
+	//printf("%s: a[%d] vs b[%d]\n", __func__, a->a, b->a);
 	
 	return (a->a - b->a);
 }
@@ -21,7 +21,7 @@ static int tree_type_compare_d(void *node_a, void *node_b){
 	tree_type_t *a = (tree_type_t *)node_a;
 	tree_type_t *b = (tree_type_t *)node_b;
 	
-	printf("%s: a[%lu] vs b[%lu]\n", __func__, a->d, b->d);
+	//printf("%s: a[%lu] vs b[%lu]\n", __func__, a->d, b->d);
 	
 	if(a->d > b->d){
 		return 1;
@@ -340,10 +340,34 @@ int raw_tree_test(){
 			tree_type_dbg_printf(pnode, lebs.link2);
 		}
 	}
-	int tmp = 3;
+	
+	int tmp;
+	tree_type_t v;
+	
+	tmp = 3;
 	db_printf("%s: test for searching.: num: %d\n", __func__, tmp);
 	
-	tree_type_t v;
+	tree_type_make_node(&v, &tmp, sizeof(int));
+	
+	db_printf("%s: find eq\n", __func__);
+	pnode = keytree_find_eq_node_raw(offset, ptree, &v);
+	tree_type_dbg_printf(pnode, lebs.link2);
+	
+	db_printf("%s: find eq(right edge)\n", __func__);
+	pnode = keytree_find_eq_node_end_raw(offset, ptree, &v);
+	tree_type_dbg_printf(pnode, lebs.link2);
+	
+	db_printf("%s: find right edge of lt\n", __func__);
+	pnode = keytree_find_lt_node_raw(offset, ptree, &v);
+	tree_type_dbg_printf(pnode, lebs.link2);
+	
+	db_printf("%s: find left edge of ge\n", __func__);
+	pnode = keytree_find_ge_node_raw(offset, ptree, &v);
+	tree_type_dbg_printf(pnode, lebs.link2);
+	
+	tmp = 11;
+	db_printf("%s: test for searching.: num: %d\n", __func__, tmp);
+	
 	tree_type_make_node(&v, &tmp, sizeof(int));
 	
 	db_printf("%s: find eq\n", __func__);

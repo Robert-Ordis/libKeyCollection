@@ -334,7 +334,7 @@ int				keytree_add_raw(size_t offset, keytree_t *self, void *node){
 			}
 			/*ここからtreap実装*/
 			link->h_pri = nrand48(self->rng);
-			printf("%s: h_pri:%d\n", __func__, link->h_pri);
+			printf("%s: h_pri:%ld\n", __func__, link->h_pri);
 			while(1){
 				/*親の優先度 = 子の優先度でヒープを作る*/
 				if(link->up == NULL){
@@ -401,7 +401,7 @@ int				keytree_insert_after_raw(size_t offset, keytree_t *self, void *index_node
 
 void*			keytree_find_eq_node_raw(size_t offset, keytree_t *self, void *index_node){
 	keytree_link_t	*curr_link;
-	void			*curr_node;
+	void			*curr_node = NULL;
 	void			*ret;
 	int				comp_ret;
 	
@@ -423,7 +423,7 @@ void*			keytree_find_eq_node_raw(size_t offset, keytree_t *self, void *index_nod
 				break;
 			}
 		}
-		ret = curr_node;
+		ret = (curr_link == NULL) ? NULL : curr_node;
 		/*curr_node == index_nodeが崩れるまで同値中を「値が下がる方向」へたどる*/
 		/*同値の同居を許す仕様であり、同値の「最も小さいもの」を探すため*/
 		if(self->allow_eq && ret != NULL){
@@ -440,7 +440,7 @@ void*			keytree_find_eq_node_raw(size_t offset, keytree_t *self, void *index_nod
 
 void*			keytree_find_eq_node_end_raw(size_t offset, keytree_t *self, void *index_node){
 	keytree_link_t	*curr_link;
-	void			*curr_node;
+	void			*curr_node = NULL;
 	void			*ret;
 	int				comp_ret;
 	
@@ -462,7 +462,7 @@ void*			keytree_find_eq_node_end_raw(size_t offset, keytree_t *self, void *index
 				break;
 			}
 		}
-		ret = curr_node;
+		ret = (curr_link == NULL) ? NULL : curr_node;
 		/*curr_node == index_nodeが崩れるまで同値中を「値が下がる方向」へたどる*/
 		/*同値の同居を許す仕様であり、同値の「最も小さいもの」を探すため*/
 		if(self->allow_eq && ret != NULL){
@@ -515,7 +515,6 @@ void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_nod
 			while(ret != NULL){
 				curr_link = keytree_link_get_prev_(curr_link);
 				curr_node = keycollection_get_container_ptr(offset, curr_link);
-								printf("%s: curr->%p, ret->%p\n", __func__, curr_node, ret);
 				if(curr_link == NULL || self->comp_node(curr_node, index_node) < 0){
 					break;
 				}
@@ -534,7 +533,6 @@ void*			keytree_find_ge_node_raw(size_t offset, keytree_t *self, void *index_nod
 			}
 		}
 	}KEYCOLLECT_LOCK_RELEASE_(self);
-	printf("%s: return is %p\n", __func__, ret);
 	return ret;
 }
 
