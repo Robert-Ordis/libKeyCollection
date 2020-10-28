@@ -229,7 +229,7 @@ void*		keytree_find_gt_node(keytree_t *self, void *index_node);
  *  \return	NULL if no one has the value.
  *  \remarks	This is not usable for opaque pointer which doesn't have API for manipulating data.
  */
-void*		keytree_find_le_node_raw(keytree_t *self, void *index_node);
+void*		keytree_find_le_node(keytree_t *self, void *index_node);
 /*void*		keytree_find_le_value(keytree_t *self, void *value, size_t value_len);*/
 
 /**
@@ -332,7 +332,7 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
  *  \param		type	target structure type
  *  \param		member	link member for making linked tree.
  */
-#define		keytree_init_for(self, type, member)\
+#define		keytree_init_for(self, allow_eq, comp_node, type, member)\
 	do{\
 		keytree_init(self, allow_eq, comp_node);\
 		(self)->ofst = offsetof(type, member);\

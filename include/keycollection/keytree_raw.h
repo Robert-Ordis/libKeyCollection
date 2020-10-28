@@ -6,6 +6,8 @@
  *  \remarks	This may NOT be usable for incomplete type.
  */
 
+#include <string.h>
+
 #include "./private/keycollection_commons.h"
 
 #ifndef	KEYTREE_RAW_H_

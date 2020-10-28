@@ -14,6 +14,7 @@ SRC_LIBPART		:=\
 				 $(SRC_DIR)/keylist_raw.c\
 				 $(SRC_DIR)/keylist.c\
 				 $(SRC_DIR)/keytree_raw.c\
+				 $(SRC_DIR)/keytree.c\
 
 TST_DIR			= ./test
 SRC_PROGRAM		:=\
@@ -23,6 +24,7 @@ SRC_PROGRAM		:=\
 				 $(TST_DIR)/sampleCollection.c\
 				 $(TST_DIR)/sampleCollectionLarge.c\
 				 $(TST_DIR)/raw_tree_test.c\
+				 $(TST_DIR)/poly_tree_test.c\
 
 #### default compilers ####
 CC	= gcc

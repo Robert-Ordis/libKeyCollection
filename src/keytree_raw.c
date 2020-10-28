@@ -335,7 +335,7 @@ int				keytree_add_raw(size_t offset, keytree_t *self, void *node){
 			
 			/*ここからtreap実装*/
 			link->h_pri = nrand48(self->rng);
-			printf("%s: h_pri:%ld\n", __func__, link->h_pri);
+			/*printf("%s: h_pri:%ld\n", __func__, link->h_pri);*/
 			while(1){
 				/*親の優先度 = 子の優先度でヒープを作る*/
 				if(link->up == NULL){
