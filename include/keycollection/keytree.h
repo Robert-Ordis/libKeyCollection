@@ -68,7 +68,6 @@ void		keytree_init(keytree_t *self, int allow_eq, keytree_comp_node_cb comp_node
  *  \brief		Get contained num on the List.
  *  \param		*self	tree instance.
  *  \return	Number of nodes in the tree.
- *  \remarks	Experimental implementation with macro.
  */
 int			keytree_get_count(keytree_t *self);
 
