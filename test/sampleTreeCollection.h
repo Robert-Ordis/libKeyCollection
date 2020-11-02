@@ -1,6 +1,6 @@
 #include <keycollection/keytree.h>
 #include <keycollection/keytree_raw.h>
-//#include <keycollection/keytree_witchcraft.h>
+#include <keycollection/keytree_witchcraft.h>
 
 #include "./test_config.h"
 
@@ -43,7 +43,7 @@ typedef struct type_s{
 	}while(0)
 	
 
-//keylist_define_prototypes(typelink, type_t, lebs.link);
+keytree_define_prototypes(typetree, tree_type_t, lebs.link);
 //keylist_define_prototypes(typelinkl, type_t, lebs.link2);
 
 #endif	/* !SAMPLE_TREE_COLLECTION_H_ */

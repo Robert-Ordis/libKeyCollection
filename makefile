@@ -25,6 +25,8 @@ SRC_PROGRAM		:=\
 				 $(TST_DIR)/sampleCollectionLarge.c\
 				 $(TST_DIR)/raw_tree_test.c\
 				 $(TST_DIR)/poly_tree_test.c\
+				 $(TST_DIR)/type_tree_test.c\
+				 $(TST_DIR)/sampleTreeCollection.c\
 
 #### default compilers ####
 CC	= gcc

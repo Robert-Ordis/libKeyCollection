@@ -296,7 +296,7 @@
  *	\remarks	ここからtype_iterate_forwardを用いることでheadからループを回す
  *	\remarks	ここからtype_iterate_backwardを用いることでheadからループを回す
  */
-#define	KEYTREE_INIT_ITERATOR_(yourtree)	yourtree##_init_iterator
+#define	KEYTREE_INIT_ITERATOR_RANGED_(yourtree)	yourtree##_init_iterator_ranged
 
 /**
  *	\fn			yourtree_iterator_move(*iterator, *index_node)
