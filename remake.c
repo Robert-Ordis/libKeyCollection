@@ -47,9 +47,16 @@ yourtree_find_lt_value(ptree, value_ptr, value_len);
 
 //。。。まあ、split/mergeはひとまず置いておこう！
 
-//keyhashに関しては、旧来の生成方式じゃないと破綻どころかそもそも組めない…ｗ
-//→本当か？…せめて共通化できるところは共通化、っていう方針じゃねかなあ。
+//keytree、ひとまず仮完成。しばらく遊んだりしてアイデアを練ってみようか。
+
+//keyhashの素体は、チェーン数を決めれば一応組める。
+//せめて共通化できるところは共通化、っていう方針じゃねかなあ。
 //
+
+keyhash_t{
+	keytree_t chain[KEYHASH_DEFAULT_WIDTH];
+	//...
+}
 
 yourhash_remap(self, node);
 yourhash_remap_all(self);
