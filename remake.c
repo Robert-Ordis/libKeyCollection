@@ -54,8 +54,10 @@ yourtree_find_lt_value(ptree, value_ptr, value_len);
 //
 
 keyhash_t{
-	keytree_t chain[KEYHASH_DEFAULT_WIDTH];
-	//...
+	keytree_t hash_chain[KEYHASH_DEFAULT_WIDTH];
+	keytree_t wild_chain;
+	keyhash_hash_node_cb	hash_node;
+	int						allow_eq;
 }
 
 yourhash_remap(self, node);
