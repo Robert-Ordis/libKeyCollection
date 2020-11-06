@@ -94,7 +94,7 @@
 
 /**
  *  \def	keytree_define_implements
- *  \brief	Withcraft used in source code(*.c)
+ *  \brief	Witchcraft used in source code(*.c)
  *  \brief	By this macro, implementation of functions(yourtree_add/_del/...) are generated.
  *  \param	yourtree		Defining the functions related to below types: yourtree_t and yourtree_iterator_t.
  *  \param	nodetype_s		Target type you want to treat.

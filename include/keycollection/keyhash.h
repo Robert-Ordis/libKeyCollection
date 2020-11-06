@@ -1,53 +1,18 @@
 /**
  *  \file		keyhash.h
- *  \brief		ハッシュテーブルをマクロで定義するためのライブラリ
- *	\remarks	ハッシュテーブルはハッシュとツリー/リンクリストで定義される
- *	\remarks	「検索対象の一部ノード自体がワイルドカード」の場合に特に効果を発揮します
+ *  \brief		Hash chaining table library using the defined member filed.
+ *  \remarks	Due to treat given value directly, hash-table is completely based on the templatal witchcraft.
  */
-#include <assert.h>
  
-#include "keyhash_functions.h"
-#include "./private/keyhash_implementations.h"
+#include "./private/keycollection_commons.h"
+
+#include <stdint.h>
+#include <stddef.h>
+ 
 #ifndef	KEYHASH_H_
 #define	KEYHASH_H_
 
-//プライベート
-#ifdef __linux__
-	#define	KEYHASH_LOCK_INIT_(self)\
-		do{\
-			if((self)->if_lock)\
-				pthread_mutex_init(&(self)->lock, NULL);\
-		}while(0)\
 
-	#define	KEYHASH_LOCK_ACQUIRE_(self)\
-		do{\
-			if((self)->if_lock)\
-				pthread_mutex_lock(&(self)->lock);\
-		}while(0)\
-		
-	#define	KEYHASH_LOCK_RELEASE_(self)\
-		do{\
-			if((self)->if_lock)\
-				pthread_mutex_unlock(&(self)->lock);\
-		}while(0)\
-
-	#define	KEYHASH_LOCKER_T	pthread_mutex_t
-
-#else
-	#define	KEYHASH_LOCK_INIT_(self)\
-		do{\
-		}while(0)\
-
-	#define	KEYHASH_LOCK_ACQUIRE_(self)\
-		do{\
-		}while(0)\
-		
-	#define	KEYHASH_LOCK_RELEASE_(self)\
-		do{\
-		}while(0)\
-
-	#define	KEYHASH_LOCKER_T	void*
-#endif /* __linux__ */
 
 /**
  *	\def	keyhash_define_prototypes
@@ -59,20 +24,12 @@
  */
 #define	keyhash_define_prototypes(yourhash, nodetype_s, treename, hash_max)\
 	\
-	typedef	int		(*KEYHASH_NODE_COMP_T_(yourhash))(nodetype_s *node_a, nodetype_s *node_b);\
-	typedef	void	(*KEYHASH_NODE_VIRT_T_(yourhash))(nodetype_s *node, void *value, size_t value_len);\
 	typedef	int		(*KEYHASH_NODE_HASH_T_(yourhash))(nodetype_s *node_a);\
 	\
 	typedef struct {\
 		KEYTREE_T_(treename)	hash_chain[hash_max];	/*通常のハッシュテーブル*/\
 		KEYTREE_T_(treename)	wild_chain;				/*ワイルドカードレコードの格納場（リストとしての用途のみ）*/\
-		KEYHASH_NODE_COMP_T_(yourhash)	comp;			/*比較関数。ツリーにもつける*/\
-		KEYHASH_NODE_VIRT_T_(yourhash)	virt;			/*比較前準備。ツリーにもつける*/\
 		KEYHASH_NODE_HASH_T_(yourhash)	hash;			/*ハッシュ計算関数*/\
-		int								hash_width;		/*自身のハッシュの広さ*/\
-		int								allow_eq;		/*同値の挿入を許すなら１*/\
-		int								if_lock;		/*操作毎にロックをかけるなら１*/\
-		KEYHASH_LOCKER_T				lock;			/*ロック*/\
 	} KEYHASH_T_(yourhash);\
 	\
 	\

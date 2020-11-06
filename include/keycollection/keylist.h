@@ -11,28 +11,24 @@
 #include <stddef.h>
 
 /**
- *  \typedef	keylist_link_t
  *  \brief		Set of members for composing a doubly linked list.
  *  \details	First, set this as a member of the struct you want to make Doubly Linked List.
  */
 typedef struct keylist_link_s keylist_link_t;
 
 /**
- *  \typedef	keylist_t
  *  \brief		Doubly linked list container(Generic/Raw type)
  *
  */
 typedef struct keylist_s keylist_t;
 
 /**
- *  \typedef	keylist_iterator_t
  *  \brief		Iterator for doubly linked list.(may be same in binary tree)
  *  \brief		While iterating by this, the nearby node in the collection can be edited.
  */
 typedef struct keylist_iterator_s keylist_iterator_t;
 
 /**
- *  \fn			keylist_init
  *  \brief		Initialize the list.
  *  \param		*self	list instance.
  *  \remarks	If you  use this func, target struct must contains keylist_link_t as the first member.
@@ -40,7 +36,6 @@ typedef struct keylist_iterator_s keylist_iterator_t;
 void		keylist_init(keylist_t *self);
 
 /**
- *  \fn			keylist_get_count
  *  \brief		Get contained num on the List.
  *  \param		*self	list instance.
  *  \return	Number of nodes in the list.
@@ -49,7 +44,7 @@ void		keylist_init(keylist_t *self);
 int			keylist_get_count(keylist_t *self);
 
 /**
- *  \fn			keylist_ref_head
+ *
  *  \brief		Get top node in the list.
  *  \param		*self	list instance.
  *  \return	Top node in the list.
@@ -57,7 +52,7 @@ int			keylist_get_count(keylist_t *self);
 void*		keylist_ref_head(keylist_t *self);
 
 /**
- *  \fn			keylist_ref_tail
+ *
  *  \brief		Get last node in the list.
  *  \param		*self	list instance.
  *  \return	Last node in the list.
@@ -65,7 +60,7 @@ void*		keylist_ref_head(keylist_t *self);
 void*		keylist_ref_tail(keylist_t *self);
 
 /**
- *  \fn			keylist_pop_head
+ *
  *  \brief		Get and delete the top node from the list.
  *  \param		offset	offset length to link member of the node.
  *  \param		*self	list instance.
@@ -74,7 +69,7 @@ void*		keylist_ref_tail(keylist_t *self);
 void*		keylist_pop_head(keylist_t *self);
 
 /**
- *  \fn			keylist_pop_tail
+ *
  *  \brief		Get and delete the last node from the list.
  *  \param		offset	offset length to link member of the node.
  *  \param		*self	list instance.
@@ -83,7 +78,7 @@ void*		keylist_pop_head(keylist_t *self);
 void*		keylist_pop_tail(keylist_t *self);
 
 /**
- *  \fn			keylist_ref_nth
+ *
  *  \brief		Get the nth(Top = 0th) node from the list.
  *  \param		*self	list instance.
  *  \param		nth		number which you want to get. minus indicates the count from the last.(last is -1)
@@ -93,7 +88,7 @@ void*		keylist_pop_tail(keylist_t *self);
 void*		keylist_ref_nth(keylist_t *self, int nth);
 
 /**
- *  \fn			keylist_add
+ *
  *  \brief		Add a node to the tail of the list.
  *  \param		*self	list instance.
  *  \param		*node	The node you want to add to *self.
@@ -102,7 +97,7 @@ void*		keylist_ref_nth(keylist_t *self, int nth);
 int			keylist_add(keylist_t *self, void *node);
 
 /**
- *  \fn			keylist_add_head
+ *
  *  \brief		Add a node to the head of the list.
  *  \param		*self	list instance.
  *  \param		*node	The node you want to add to *self.
@@ -111,7 +106,7 @@ int			keylist_add(keylist_t *self, void *node);
 int			keylist_add_head(keylist_t *self, void *node);
 
 /**
- *  \fn			keylist_add_tail
+ *
  *  \brief		Add a node to the tail of the list.
  *  \param		*self	list instance.
  *  \param		*node	The node you want to add to *self.
@@ -120,7 +115,7 @@ int			keylist_add_head(keylist_t *self, void *node);
 int			keylist_add_tail(keylist_t *self, void *node);
 
 /**
- *  \fn			keylist_del
+ *
  *  \brief		Delete the node from the list.
  *  \param		*self	list instance.
  *  \param		*node	The node you want to remove from *self.
@@ -130,7 +125,7 @@ int			keylist_add_tail(keylist_t *self, void *node);
 int			keylist_del(keylist_t *self, void *node);
 
 /**
- *  \fn			keylist_insert_before
+ *
  *  \brief		Insert the node to the list, before the *index_node.
  *  \param		*self	list instance.
  *  \param		*index_node	Index node. *node will be inserted before this.
@@ -143,7 +138,7 @@ int			keylist_del(keylist_t *self, void *node);
 int			keylist_insert_before(keylist_t *self, void *index_node, void *node);
 
 /**
- *  \fn			keylist_insert_after
+ *
  *  \brief		Insert the node to the list, before the *index_node.
  *  \param		*self	list instance.
  *  \param		*index_node	Index node. *node will be inserted before this.
@@ -156,7 +151,7 @@ int			keylist_insert_before(keylist_t *self, void *index_node, void *node);
 int			keylist_insert_after(keylist_t *self, void *index_node, void *node);
 
 /**
- *  \fn			keylist_has_node
+ *
  *  \brief		Check if *self has the node specified as *node.
  *  \param		*self	list instance
  *  \param		*node	node instance.
@@ -165,7 +160,7 @@ int			keylist_insert_after(keylist_t *self, void *index_node, void *node);
 int			keylist_has_node(keylist_t *self, void *node);
 
 /**
- *  \fn			keylist_get_next
+ *
  *  \brief		Get the next node of the node directly.
  *  \param		*self	list instance
  *  \param		*node	node instance.
@@ -176,7 +171,7 @@ int			keylist_has_node(keylist_t *self, void *node);
 void*		keylist_get_next(keylist_t *self, void *node);
 
 /**
- *  \fn			keylist_get_prev
+ *
  *  \brief		Get the previous node of the node directly.
  *  \param		*self	list instance
  *  \param		*node	node instance.
@@ -188,7 +183,7 @@ void*		keylist_get_prev(keylist_t *self, void *node);
 
 
 /**
- *  \fn			keylist_init_iterator
+ *
  *  \brief		Initialize the keylist_iterator_t.
  *  \param		*self	list instance.
  *  \param		*iterator	iterator instance.
@@ -198,7 +193,7 @@ void*		keylist_get_prev(keylist_t *self, void *node);
 int			keylist_init_iterator(keylist_t *self, keylist_iterator_t *iterator);
 
 /**
- *  \fn			keylist_iterator_move
+ *
  *  \brief		Move the iterator to one step before the specified node.
  *  \param		*iterator	iterator instance
  *  \param		*index_node	The node you want to set as the first point.
@@ -210,7 +205,7 @@ int			keylist_init_iterator(keylist_t *self, keylist_iterator_t *iterator);
 int			keylist_iterator_move(keylist_iterator_t *iterator, void *index_node);
 
 /**
- *  \fn			keylist_iterator_forward
+ *
  *  \brief		Iterate to the next node.
  *  \param		*iterator	iterator instance.
  *  \return	Next node. If in the tail, NULL will be returned.
@@ -219,7 +214,7 @@ int			keylist_iterator_move(keylist_iterator_t *iterator, void *index_node);
 void*		keylist_iterator_forward(keylist_iterator_t *iterator);
 
 /**
- *  \fn			keylist_iterator_backward
+ *
  *  \brief		Iterate to the previous node.
  *  \param		*iterator	iterator instance.
  *  \return	Previous node. If in the tail, NULL will be returned.
@@ -229,7 +224,7 @@ void*		keylist_iterator_backward(keylist_iterator_t *iterator);
 
 
 /**
- *  \def		keylist_foreach_forward
+ *
  *  \brief		Syntax sugar for fast forward iterating
  *	\param		offset	offset length to link member of the node
  *	\param		*node	working pointer of picking node
@@ -243,7 +238,7 @@ void*		keylist_iterator_backward(keylist_iterator_t *iterator);
 	)
 
 /**
- *  \def		keylist_foreach_backward
+ *
  *  \brief		Syntax sugar for fast backward iterating
  *	\param		offset	offset length to link member of the node
  *	\param		*node	working pointer of picking node
@@ -257,7 +252,7 @@ void*		keylist_iterator_backward(keylist_iterator_t *iterator);
 	)
 
 /**
- *  \def		keylist_init_for
+ *
  *  \brief		Initialize the keylist for treating the specified structure and link-member.
  *  \param		*self	list instance
  *  \param		type	target structure type
@@ -269,18 +264,36 @@ void*		keylist_iterator_backward(keylist_iterator_t *iterator);
 		(self)->ofst = offsetof(type, member);\
 	}while(0)\
 		
-
+/**
+ *  \brief		Actual definition of link structure for Linked-list .
+ */
 struct keylist_link_s {
-	struct keylist_link_s	*prev;			/**previous pointer*/
-	struct keylist_link_s	*next;			/**next pointer.*/
-	struct keylist_s		*coll;			/**pointer of container(e.g. keylist_t)*/
+	/**previous pointer*/
+	struct keylist_link_s	*prev;
+	
+	/**next pointer.*/
+	struct keylist_link_s	*next;
+	
+	/**pointer of container(e.g. keylist_t)*/
+	struct keylist_s		*coll;
 };
 
+/**
+ *  \brief		Actual definition of Linked-list Container.
+ */
 struct keylist_s {
-	struct keylist_link_s*	head;	/**Pointer to head link.*/
-	struct keylist_link_s*	tail;	/**Pointer to tail link.*/
-	int						size;	/**Counter for having nodes.*/
-	size_t					ofst;	/**DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL*/
+	/**Pointer to head link.*/
+	struct keylist_link_s*	head;
+	
+	/**Pointer to tail link.*/
+	struct keylist_link_s*	tail;
+	
+	/**Counter for having nodes.*/
+	int						size;
+	
+	/**DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL*/
+	size_t					ofst;
+	
 	/*
 	2020-10-04/KK: ロックの搭載を試みたものの、今のバージョンではやめた。
 	コンセプトとしてdestroyを提供しない以上、init & destroyをAPIとして提供するﾓﾉとは相性が悪い。
@@ -288,10 +301,20 @@ struct keylist_s {
 	*/
 };
 
+/**
+ *  \brief		Actual definition of Linked-list Iterator.
+ */
 struct keylist_iterator_s {
-	struct keylist_link_s	*prev;
+	/**Pointer to previous node(gotten in iterator_backward)*/
+	struct keylist_link_s	*prev;	
+	
+	/**Pointer to current node(for more robustness against deleting)*/
 	struct keylist_link_s	*curr;
+	
+	/**Pointer to next node(gotten in iterator_forward)*/
 	struct keylist_link_s	*next;
+	
+	/**Collection which made the iterator*/
 	struct keylist_s		*coll;
 };
 

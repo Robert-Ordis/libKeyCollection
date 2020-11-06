@@ -54,7 +54,7 @@ typedef int	(*keytree_comp_node_cb)(void *node_a, void *node_b);
 typedef void	(*keytree_make_node_cb)(void *node, void *value, size_t value_len);
 
 /**
- *  \fn			keytree_init
+ *
  *  \brief		Initialize the tree.
  *  \param		*self	tree instance.
  *  \param		allow_eq	0 if you don't want to add same-valued node in the tree. Otherwise if you allow.
@@ -64,7 +64,7 @@ typedef void	(*keytree_make_node_cb)(void *node, void *value, size_t value_len);
 void		keytree_init(keytree_t *self, int allow_eq, keytree_comp_node_cb comp_node);
 
 /**
- *  \fn			keytree_get_count
+ *
  *  \brief		Get contained num on the List.
  *  \param		*self	tree instance.
  *  \return	Number of nodes in the tree.
@@ -72,7 +72,7 @@ void		keytree_init(keytree_t *self, int allow_eq, keytree_comp_node_cb comp_node
 int			keytree_get_count(keytree_t *self);
 
 /**
- *  \fn			keytree_ref_head
+ *
  *  \brief		Get top node in the tree.
  *  \param		*self	tree instance.
  *  \return	Top node in the tree.
@@ -80,7 +80,7 @@ int			keytree_get_count(keytree_t *self);
 void*		keytree_ref_head(keytree_t *self);
 
 /**
- *  \fn			keytree_ref_tail
+ *
  *  \brief		Get last node in the tree.
  *  \param		*self	tree instance.
  *  \return	Last node in the tree.
@@ -88,7 +88,7 @@ void*		keytree_ref_head(keytree_t *self);
 void*		keytree_ref_tail(keytree_t *self);
 
 /**
- *  \fn			keytree_pop_head
+ *
  *  \brief		Get and delete the top node from the tree.
  *  \param		offset	offset length to link member of the node.
  *  \param		*self	tree instance.
@@ -97,7 +97,7 @@ void*		keytree_ref_tail(keytree_t *self);
 void*		keytree_pop_head(keytree_t *self);
 
 /**
- *  \fn			keytree_pop_tail
+ *
  *  \brief		Get and delete the last node from the tree.
  *  \param		offset	offset length to link member of the node.
  *  \param		*self	tree instance.
@@ -106,7 +106,7 @@ void*		keytree_pop_head(keytree_t *self);
 void*		keytree_pop_tail(keytree_t *self);
 
 /**
- *  \fn			keytree_ref_nth
+ *
  *  \brief		Get the nth(Top = 0th) node from the tree.
  *  \param		*self	tree instance.
  *  \param		nth		number which you want to get. minus indicates the count from the last.(last is -1)
@@ -116,7 +116,7 @@ void*		keytree_pop_tail(keytree_t *self);
 void*		keytree_ref_nth(keytree_t *self, int nth);
 
 /**
- *  \fn			keytree_add
+ *
  *  \brief		Add a node to the tree.
  *  \param		*self	tree instance.
  *  \param		*node	The node you want to add to *self.
@@ -125,7 +125,7 @@ void*		keytree_ref_nth(keytree_t *self, int nth);
 int			keytree_add(keytree_t *self, void *node);
 
 /**
- *  \fn			keytree_del
+ *
  *  \brief		Delete the node from the tree.
  *  \param		*self	tree instance.
  *  \param		*node	The node you want to remove from *self.
@@ -139,7 +139,7 @@ int			keytree_del(keytree_t *self, void *node);
 /*keytree_insert_after*/
 
 /**
- *  \fn			keytree_has_node
+ *
  *  \brief		Check if *self has the node specified as *node.
  *  \param		*self	tree instance
  *  \param		*node	node instance.
@@ -150,7 +150,7 @@ int			keytree_has_node(keytree_t *self, void *node);
 /*keytree_get_belong(void *node);*/
 
 /**
- *  \fn			keytree_get_next
+ *
  *  \brief		Get the next node of the node directly.
  *  \param		*self	tree instance
  *  \param		*node	node instance.
@@ -161,7 +161,7 @@ int			keytree_has_node(keytree_t *self, void *node);
 void*		keytree_get_next(keytree_t *self, void *node);
 
 /**
- *  \fn			keytree_get_prev
+ *
  *  \brief		Get the previous node of the node directly.
  *  \param		*self	tree instance
  *  \param		*node	node instance.
@@ -172,7 +172,7 @@ void*		keytree_get_next(keytree_t *self, void *node);
 void*		keytree_get_prev(keytree_t *self, void *node);
 
 /**
- *  \fn			keytree_find_eq_node
+ *
  *  \brief		Get the left edge node having value equals to specified node's.
  *  \param		*self	tree instance
  *  \param		*index_node	node instance.
@@ -184,7 +184,7 @@ void*		keytree_find_eq_node(keytree_t *self, void *index_node);
 /*void*		keytree_find_eq_value(keytree_t *self, void *value, size_t value_len);*/
 
 /**
- *  \fn			keytree_find_eq_node_end
+ *
  *  \brief		Get the right edge node having value equals to specified node's.
  *  \param		*self	tree instance
  *  \param		*index_node	node instance.
@@ -196,7 +196,7 @@ void*		keytree_find_eq_node_end(keytree_t *self, void *index_node);
 /*void*		keytree_find_eq_value_end(keytree_t *self, void *value, size_t value_len);*/
 
 /**
- *  \fn			keytree_find_lt_node
+ *
  *  \brief		Get the right edge node having value lesser than specified node's.
  *  \param		*self	tree instance
  *  \param		*index_node	node instance.
@@ -208,7 +208,7 @@ void*		keytree_find_lt_node(keytree_t *self, void *index_node);
 /*void*		keytree_find_lt_value(keytree_t *self, void *value, size_t value_len);*/
 
 /**
- *  \fn			keytree_find_gt_node
+ *
  *  \brief		Get the right edge node having value greater than specified node's.
  *  \param		*self	tree instance
  *  \param		*index_node	node instance.
@@ -220,7 +220,7 @@ void*		keytree_find_gt_node(keytree_t *self, void *index_node);
 /*void*		keytree_find_gt_node(keytree_t *self, void *value, size_t value_len);*/
 
 /**
- *  \fn			keytree_find_le_node
+ *
  *  \brief		Get the left edge node having value lesser than or equals to specified node's.
  *  \param		*self	tree instance
  *  \param		*index_node	node instance.
@@ -232,7 +232,7 @@ void*		keytree_find_le_node(keytree_t *self, void *index_node);
 /*void*		keytree_find_le_value(keytree_t *self, void *value, size_t value_len);*/
 
 /**
- *  \fn			keytree_find_ge_node
+ *
  *  \brief		Get the left edge node having value greater than or equals to specified node's.
  *  \param		*self	tree instance
  *  \param		*index_node	node instance.
@@ -244,7 +244,7 @@ void*		keytree_find_ge_node(keytree_t *self, void *index_node);
 /*void*		keytree_find_ge_value(keytree_t *self, void *value, size_t value_len);*/
 
 /**
- *  \fn			keytree_init_iterator
+ *
  *  \brief		Initialize the keytree_iterator_t.
  *  \param		*self	tree instance.
  *  \param		*iterator	iterator instance.
@@ -255,7 +255,7 @@ void*		keytree_find_ge_node(keytree_t *self, void *index_node);
 int			keytree_init_iterator(keytree_t *self, keytree_iterator_t *iterator);
 
 /**
- *  \fn			keytree_init_iterator_ranged
+ *
  *  \brief		Initialize the range-limited keytree_iterator_t.
  *  \param		*self	tree instance.
  *  \param		*iterator	iterator instance.
@@ -269,7 +269,7 @@ int			keytree_init_iterator(keytree_t *self, keytree_iterator_t *iterator);
 int			keytree_init_iterator_ranged(keytree_t *self, keytree_iterator_t *iterator, void *head, void *tail);
 
 /**
- *  \fn			keytree_iterator_move
+ *
  *  \brief		Move the iterator to one step before the specified node.
  *  \param		*iterator	iterator instance
  *  \param		*index_node	The node you want to set as the first point.
@@ -281,7 +281,7 @@ int			keytree_init_iterator_ranged(keytree_t *self, keytree_iterator_t *iterator
 int			keytree_iterator_move(keytree_iterator_t *iterator, void *index_node);
 
 /**
- *  \fn			keytree_iterator_forward
+ *
  *  \brief		Iterate to the next node.
  *  \param		*iterator	iterator instance.
  *  \return	Next node. If in the tail, NULL will be returned.
@@ -290,7 +290,7 @@ int			keytree_iterator_move(keytree_iterator_t *iterator, void *index_node);
 void*		keytree_iterator_forward(keytree_iterator_t *iterator);
 
 /**
- *  \fn			keytree_iterator_backward
+ *
  *  \brief		Iterate to the previous node.
  *  \param		*iterator	iterator instance.
  *  \return	Previous node. If in the tail, NULL will be returned.
@@ -299,7 +299,7 @@ void*		keytree_iterator_forward(keytree_iterator_t *iterator);
 void*		keytree_iterator_backward(keytree_iterator_t *iterator);
 
 /**
- *  \def		keytree_foreach_forward
+ *
  *  \brief		Syntax sugar for fast forward iterating
  *	\param		*node	working pointer of picking node
  *	\param		*self	tree instance
@@ -312,7 +312,7 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
 	)
 
 /**
- *  \def		keytree_foreach_backward
+ *
  *  \brief		Syntax sugar for fast backward iterating
  *	\param		*node	working pointer of picking node
  *	\param		*self	tree instance
@@ -325,7 +325,7 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
 	)
 
 /**
- *  \def		keytree_init_for
+ *
  *  \brief		Initialize the keytree for treating the specified structure and member.
  *  \param		*self	tree instance
  *  \param		type	target structure type

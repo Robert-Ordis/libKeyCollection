@@ -9,61 +9,27 @@
 #define	KEYHASH_FUNCTIONS_H_
 
 /**
- *	\typedef	yourhash_t
+ *	\brief		yourhash_t
  *	\brief		ユーザーが定義するハッシュテーブル型の名前
- *	\param		yourlist	実際に生成したいリスト型と関数のベースの名前
+ *	\param		yourlist	実際に生成したいハッシュテーブル型と関数のベースの名前
  *	\remarks	当該リスト型を操作する関数もyourlist_xxxという命名になります。
  */
 #define	KEYHASH_T_(yourhash)					yourhash##_t
 
-#define	KEYHASH_FINDER_T_(yourhash)				yourhash##_finder_t
-
-
 /**
- *	\typedef	keytree_comp_basename_t
- *	\brief		所定のノード同士を比較するための関数ポインタ型名
- *	\arg		node_a	(nodetype_t*)比較対象A
- *	\arg		node_b	(nodetype_t*)比較対象B
- *	\return			(int) node_a - node_bに相当する演算結果。1か-1か0だけでも守っておけばOK
- */
-#define	KEYHASH_NODE_COMP_T_(basename)			keyhash_comp_##basename##_t
-
-/**
- *	\typedef	keytree_virt_basename_t
- *	\brief		値からノードを求めるための仮想ノード構築関数ポインタ名
- *	\arg		node		(nodetype_t*)構築対象の仮想ノード
- *	\arg		value		(void*)キーとする値
- *	\arg		value_len	(size_t)valueの長さ
- *	\return			void
- */
-#define	KEYHASH_NODE_VIRT_T_(basename)			keyhash_virt_##basename##_t
-
-/**
- *	\typedef	keytree_hash_basename_t
- *	\brief		値からハッシュ値を求めるための関数ポインタ
- *	\arg		node	(nodetype_t*)構築対象の仮想ノード
- *	\arg		value	(int)ハッシュ値
- *	\return			void
- */
-#define	KEYHASH_NODE_HASH_T_(basename)			keyhash_hash_##basename##_t
-
-
-/**
- *	\fn			yourhash_init(*self, if_lock)
+ *	\brief		yourhash_init(*self, if_lock)
  *	\brief		ツリーの初期化
  *	\param		self		(yourhash_t*)取り扱うツリー
- *	\param		if_lock		(int)ツリー自身にロックを持たせる場合1、そうではなく、ロックは外でやる場合0
  *	\param		allow_eq	(int)同値の同居を許すかどうか。0で不許可。それ以外でOK
- *	\param		comp		(keyhash_comp_yourhash_t)ツリー挿入用の比較関数
- *	\param		virt		(keyhash_virt_yourhash_t)ツリー探索用の仮想比較ノード構築関数
- *	\param		hash		(keyhash_hash_yourhash_t)ハッシュ計算用関数
- *	\param		hash_width	(int)今回使うハッシュ幅
+ *	\param		comp_node	(yourhash_comp_node_t)ツリー挿入用の比較関数
+ *	\param		make_node	(yourhash_make_node_t)ツリー探索用の仮想比較ノード構築関数
+ *	\param		calc_hash	(yourhash_calc_hash_t)ハッシュ計算用関数
  *	\return				(void)
  */
 #define	KEYHASH_INIT_(yourhash)					yourhash##_init
 
 /**
- *	\fn			yourhash_get_count
+ *	\brief		yourhash_get_count
  *	\brief		ハッシュテーブルが抱えているノード数を取得
  *	\param		self	(yourhash_t*)取り扱うハッシュテーブル
  *	\return			(int)テーブル中の格納数
@@ -71,7 +37,7 @@
 #define	KEYHASH_GET_COUNT_(yourhash)	yourhash##_get_count
 
 /**
- *	\fn			yourhash_add
+ *	\brief		yourhash_add
  *	\brief		ハッシュテーブルにノードを加える。この際、比較はself中に定義されたものを使用。
  *	\param		self	(yourhash_t*)取り扱うテーブル
  *	\param		node	(node_type_t*)対象ノード
@@ -80,7 +46,7 @@
 #define	KEYHASH_ADD_(yourhash)					yourhash##_add
 
 /**
- *	\fn			yourhash_del
+ *	\brief		yourhash_del
  *	\brief		ハッシュテーブルから該当するノードを削除する
  *	\param		self	(yourhash_t*)取り扱うテーブル
  *	\param		node	(node_type_t*)対象ノード
@@ -89,116 +55,50 @@
 #define	KEYHASH_DEL_(yourhash)					yourhash##_del
 
 /**
- *	\fn			yourhash_get_node
- *	\brief		テーブルから該当する値の先頭ノードを探る
- *	\param		self		(yourhash_t*)取り扱うテーブル
- *	\param		value		(void*)キーとする値のポインタ
- *	\param		value_len	(size_t)valueポインタの長さ。例えば文字列長
- *	\return				(node_type_t*)該当するうち最小に位置するノード。ない場合はNULL
- *	\remarks	ワイルドカードノードも対象に入れています
+ *	\brief		yourhash_search
+ *	\brief		Pick up the node which has the value equals to the arg pointer.
+ *	\param		self		(yourhash_t*)Table instanceル
+ *	\param		value		(void*)Pointer of the value for picking the matched node up..
+ *	\param		value_len	(size_t)Byte length of *value instance.
+ *	\return				(node_type_t*)First node having the value. NULL for not found.
  */
-#define	KEYHASH_GET_NODE_(yourhash)				yourhash##_get_node
+#define	KEYHASH_SEARCH_(yourhash)				yourhash##_search
 
 /**
- *	\fn			yourhash_get_node_end
- *	\brief		テーブルから該当する値の末尾ノードを探る
- *	\param		self		(yourhash_t*)取り扱うテーブル
- *	\param		value		(void*)キーとする値のポインタ
- *	\param		value_len	(size_t)valueポインタの長さ。例えば文字列長
- *	\return				(node_type_t*)該当するうち末尾に位置するノード。ない場合はNULL
- *	\remarks	ワイルドカードも対象に入れるため、ワイルドカードの末尾から探します。
+ *	\brief		yourhash_search_wildcard
+ *	\brief		Pick up the node which has the wildcard matching with the arg pointer.
+ *	\param		self		(yourhash_t*)Table instanceル
+ *	\param		value		(void*)Pointer of the value for picking the matched node up..
+ *	\param		value_len	(size_t)Byte length of *value instance.
+ *	\return				(node_type_t*)First node having the matched value. NULL for not found.
  */
-#define	KEYHASH_GET_NODE_END_(yourhash)			yourhash##_get_node_end
+#define	KEYHASH_SEARCH_WILDCARD_(yourhash)		yourhash##_search_wildcard
 
 /**
- *	\fn			yourhash_get_node
- *	\brief		テーブルから該当する値の通常先頭ノードを探る
- *	\param		self		(yourhash_t*)取り扱うテーブル
- *	\param		value		(void*)キーとする値のポインタ
- *	\param		value_len	(size_t)valueポインタの長さ。例えば文字列長
- *	\return				(node_type_t*)該当するうち先頭に位置するノード。ない場合はNULL
- *	\remarks	ワイルドカードは対象外です
+ *	\brief		yourhash_setup_iterator
+ *	\brief		Setup the Iterator for only on specified value.
+ *	\param		self		(yourhash_t*)Table instance.
+ *	\param		iterator	(treename_iterator_t*)Iterator.
+ *	\param		value		(void*)Pointer of the value for picking the eq-valued node up..
+ *	\param		value_len	(size_t)Byte length of *value instance.
+ *	\return				(int) 0 if the node was found. -1 for not found.
  */
-#define	KEYHASH_GET_NORMAL_NODE_(yourhash)		yourhash##_get_normal_node
+#define	KEYHASH_SETUP_ITERATOR_(yourhash)		yourhash##_setup_iterator
+
 
 /**
- *	\fn			yourhash_get_node_end
- *	\brief		テーブルから該当する値の通常末尾ノードを探る
- *	\param		self		(yourhash_t*)取り扱うテーブル
- *	\param		value		(void*)キーとする値のポインタ
- *	\param		value_len	(size_t)valueポインタの長さ。例えば文字列長
- *	\return				(node_type_t*)該当するうち末尾に位置するノード。ない場合はNULL
- *	\remarks	ワイルドカードは対象外です
+ *	\brief		yourhash_setup_iterator_wildcard
+ *	\brief		Setup the Iterator for node detected as wildcard.
+ *	\param		self		(yourhash_t*)Table instance.
+ *	\param		iterator	(treename_iterator_t*)Iterator.
+ *	\return				(int)Always 0.
  */
-#define	KEYHASH_GET_NORMAL_NODE_END_(yourhash)	yourhash##_get_normal_node_end
+#define	KEYHASH_SETUP_ITERATOR_WILDCARD_(yourhash)	yourhash##_setup_iterator_wildcard
+
+
 
 /**
- *	\fn			yourhash_get_wildcard
- *	\brief		テーブルに登録されたワイルドカードから、valueでヒットする先頭ノードを取得する
- *	\param		self		(yourhash_t*)取り扱うテーブル
- *	\param		value		(void*)キーとする値のポインタ
- *	\param		value_len	(size_t)valueポインタの長さ。例えば文字列長
- *	\return				(node_type_t*)該当するうち先頭に位置するノード。ない場合はNULL
- *	\remarks	ワイルドカードのみから探します
- */
-#define	KEYHASH_GET_WILDCARD_(yourhash)			yourhash##_get_wildcard
-
-/**
- *	\fn			yourhash_get_wildcard_end
- *	\brief		テーブルに登録されたワイルドカードから、valueでヒットする末尾ノードを取得する
- *	\param		self		(yourhash_t*)取り扱うテーブル
- *	\param		value		(void*)キーとする値のポインタ
- *	\param		value_len	(size_t)valueポインタの長さ。例えば文字列長
- *	\return				(node_type_t*)該当するうち先頭に位置するノード。ない場合はNULL
- *	\remarks	ワイルドカードのみから探します
- */
-#define	KEYHASH_GET_WILDCARD_END_(yourhash)		yourhash##_get_wildcard_end
-
-/**
- *	\fn			yourhash_init_finder
- *	\brief		「指定の値にヒットするノード」のみでイテレートするfinderを初期化
- *	\param		self		(yourhash_t*)取り扱うテーブル
- *	\param		finder		(yourhash_finder_t*)ファインダー
- *	\param		value		(void*)キーとする値のポインタ
- *	\param		value_len	(size_t)valueポインタの長さ。例えば文字列長
- *	\return				(nodetype_t*)成功で該当ノード。失敗でNULL：例えばそんな値では何一つ見つからないとか
- *	\remarks	
- */
-#define	KEYHASH_INIT_FINDER_(yourhash)		yourhash##_init_finder
-
-/**
- *	\fn			yourhash_find_next
- *	\brief		「指定の値にヒットするノード」縛りで次のノードを取得
- *	\param		self	(yourhash_t*)取り扱うテーブル
- *	\param		finder	(yourhash_finder_t*)ファインダー
- *	\return			(nodetype_t*)ノード。続かない場合はNULL
- *	\remarks	loop中、returnされたノードは削除してもよい。
- *	\remarks	通常ノードのイテレーションが終わったらワイルドカードで回す。
- */
-#define	KEYHASH_FIND_NEXT_(yourhash)			yourhash##_find_next
-
-/**
- *	\fn			yourhash_find_prev
- *	\brief		「指定の値にヒットするノード」縛りで前のノードを取得
- *	\param		self	(yourhash_t*)取り扱うテーブル
- *	\param		finder	(yourhash_finder_t*)ファインダー
- *	\return			(nodetype_t*)ノード。続かない場合はNULL
- *	\remarks	loop中、returnされたノードは削除してもよい。
- *	\remarks	ワイルドカードのイテレーションが終わったら通常ノードで回す。
- */
-#define	KEYHASH_FIND_PREV_(yourhash)			yourhash##_find_prev
-
-/**
- *	\fn			yourhash_finder_in_wildcard
- *	\brief		ファインダーが現在ワイルドカードを見ているかどうか。
- *	\param		self	(yourhash_t*)取り扱うテーブル
- *	\param		finder	(yourhash_finder_t*)ファインダー
- *	\return			(int)0で偽、1で真
- */
-#define	KEYHASH_FINDER_IN_WILDCARD_(yourhash)	yourhash##_finder_in_wildcard
-
-/**
- *	\fn			yourhash_dbg_dump
+ *	\brief		yourhash_dbg_dump
  *	\brief		デバッグ用	
  *	\param		self	(yourhash_t*)対象テーブル
  *	\param		dump	(*(int)(nodetype_t* node, char *buf, int buflen))見つけたノードを取り扱う関数。負の値を返すと中断。

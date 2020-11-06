@@ -20,7 +20,7 @@
 
 /**
  *  \def	keylist_define_implements
- *  \brief	Withcraft used in source code(*.c)
+ *  \brief	Witchcraft used in source code(*.c)
  *  \brief	By this macro, implementation of functions(yourlist_add/_del/...) are generated.
  *  \param	yourlist		Defining the types and functions based on this arg.(yourlist_t and yourlist_add, e.g.)
  *  \param	nodetype_s		Target type you want to treat.
