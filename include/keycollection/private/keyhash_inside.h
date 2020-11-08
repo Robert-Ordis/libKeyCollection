@@ -6,11 +6,11 @@
 #define	PRIVATE_KEYHASH_INSIDE_H_
 
 //ハッシュ値の計算
-#define			KEYHASH_IMPL_CALC_HASH_(self, node, ret)\
+#define			KEYHASH_IMPL_CALC_HASH_(self, node, width, ret)\
 	do{\
-		ret = (self)->hash(node);\
+		ret = (self)->calc_hash(node);\
 		if(ret >= 0){\
-			ret = ret % (self)->hash_width;\
+			ret = ret % width;\
 		}\
 	}while(0)
 

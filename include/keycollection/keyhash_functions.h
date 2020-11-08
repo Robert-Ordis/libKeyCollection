@@ -21,15 +21,15 @@
  *	\brief		ツリーの初期化
  *	\param		self		(yourhash_t*)取り扱うツリー
  *	\param		allow_eq	(int)同値の同居を許すかどうか。0で不許可。それ以外でOK
- *	\param		comp_node	(yourhash_comp_node_t)ツリー挿入用の比較関数
- *	\param		make_node	(yourhash_make_node_t)ツリー探索用の仮想比較ノード構築関数
- *	\param		calc_hash	(yourhash_calc_hash_t)ハッシュ計算用関数
+ *	\param		comp_node	(keytree_comp_node_cb)ツリー挿入用の比較関数
+ *	\param		make_node	(keytree_make_node_cb)ツリー探索用の仮想比較ノード構築関数
+ *	\param		calc_hash	(keyhash_calc_hash_cb)ハッシュ計算用関数
  *	\return				(void)
  */
 #define	KEYHASH_INIT_(yourhash)					yourhash##_init
 
 /**
- *	\brief		yourhash_get_count
+ *	\brief		yourhash_get_count(*self)
  *	\brief		ハッシュテーブルが抱えているノード数を取得
  *	\param		self	(yourhash_t*)取り扱うハッシュテーブル
  *	\return			(int)テーブル中の格納数
@@ -78,7 +78,7 @@
  *	\brief		yourhash_setup_iterator
  *	\brief		Setup the Iterator for only on specified value.
  *	\param		self		(yourhash_t*)Table instance.
- *	\param		iterator	(treename_iterator_t*)Iterator.
+ *	\param		iterator	(yourhash_iterator_t*)Iterator.
  *	\param		value		(void*)Pointer of the value for picking the eq-valued node up..
  *	\param		value_len	(size_t)Byte length of *value instance.
  *	\return				(int) 0 if the node was found. -1 for not found.
@@ -90,7 +90,7 @@
  *	\brief		yourhash_setup_iterator_wildcard
  *	\brief		Setup the Iterator for node detected as wildcard.
  *	\param		self		(yourhash_t*)Table instance.
- *	\param		iterator	(treename_iterator_t*)Iterator.
+ *	\param		iterator	(yourhash_iterator_t*)Iterator.
  *	\return				(int)Always 0.
  */
 #define	KEYHASH_SETUP_ITERATOR_WILDCARD_(yourhash)	yourhash##_setup_iterator_wildcard

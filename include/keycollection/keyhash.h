@@ -5,6 +5,7 @@
  */
  
 #include "./private/keycollection_commons.h"
+#include "./private/keyhash_inside.h"
 
 #include <stdint.h>
 #include <stddef.h>
@@ -25,30 +26,20 @@
 #define	keyhash_define_prototypes(yourhash, nodetype_s, treename, hash_max)\
 	\
 	typedef	int		(*KEYHASH_NODE_HASH_T_(yourhash))(nodetype_s *node_a);\
+	typedef	KEYTREE_ITERATOR_T_(treename) KEYHASH_ITERATOR_T_(yourhash);\
 	\
 	typedef struct {\
 		KEYTREE_T_(treename)	hash_chain[hash_max];	/*通常のハッシュテーブル*/\
 		KEYTREE_T_(treename)	wild_chain;				/*ワイルドカードレコードの格納場（リストとしての用途のみ）*/\
-		KEYHASH_NODE_HASH_T_(yourhash)	hash;			/*ハッシュ計算関数*/\
+		keyhash_calc_hash_cb	calc_hash;				/*ハッシュ計算関数*/\
 	} KEYHASH_T_(yourhash);\
 	\
 	\
-	typedef struct {\
-		KEYHASH_T_(yourhash)			*hash;			/*ハッシュテーブル*/\
-		nodetype_s						v_node;			/*比較用の仮想ノード（仮）*/\
-		int								v_hash;			/*ハッシュ値*/\
-		nodetype_s						*prev;			/*イテレーションの「前ノード」*/\
-		nodetype_s						*next;			/*イテレーションの「後ノード」*/\
-		nodetype_s						*curr;			/*今見ているノード*/\
-		KEYTREE_ITERATOR_T_(treename)	iter;			/*イテレータ*/\
-	} KEYHASH_FINDER_T_(yourhash);\
-	\
-	\
-	void		KEYHASH_INIT_(yourhash)(KEYHASH_T_(yourhash) *self, int if_lock, int allow_eq, \
-					KEYHASH_NODE_COMP_T_(yourhash) comp,\
-					KEYHASH_NODE_VIRT_T_(yourhash) virt,\
-					KEYHASH_NODE_HASH_T_(yourhash) hash,\
-					int hash_width);\
+	void		KEYHASH_INIT_(yourhash)(KEYHASH_T_(yourhash) *self, int allow_eq, \
+					keytree_comp_node_cb comp_node,\
+					keytree_make_node_cb make_node,\
+					keyhash_calc_hash_cb calc_hash,\
+				);\
 	\
 	/*単純に各チェインの合計数を取得する*/\
 	int			KEYHASH_GET_COUNT_(yourhash)(KEYHASH_T_(yourhash) *self);\
@@ -59,20 +50,17 @@
 	/*削除処理。確認のためハッシュ特定→削除処理*/\
 	int			KEYHASH_DEL_(yourhash)(KEYHASH_T_(yourhash) *self, nodetype_s *node);\
 	\
-	/*通常等価→ワイルドカードの順で前方から検索*/\
-	nodetype_s *KEYHASH_GET_NODE_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len);\
+	/*通常等価で前方を検索*/\
+	nodetype_s*	KEYHASH_SEARCH_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len);\
 	\
-	/*ワイルドカード→通常等価の順で後方から検索*/\
-	nodetype_s *KEYHASH_GET_NODE_END_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len);\
+	/*ワイルドカードで前方を検索*/\
+	nodetype_s*	KEYHASH_SEARCH_WILDCARD_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len);\
 	\
-	/*検索処理。普通の等価のうちの下っ端を当てる*/\
-	nodetype_s *KEYHASH_GET_NORMAL_NODE_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len);\
-	/*検索処理。等価のうちの大きいものを当てる*/\
-	nodetype_s *KEYHASH_GET_NORMAL_NODE_END_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len);\
-	/*ワイルドカードの該当する最初を引き当てる*/\
-	nodetype_s *KEYHASH_GET_WILDCARD_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len);\
-	/*ワイルドカードの該当する最後を引き当てる*/\
-	nodetype_s *KEYHASH_GET_WILDCARD_END_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len);\
+	/*通常等価で回すイテレータをセット*/\
+	int			KEYHASH_SETUP_ITERATOR_(yourhash)(KEYHASH_T_(yourhash) *self, KEYHASH_ITERATOR_T_(yourhash) *iterator, void *value, size_t value_len);\
+	\
+	/*ワイルドカードをめぐるイテレータをセット*/\
+	int			KEYHASH_SETUP_ITERATOR_WILDCARD_(yourhash)(KEYHASH_T_(yourhash) *self, KEYHASH_ITERATOR_T_(yourhash) *iterator)\
 	\
 	int			KEYHASH_DBG_DUMP_(yourhash)(KEYHASH_T_(yourhash) *self, void *userdata, int (*dump)(nodetype_s*, void*, char*, int));\
 	
@@ -88,30 +76,26 @@
  */
 #define	keyhash_define_implements(yourhash, nodetype_s, treename, hash_max)\
 	void		KEYHASH_INIT_(yourhash)(KEYHASH_T_(yourhash) *self, int if_lock, int allow_eq, \
-					KEYHASH_NODE_COMP_T_(yourhash) comp,\
-					KEYHASH_NODE_VIRT_T_(yourhash) virt,\
-					KEYHASH_NODE_HASH_T_(yourhash) hash,\
-					int hash_width){\
+					keytree_comp_node_cb comp,\
+					keytree_comp_node_cb make,\
+					keyhash_calc_hash_cb hash,\
+				){\
 		assert(self != NULL);\
 		assert(comp != NULL);\
 		assert(virt != NULL);\
 		assert(hash != NULL);\
-		(self)->if_lock = (if_lock != 0);\
-		KEYHASH_LOCK_INIT_(self);\
-		KEYHASH_LOCK_ACQUIRE_(self);{\
+		\
+		{\
 			int i;\
-			(self)->comp = comp;\
-			(self)->virt = virt;\
-			(self)->hash = hash;\
+			(self)->calc_hash = hash;\
 			/*ハッシュテーブルの整備。広さを限界値を超えたりゼロにしたりしないよう気を付ける*/\
-			(self)->hash_width = (hash_width > hash_max || hash_width < 1) ? hash_max : hash_width;\
-			for(i = 0; i < (self)->hash_width; i++){\
+			for(i = hash_max - 1; i >= 0; --i){\
 				/*各通常チェインの初期化*/\
-				KEYTREE_INIT_(treename)(&((self)->hash_chain[i]), 0, allow_eq, comp, virt);\
+				KEYTREE_INIT_(treename)(&((self)->hash_chain[i]), allow_eq, comp, make);\
 			}\
 			/*ワイルドカードチェインの初期化。比較関数等をゼロとすることで線形リストとして定義づける*/\
-			KEYTREE_INIT_(treename)(&((self)->wild_chain), 0, allow_eq, NULL, NULL);\
-		}KEYHASH_LOCK_RELEASE_(self);\
+			KEYTREE_INIT_(treename)(&((self)->wild_chain), allow_eq, NULL, NULL);\
+		}\
 	}\
 	\
 	\
@@ -119,7 +103,7 @@
 	int			KEYHASH_GET_COUNT_(yourhash)(KEYHASH_T_(yourhash) *self){\
 		int ret = KEYTREE_GET_COUNT_(treename)(&((self)->wild_chain));\
 		int i;\
-		for(i = 0; i < (self)->hash_width; i++){\
+		for(i = hash_max - 1; i >= 0; --i){\
 			ret += KEYTREE_GET_COUNT_(treename)(&((self)->hash_chain[i]));\
 		}\
 		return ret;\
@@ -132,8 +116,8 @@
 		KEYTREE_T_(treename) *dst = NULL;\
 		\
 		/*ハッシュ計算*/\
-		KEYHASH_IMPL_CALC_HASH_(self, node, hash_index);\
-		KEYHASH_LOCK_ACQUIRE_(self);{\
+		KEYHASH_IMPL_CALC_HASH_(self, node, hash_max, hash_index);\
+		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
 			if(hash_index == -1){\
 				/*算出値が-1だった場合にのみワイルドカードチェインを提供*/\
 				dst = &((self)->wild_chain);\
@@ -143,10 +127,10 @@
 				dst = &((self)->hash_chain[hash_index]);\
 			}\
 			if(dst != NULL){\
-				/*チェーンに加える。ツリーなのでソートは自動で行われる*/\
+				/*チェーンに加える。通常ツリーならソートは自動で行われる*/\
 				ret = KEYTREE_ADD_(treename)(dst, node);\
 			}\
-		}KEYHASH_LOCK_RELEASE_(self);\
+		}KEYCOLLECT_LOCK_RELEASE_(self);\
 		return ret;\
 	}\
 	\
@@ -155,15 +139,15 @@
 		int ret = -1;\
 		int hash_index = (self)->hash(node);\
 		KEYTREE_T_(treename) *dst = NULL;\
-		KEYTREE_T_(treename) *belong = KEYTREE_GET_BELONGED_(treename)(node);\
+		KEYTREE_T_(treename) *belong = KEYTREE_GET_BELONG_(treename)(node);\
 		\
 		/*ハッシュ計算*/\
-		KEYHASH_IMPL_CALC_HASH_(self, node, hash_index);\
+		KEYHASH_IMPL_CALC_HASH_(self, node, hash_max, hash_index);\
 		if(belong == NULL){\
 			/*そもそもどこにも所属していないのなら何もしない*/\
 			return ret;\
 		}\
-		KEYHASH_LOCK_ACQUIRE_(self);{\
+		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
 			if(hash_index == -1){\
 				/*算出値が-1だった場合にのみワイルドカードチェインを提供*/\
 				dst = &((self)->wild_chain);\
@@ -173,164 +157,75 @@
 				dst = &((self)->hash_chain[hash_index]);\
 			}\
 			if(dst != NULL){\
-				/*そのチェーンが、nodeが属するもの*/\
-				assert(dst == belong);\
+				/*そのチェーンが、nodeが属するものかどうかは中の関数に任せる*/\
 				ret = KEYTREE_DEL_(treename)(dst, node);\
 			}\
-		}KEYHASH_LOCK_RELEASE_(self);\
+		}KEYCOLLECT_LOCK_RELEASE_(self);\
 		return ret;\
 	}\
 	\
-	/*通常ノード→ワイルドカードの順で一致するものを前方から検索する*/\
-	nodetype_s *KEYHASH_GET_NODE_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len){\
+	/*通常ノードにて一致する最初のノードをとる*/\
+	nodetype_s *KEYHASH_SEARCH_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len){\
 		nodetype_s *ret_node = NULL;\
-		nodetype_s v_node;\
-		int hash;\
+		int hash_index;\
 		\
-		(self)->virt(&v_node, value, value_len);\
-		KEYHASH_IMPL_CALC_HASH_(self, &v_node, hash);\
+		KEYHASH_IMPL_CALC_HASH_(self, &v_node, hash_max, hash_index);\
 		\
-		KEYHASH_LOCK_ACQUIRE_(self);{\
+		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
 			if(hash >= 0){\
-				/*最初は普通に探す*/\
-				ret_node = KEYTREE_FIND_EQ_(treename)(&(self)->hash_chain[hash], value, value_len);\
+				/*普通に探す*/\
+				ret_node = KEYTREE_FIND_EQ_VALUE_(treename)(&(self)->hash_chain[hash], value, value_len);\
 			}\
-			if(ret_node == NULL){\
-				/*もしヒットしなければワイルドカードから探す*/\
-				KEYTREE_T_(treename) *dst = &((self)->wild_chain);\
-				KEYTREE_ITERATOR_T_(treename) it;\
-				KEYTREE_INIT_ITERATOR_(treename)(dst, &it);\
-				while((ret_node = KEYTREE_ITERATE_FORWARD_(treename)(dst, &it)) != NULL){\
-					/*ワイルドカードチェインを前から回して比較==0→「一致」が出たら終わる。*/\
-					if((self)->comp(&v_node, ret_node) == 0){\
-						break;\
-					}\
-				}\
-			}\
-		}KEYHASH_LOCK_RELEASE_(self);\
+		}KEYCOLLECT_LOCK_RELEASE_(self);\
 		return ret_node;\
 	}\
 	\
-	/*ワイルドカード→通常ノードの順で一致するものを後方から検索する*/\
-	nodetype_s *KEYHASH_GET_NODE_END_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len){\
+	/*ワイルドカードにて一致する最初のノードをとる*/\
+	nodetype_s *KEYHASH_SEARCH_WILDCARD_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len){\
 		nodetype_s *ret_node = NULL;\
 		nodetype_s v_node;\
-		int hash;\
+		int hash_index;\
+		keytree_comp_node_cb cmp = (self)->hash_chain[0]->comp_node;\
+		(self)->hash_chain[0]->make_node(&v_node, value, value_len);\
 		\
-		(self)->virt(&v_node, value, value_len);\
-		\
-		KEYHASH_LOCK_ACQUIRE_(self);{\
-			/*ワイルドカードの後ろから回す*/\
-			KEYTREE_T_(treename) *dst = &((self)->wild_chain);\
-			KEYTREE_ITERATOR_T_(treename) it;\
-			KEYTREE_INIT_ITERATOR_(treename)(dst, &it);\
-			while((ret_node = KEYTREE_ITERATE_BACKWARD_(treename)(dst, &it)) != NULL){\
-				/*ワイルドカードチェインを前から回して比較==0→「一致」が出たら終わる。*/\
-				if((self)->comp(&v_node, ret_node) == 0){\
+		/*ワイルドカードチェインを回して、一致したら抜ける*/\
+		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
+			for(\
+				ret_node = KEYTREE_REF_FIRST_(treename)(&(self)->wild_chain);\
+				ret_node != NULL;\
+				ret_node = KEYTREE_GET_NEXT_(treename)(&(self)->wild_chain, ret_node)){\
+				\
+				if(cmp(ret_node, v_node) == 0){\
 					break;\
 				}\
 			}\
-			\
-			if(ret_node == NULL){\
-				/*ワイルドカードで出なかったら通常チェーンから探す*/\
-				KEYHASH_IMPL_CALC_HASH_(self, &v_node, hash);\
-				if(hash >= 0){\
-					ret_node = KEYTREE_FIND_EQ_END_(treename)(&(self)->hash_chain[hash], value, value_len);\
-				}\
-			}\
-		}KEYHASH_LOCK_RELEASE_(self);\
+		}KEYCOLLECT_LOCK_RELEASE_(self);\
 		return ret_node;\
 	}\
 	\
-	/*検索処理。普通の等価のうちの下っ端を当てる*/\
-	nodetype_s *KEYHASH_GET_NORMAL_NODE_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len){\
+	int			KEYHASH_SETUP_ITERATOR_(yourhash)(KEYHASH_T_(yourhash) *self, KEYHASH_ITERATOR_T_(yourhash) *iterator, void *value, size_t value_len){\
+		int ret = -1;\
 		nodetype_s v_node;\
-		nodetype_s *ret_node = NULL;\
-		(self)->virt(&v_node, value, value_len);\
-		int hash;\
-		KEYHASH_IMPL_CALC_HASH_(self, &v_node, hash);\
+		int hash_index;\
+		KEYHASH_IMPL_CALC_HASH_(self, &v_node, hash_max, hash_index);\
 		\
-		if(hash >= 0){\
-			KEYHASH_LOCK_ACQUIRE_(self);{\
-				ret_node = KEYTREE_FIND_EQ_(treename)(&(self)->hash_chain[hash], value, value_len);\
-			}KEYHASH_LOCK_RELEASE_(self);\
-		}\
-		return ret_node;\
-	}\
-	/*検索処理。等価のうちの大きいものを当てる*/\
-	nodetype_s *KEYHASH_GET_NORMAL_NODE_END_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len){\
-		nodetype_s v_node;\
-		nodetype_s *ret_node = NULL;\
-		(self)->virt(&v_node, value, value_len);\
-		int hash;\
-		KEYHASH_IMPL_CALC_HASH_(self, &v_node, hash);\
-		\
-		if(hash >= 0){\
-			KEYHASH_LOCK_ACQUIRE_(self);{\
-				ret_node = KEYTREE_FIND_EQ_END_(treename)(&(self)->hash_chain[hash], value, value_len);\
-			}KEYHASH_LOCK_RELEASE_(self);\
-		}\
-		return ret_node;\
-	}\
-	/*ワイルドカードの該当する最初を引き当てる*/\
-	nodetype_s *KEYHASH_GET_WILDCARD_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len){\
-		nodetype_s v_node;\
-		nodetype_s *ret_node = NULL;\
-		(self)->virt(&v_node, value, value_len);\
-		\
-		KEYHASH_LOCK_ACQUIRE_(self);{\
-			KEYTREE_T_(treename) *dst = &((self)->wild_chain);\
-			KEYTREE_ITERATOR_T_(treename) it;\
-			KEYTREE_INIT_ITERATOR_(treename)(dst, &it);\
-			while((ret_node = KEYTREE_ITERATE_FORWARD_(treename)(dst, &it)) != NULL){\
-				/*ワイルドカードチェインをひたすら回して比較==0→「一致」が出たら終わる。*/\
-				if((self)->comp(&v_node, ret_node) == 0){\
-					break;\
+		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
+			if(hash >= 0){\
+				/*普通に探す*/\
+				nodetype_s *head_node, *tail_node;\
+				*head_node = KEYTREE_FIND_EQ_NODE_(treename)(&(self)->hash_chain[hash_index], &v_node);\
+				if(head_node != NULL){\
+					tail_node = KEYTREE_FIND_EQ_NODE_END_(treename)(&(self)->hash_chain[hash_index], &v_node);\
+					ret = KEYTREE_INIT_ITERATOR_RANGED_(treename)(&(self)->hash_chain[hash_index], iterator, head_node, tail_node);\
 				}\
+				\
 			}\
-		}KEYHASH_LOCK_RELEASE_(self);\
-		return ret_node;\
-	}\
-	/*ワイルドカードの該当する最後を引き当てる*/\
-	nodetype_s *KEYHASH_GET_WILDCARD_END_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len){\
-		nodetype_s v_node;\
-		nodetype_s *ret_node = NULL;\
-		(self)->virt(&v_node, value, value_len);\
+		}KEYCOLLECT_LOCK_RELEASE_(self);\
 		\
-		KEYHASH_LOCK_ACQUIRE_(self);{\
-			KEYTREE_T_(treename) *dst = &((self)->wild_chain);\
-			KEYTREE_ITERATOR_T_(treename) it;\
-			KEYTREE_INIT_ITERATOR_(treename)(dst, &it);\
-			while((ret_node = KEYTREE_ITERATE_BACKWARD_(treename)(dst, &it)) != NULL){\
-				/*ワイルドカードチェインをひたすら回して比較==0→「一致」が出たら終わる。*/\
-				if((self)->comp(&v_node, ret_node) == 0){\
-					break;\
-				}\
-			}\
-		}KEYHASH_LOCK_RELEASE_(self);\
-		return ret_node;\
-	}\
-	/*探索子（仮）を初期化する*/\
-	int			KEYHASH_INIT_FINDER_(yourhash)(KEYHASH_T_(yourhash) *self, KEYHASH_FINDER_T_(yourhash) *finder, void *value, size_t value_len){\
-		int ret = 0;\
-		KEYHASH_LOCK_ACQUIRE_(self);{\
-			/*まずは比較用の仮想ノードを用意する*/\
-			(self)->virt(&((finder)->v_node), value, value_len);\
-			/*次に、ノードのハッシュ値を計算する*/\
-			(finder)->v_hash = (self)->hash(&((finder)->v_node));\
-			/*TODO: ここでもうnextとprevを据えておいた方がいいかも？*/\
-			(finder)->curr = NULL;\
-			(finder)->next = NULL;\
-			(finder)->prev = NULL;\
-			(finder)->hash = self;\
-		}KEYHASH_LOCK_RELEASE_(self);\
 		return ret;\
 	}\
-	/*探索子をもって、次ノードを取得する*/\
-	nodetype_s	*KEYHASH_FIND_NEXT_(yourhash)(KEYHASH_T_(yourhash) *self, KEYHASH_FINDER_T_(yourhash) *finder){\
-	}\
-	/*探索子をもって、前ノードを取得する*/\
-	nodetype_s	*KEYHASH_FIND_PREV_(yourhash)(KEYHASH_T_(yourhash) *self, KEYHASH_FINDER_T_(yourhash) *finder){\
+	int			KEYHASH_SETUP_ITERATOR_WILDCARD_(yourhash)(KEYHASH_T_(yourhash) *self, KEYHASH_ITERATOR_T_(yourhash) *iterator){\
+		return KEYTREE_INIT_ITERATOR_(&(self)->wild_chain[hash_index], iterator);\
 	}\
 	int			KEYHASH_DBG_DUMP_(yourhash)(KEYHASH_T_(yourhash) *self, void *userdata, int (*dump)(nodetype_s*, void*, char*, int)){\
 		KEYTREE_ITERATOR_T_(treename) it;\
@@ -338,19 +233,19 @@
 		int i;\
 		int ret;\
 		int loop_ret = 0;\
-		KEYHASH_LOCK_ACQUIRE_(self);{\
+		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
 			\
 			char buf[64];\
-			for(i = 0; i < (self)->hash_width; i++){\
+			for(i = 0; i < hash_max; i++){\
 				printf("%s: chain number->%d\n", __func__, i);\
 				KEYTREE_INIT_ITERATOR_(treename)(&((self)->hash_chain[i]), &it);\
-				while((node = KEYTREE_ITERATE_FORWARD_(treename)(&((self)->hash_chain[i]), &it)) != NULL){\
-					KEYHASH_LOCK_RELEASE_(self);\
+				while((node = KEYTREE_ITERATOR_FORWARD_(treename)(&((self)->hash_chain[i]), &it)) != NULL){\
+					KEYCOLLECT_LOCK_RELEASE_(self);\
 					ret++;\
 					if(dump != NULL){\
 						loop_ret = (*dump)(node, userdata, buf, 64);\
 					}\
-					KEYHASH_LOCK_ACQUIRE_(self);\
+					KEYCOLLECT_LOCK_ACQUIRE_(self);\
 					printf("%s:[%p(%03d)]:val->%s\n", __func__, node, i, buf);\
 					if(loop_ret < 0){\
 						break;\
@@ -361,24 +256,24 @@
 				}\
 			}\
 			if(loop_ret < 0){\
-				KEYHASH_LOCK_RELEASE_(self);\
+				KEYCOLLECT_LOCK_RELEASE_(self);\
 				return ret;\
 			}\
 			KEYTREE_INIT_ITERATOR_(treename)(&((self)->wild_chain), &it);\
 			printf("%s: wild chain\n", __func__);\
-			while((node = KEYTREE_ITERATE_FORWARD_(treename)(&((self)->wild_chain), &it)) != NULL){\
-				KEYHASH_LOCK_RELEASE_(self);\
+			while((node = KEYTREE_ITERATOR_FORWARD_(treename)(&((self)->wild_chain), &it)) != NULL){\
+				KEYCOLLECT_LOCK_RELEASE_(self);\
 				ret++;\
 				if(dump != NULL){\
 					loop_ret = (*dump)(node, userdata, buf, 64);\
 				}\
-				KEYHASH_LOCK_ACQUIRE_(self);\
+				KEYCOLLECT_LOCK_ACQUIRE_(self);\
 				printf("%s:[%p(%03d)]:val->%s\n", __func__, node, -1, buf);\
 				if(loop_ret < 0){\
 					break;\
 				}\
 			}\
-		}KEYHASH_LOCK_RELEASE_(self);\
+		}KEYCOLLECT_LOCK_RELEASE_(self);\
 		\
 		return ret;\
 	}\
