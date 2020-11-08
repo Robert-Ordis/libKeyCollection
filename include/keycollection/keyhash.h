@@ -75,7 +75,7 @@
  *	\brief	ハッシュセットの実装を自動で行う
  */
 #define	keyhash_define_implements(yourhash, nodetype_s, treename, hash_max)\
-	void		KEYHASH_INIT_(yourhash)(KEYHASH_T_(yourhash) *self, int if_lock, int allow_eq, \
+	void		KEYHASH_INIT_(yourhash)(KEYHASH_T_(yourhash) *self, int allow_eq, \
 					keytree_comp_node_cb comp,\
 					keytree_comp_node_cb make,\
 					keyhash_calc_hash_cb hash,\
