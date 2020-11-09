@@ -343,17 +343,29 @@ struct keytree_link_s {
 		KEYLISTのマクロを流用するので、メンバ名は共通
 		For reusing KEYLIST macros, some member names are same as keytree_link_t.
 	 */
-	struct keytree_link_s	*prev;			/**previous pointer*/
-	struct keytree_link_s	*next;			/**next pointer.*/
-	struct keytree_s		*coll;			/**pointer of container(e.g. keytree_t)*/
+	/**previous pointer*/
+	struct keytree_link_s	*prev;
+	
+	/**next pointer.*/
+	struct keytree_link_s	*next;
+	
+	/**pointer of container(e.g. keytree_t)*/
+	struct keytree_s		*coll;
 
 	/*以下はツリー用。/ Belows are for keytree.*/
-	struct keytree_link_s	*ge;			/**pointer for value evaled as "Greater than/Equals to" this.*/
-	struct keytree_link_s	*lt;			/**pointer for value evaled as "Lesser than" this.*/
-	struct keytree_link_s	*up;			/**pointer for the parent of this. If the struct is root, this is NULL.*/
+	
+	/**pointer for value evaled as "Greater than/Equals to" this.*/
+	struct keytree_link_s	*ge;
+	
+	/**pointer for value evaled as "Lesser than" this.*/
+	struct keytree_link_s	*lt;
+	
+	/**pointer for the parent of this. If the struct is root, this is NULL.*/
+	struct keytree_link_s	*up;
 
 	/*平衡2分木機能用。/ For self-balancing.*/
-	long int				h_pri;			/**Priority on "Treap". Parent->h_pri <= Child->h_pri on promotive rotation.*/
+	/**Priority on "Treap". Parent->h_pri <= Child->h_pri on promotive rotation.*/
+	long int				h_pri;
 };
 
 struct keytree_s {
@@ -361,23 +373,39 @@ struct keytree_s {
 		KEYLISTのマクロを流用するので、メンバ名は共通
 		For reusing KEYLIST macros, some member names are same as keytree_link_t.
 	*/
-	struct keytree_link_s*	head;	/**Pointer to head link.*/
-	struct keytree_link_s*	tail;	/**Pointer to tail link.*/
-	int						size;	/**Counter for having nodes.*/
-	size_t					ofst;	/**DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL*/
+	/**Pointer to head link.*/
+	struct keytree_link_s*	head;
+	
+	/**Pointer to tail link.*/
+	struct keytree_link_s*	tail;
+	
+	/**Counter for having nodes.*/
+	int						size;
+	
+	/**DIRTY MEMBER. FOR PSEUDO POLYMORPHISM...LOL*/
+	size_t					ofst;
 	/*
 		2020-10-04/KK: ロックの搭載を試みたものの、今のバージョンではやめた。
 		コンセプトとしてdestroyを提供しない以上、init & destroyをAPIとして提供するﾓﾉとは相性が悪い。
 		スレッドセーフティについては、外側から提供してください。
 	 */
 	/*以下はツリー用。/ Belows are for keytree.*/
-	struct keytree_link_s*	root;		/**Root node on the tree.*/
-	int						allow_eq;	/**1 if allowing to insert the "Equals" node to "ge" pointer.*/
-	keytree_comp_node_cb	comp_node;	/**Node comparator*/
-	keytree_make_node_cb	make_node;	/**Node value setter*/
+	/**Root node on the tree.*/
+	struct keytree_link_s*	root;
+		
+	/**1 if allowing to insert the "Equals" node to "ge" pointer.*/
+	int						allow_eq;	
+	
+	/**Node comparator*/
+	keytree_comp_node_cb	comp_node;	
+	
+	/**Node value setter*/
+	keytree_make_node_cb	make_node;	
 	
 	/*平衡2分木機能用。/ For self-balancing.*/
-	unsigned short			rng[3];		/**work for reentrant RNG(jrand48)*/
+	/**work for reentrant RNG(jrand48)*/
+	/*unsigned short			rng[3];*/
+	uint64_t					rng;
 };
 
 struct keytree_iterator_s {

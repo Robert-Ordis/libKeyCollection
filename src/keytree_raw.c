@@ -1,4 +1,3 @@
-#define _XOPEN_SOURCE
 #include <stdlib.h>
 #include <limits.h>
 
@@ -10,6 +9,16 @@
 #include "keycollection/private/keycollection_lock.h"
 
 /*static関数群。*/
+
+/*rand関数相当*/	
+inline static int		kt_rand_r_(uint64_t *rng){	
+	const static uint64_t rng_mul = 0x0fdeece66dllu;
+	const static uint64_t rng_add = 0x0bllu;
+	const static uint64_t rng_msk = 0x0000ffffffffffffllu;
+	*rng = (*rng * rng_mul + rng_add) & rng_msk;
+	return (int)(*rng & 0x7fffffffllu);
+}
+
 /*linkを、右方向に下げるように回転する*/
 static int		keytree_link_rotate_right_(keytree_t *self, keytree_link_t *link){
 	keytree_link_t *pivot = link->lt;		/*回転後のlinkの親。linkが右に降りるので元左子が昇格*/
@@ -334,7 +343,12 @@ int				keytree_add_raw(size_t offset, keytree_t *self, void *node){
 			}
 			
 			/*ここからtreap実装*/
+			link->h_pri = kt_rand_r_(&self->rng);
+			/*
+			link->h_pri = kt_rand_r_(&self->rng);
+			link->h_pri = kt_rand_macro_(self->rng);
 			link->h_pri = nrand48(self->rng);
+			*/
 			/*printf("%s: h_pri:%ld\n", __func__, link->h_pri);*/
 			while(1){
 				/*親の優先度 = 子の優先度でヒープを作る*/
