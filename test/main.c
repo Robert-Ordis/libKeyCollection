@@ -18,6 +18,7 @@ int type_test_large();
 int raw_tree_test();
 int poly_tree_test();
 int type_tree_test();
+int type_hash_test();
 
 static int poly_test(){
 	
@@ -597,6 +598,8 @@ int main(int argc, char *argv[]){
 	end = clock();
 	large = end - start;
 	printf("%d times. type_tree:%ju, \n", i, (uintmax_t)large);
+	
+	type_hash_test();
 	
 	return 0;
 }

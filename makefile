@@ -27,6 +27,8 @@ SRC_PROGRAM		:=\
 				 $(TST_DIR)/poly_tree_test.c\
 				 $(TST_DIR)/type_tree_test.c\
 				 $(TST_DIR)/sampleTreeCollection.c\
+				 $(TST_DIR)/sampleHashCollection.c\
+				 $(TST_DIR)/type_hash_test.c
 
 #### default compilers ####
 CC	= gcc
@@ -35,8 +37,8 @@ AR	= ar
 
 ####build options####
 #CFLAGS			= -Wall -O0 -g -std=c99
-#CFLAGS			= -Wall -Os -g -std=c99
-CFLAGS			= -Wall -O2 -g -std=c99
+CFLAGS			= -Wall -O2 -g -std=c99 
+#CFLAGS			= -Wall -O2 -g -std=c99
 #CFLAGS			= -Wall -O2 -g -ansi
 DEFS			= 
 CROSS_PREFIX	= 

@@ -17,7 +17,16 @@
 #define	KEYHASH_T_(yourhash)					yourhash##_t
 
 /**
- *	\brief		yourhash_init(*self, if_lock)
+ *	\brief		yourhash_iterator_t
+ *	\brief		Definition of the iterator for the hash table
+ *	\tparam	yourlist
+ *	\remarks	Same as the "treename_iterator_t"
+ *
+ */
+#define	KEYHASH_ITERATOR_T_(yourhash)			yourhash##_iterator_t
+
+/**
+ *	\brief		yourhash_init(*self)
  *	\brief		ツリーの初期化
  *	\param		self		(yourhash_t*)取り扱うツリー
  *	\param		allow_eq	(int)同値の同居を許すかどうか。0で不許可。それ以外でOK
@@ -95,7 +104,33 @@
  */
 #define	KEYHASH_SETUP_ITERATOR_WILDCARD_(yourhash)	yourhash##_setup_iterator_wildcard
 
+/**
+ *	\brief		yourhash_iterator_move(*iterator, *index_node)
+ *  \brief		Move the iterator to one step before the specified node.
+ *  \param		iterator	iterator instance
+ *  \param		index_node	The node you want to set as the first point.
+ *  \return	0: success.
+ *  \return	-2: error[*index_node doesn't belong to the tree which is src of iterator].
+ *  \remarks	After this, next "keytree_iterator_forward/backward" returns *index_node as you specified.
+ *  \remarks	index_node == NULL means to make the iterator to the state on initiated.
+ */
+#define	KEYHASH_ITERATOR_MOVE_(yourhash)		yourhash##_iterator_move
 
+/**
+ *	\brief		yourhash_iterator_forward(*iterator)
+ *	\brief		Get the next node on the Iterator..
+ *	\param		iterator	(yourhash_iterator_t*)Iterator.
+ *	\return				(nodetype_t*)Gotten node. If null, the iteration has ended.
+ */
+#define	KEYHASH_ITERATOR_FORWARD_(yourhash)		yourhash##_iterator_forward
+
+/**
+ *	\brief		yourhash_iterator_backward(*iterator)
+ *	\brief		Get the previous node on the Iterator..
+ *	\param		iterator	(yourhash_iterator_t*)Iterator.
+ *	\return				(nodetype_t*)Gotten node. If null, the iteration has ended.
+ */
+#define	KEYHASH_ITERATOR_BACKWARD_(yourhash)	yourhash##_iterator_backward
 
 /**
  *	\brief		yourhash_dbg_dump

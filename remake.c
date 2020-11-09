@@ -48,10 +48,12 @@ yourtree_find_lt_value(ptree, value_ptr, value_len);
 //。。。まあ、split/mergeはひとまず置いておこう！
 
 //keytree、ひとまず仮完成。しばらく遊んだりしてアイデアを練ってみようか。
+//→additional compの件忘れてたなあ。同値間での最終比較条件。nulleable
 
 //keyhashの素体は、チェーン数を決めれば一応組める。
 //せめて共通化できるところは共通化、っていう方針じゃねかなあ。
-//
+//前回はtreeの関数指定させてやっていたんだけど、今回からはあれかな？
+//keytree_rawファミリーができたんでそっち活用かな？
 
 keyhash_t{
 	keytree_t hash_chain[KEYHASH_DEFAULT_WIDTH];
