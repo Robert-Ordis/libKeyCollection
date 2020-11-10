@@ -14,7 +14,6 @@
 #define	KEYTREE_RAW_H_
 
 /**
- *  \def		keytree_init_raw
  *  \brief		Get contained num on the List.
  *  \param		offset	unused
  *  \param		*self	tree instance.
@@ -31,14 +30,19 @@
 		(self)->root = NULL;\
 		(self)->allow_eq = allowEq;\
 		(self)->comp_node = compNode;\
+		(self)->comp_equivalent = NULL;\
 		(self)->make_node = NULL;\
 		/*treap*/\
 		memcpy(&((self)->rng), self, (sizeof((self)->rng) > sizeof(self)) ? sizeof(self) : sizeof((self)->rng));\
 	}while(0)\
 
+#define		keytree_set_eq_comp_raw(offset, self, eq_comp)\
+	do{\
+		(self)->comp_equivalent = eq_comp;\
+	}while(0)\
+
 /*数の取得など、変数を直接示すようなマクロは左辺にできないようにする*/
 /**
- *  \def		keytree_get_count_raw
  *  \brief		Get contained num on the List.
  *  \param		offset	unused.
  *  \param		*self	tree instance.[]

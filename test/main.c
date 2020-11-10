@@ -13,12 +13,6 @@
 コンセプト：めんどくさいキャストを排除。リストには常に一定の型しか入れない
 コンセプト：イテレーションの実装
 */
-int type_test();
-int type_test_large();
-int raw_tree_test();
-int poly_tree_test();
-int type_tree_test();
-int type_hash_test();
 
 static int poly_test(){
 	
@@ -553,6 +547,14 @@ static int raw_test(){
 }
 
 
+int type_test();
+int type_test_large();
+int raw_tree_test();
+int poly_tree_test();
+int type_tree_test();
+int type_tree_eqcmp_test();
+int type_hash_test();
+
 #include <time.h>
 
 int main(int argc, char *argv[]){
@@ -598,7 +600,7 @@ int main(int argc, char *argv[]){
 	end = clock();
 	large = end - start;
 	printf("%d times. type_tree:%ju, \n", i, (uintmax_t)large);
-	
+	type_tree_eqcmp_test();
 	type_hash_test();
 	
 	return 0;

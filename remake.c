@@ -49,6 +49,7 @@ yourtree_find_lt_value(ptree, value_ptr, value_len);
 
 //keytree、ひとまず仮完成。しばらく遊んだりしてアイデアを練ってみようか。
 //→additional compの件忘れてたなあ。同値間での最終比較条件。nulleable
+//->comp_oneq
 
 //keyhashの素体は、チェーン数を決めれば一応組める。
 //せめて共通化できるところは共通化、っていう方針じゃねかなあ。

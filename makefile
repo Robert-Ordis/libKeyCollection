@@ -26,6 +26,7 @@ SRC_PROGRAM		:=\
 				 $(TST_DIR)/raw_tree_test.c\
 				 $(TST_DIR)/poly_tree_test.c\
 				 $(TST_DIR)/type_tree_test.c\
+				 $(TST_DIR)/type_tree_eqcmp_test.c\
 				 $(TST_DIR)/sampleTreeCollection.c\
 				 $(TST_DIR)/sampleHashCollection.c\
 				 $(TST_DIR)/type_hash_test.c

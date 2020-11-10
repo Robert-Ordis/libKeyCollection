@@ -8,23 +8,23 @@
 #define	KEYTREE_FUNCTIONS_H_
 
 /**
- *	\typedef	yourtree_t
+ *	\brief		yourtree_t
  *	\brief		ユーザーが定義する二分木型の名前
- *	\param		yourtree	実際に生成したい二分木型と関数のベースの名前
+ *	\tparam	yourtree	実際に生成したい二分木型と関数のベースの名前
  *	\remarks	当該二分木型を操作する関数もyourtree_xxxという命名になります。
  */
 #define	KEYTREE_T_(yourtree)			yourtree##_t
 
 /**
- *	\typedef	yourtree_iterator_t
+ *	\brief		yourtree_iterator_t
  *	\brief		ユーザーが定義する二分木におけるイテレータ型の名前
- *	\param		yourtree	実際に生成したいイテレータ型のベースの名前
+ *	\tparam	yourtree	実際に生成したいイテレータ型のベースの名前
  *	
  */
 #define	KEYTREE_ITERATOR_T_(yourtree)	yourtree##_iterator_t
 
 /**
- *	\fn			yourtree_init(*self, allow_eq, comp_node, make_node)
+ *	\brief		yourtree_init(*self, allow_eq, comp_node, make_node)
  *	\brief		二分木の初期化
  *	\param		self	(yourtree_t*)取り扱う二分木
  *	\param		allow_eq(int)0で同値の挿入不可。1で可能。
@@ -35,7 +35,16 @@
 #define	KEYTREE_INIT_(yourtree)			yourtree##_init
 
 /**
- *	\fn			yourtree_get_count(*self)
+ *	\brief		yourtree_set_eq_comp(*self, eq_comp)
+ *	\brief		同値間における比較関数をセットする
+ *	\param		self	(yourtree_t*)取り扱う二分木
+ *	\param		eq_comp(int(type*, type*)) 2つのノードを比較するコールバック
+ *	\return			(void)
+ */
+#define	KEYTREE_SET_EQ_COMP_(yourtree)			yourtree##_set_eq_comp
+
+/**
+ *	\brief		yourtree_get_count(*self)
  *	\brief		二分木が抱えているノード数を取得
  *	\param		self	(yourtree_t*)取り扱う二分木
  *	\return			(int)二分木中の格納数
@@ -43,7 +52,7 @@
 #define	KEYTREE_GET_COUNT_(yourtree)	yourtree##_get_count
 
 /**
- *	\fn			yourtree_ref_head(*self)
+ *	\brief		yourtree_ref_head(*self)
  *	\brief		二分木中の最初のノードを参照する
  *	\param		self	(yourtree_t*)取り扱う二分木
  *	\return			(nodetype_t*)先頭ノードのポインタ。ない場合はNULL
@@ -51,7 +60,7 @@
 #define	KEYTREE_REF_HEAD_(yourtree)	yourtree##_ref_head
 
 /**
- *	\fn			yourtree_ref_tail(*self)
+ *	\brief		yourtree_ref_tail(*self)
  *	\brief		二分木中の最後のノードを参照する
  *	\param		self	(yourtree_t*)取り扱う二分木
  *	\return			(nodetype_t*)末尾ノードのポインタ。ない場合はNULL
@@ -59,7 +68,7 @@
 #define	KEYTREE_REF_TAIL_(yourtree)		yourtree##_ref_tail
 
 /**
- *	\fn			yourtree_pop_head(*self)
+ *	\brief		yourtree_pop_head(*self)
  *	\brief		二分木中の最初のノードを削除して取得する
  *	\param		self	(yourtree_t*)取り扱う二分木
  *	\return			(nodetype_t*)先頭ノードのポインタ。ない場合はNULL。このノードは二分木から削除される。
@@ -67,7 +76,7 @@
 #define	KEYTREE_POP_HEAD_(yourtree)	yourtree##_pop_head
 
 /**
- *	\fn			yourtree_pop_tail(*self)
+ *	\brief		yourtree_pop_tail(*self)
  *	\brief		二分木中の最後のノードを削除して取得する
  *	\param		self	(yourtree_t*)取り扱う二分木
  *	\return			(nodetype_t*)末尾ノードのポインタ。ない場合はNULL。このノードは二分木から削除される。
@@ -75,7 +84,7 @@
 #define	KEYTREE_POP_TAIL_(yourtree)		yourtree##_pop_tail
 
 /**
- *	\fn			yourtree_ref_nth(*self, nth)
+ *	\brief		yourtree_ref_nth(*self, nth)
  *	\brief		N番目のノードを参照する
  *	\param		self	(yourtree_t*)取り扱う二分木
  *	\param		nth		(int)0を基準とした数。0で先頭、増えていってその後ろ。-1だと末尾。減っていってその前
@@ -84,7 +93,7 @@
 #define	KEYTREE_REF_NTH_(yourtree)		yourtree##_ref_nth
 
 /**
- *	\fn			yourtree_add(*self, *node)
+ *	\brief		yourtree_add(*self, *node)
  *	\brief		二分木の末尾にノードを加える
  *	\param		self	(yourtree_t*)取り扱う二分木
  *	\param		node	(node_type_t*)対象ノード
@@ -93,7 +102,7 @@
 #define	KEYTREE_ADD_(yourtree)			yourtree##_add
 
 /**
- *	\fn			yourtree_del(*self, *node)
+ *	\brief		yourtree_del(*self, *node)
  *	\brief		二分木から該当するノードを削除する
  *	\param		self	(yourtree_t*)取り扱う二分木
  *	\param		node	(node_type_t*)対象ノード
@@ -102,7 +111,7 @@
 #define	KEYTREE_DEL_(yourtree)			yourtree##_del
 
 /**
- *	\fn			yourtree_insert_before(*self, *index_node, *node)
+ *	\brief		yourtree_insert_before(*self, *index_node, *node)
  *	\brief		二分木に対し、所定のノードの前に挿入する
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		index_node	(node_type_t*)挿入位置指定ノード。NULLで末尾挿入
@@ -113,7 +122,7 @@
 #define	KEYTREE_INSERT_BEFORE_(yourtree)	yourtree##_insert_before
 
 /**
- *	\fn			yourtree_insert_after(*self, *index_node, *node)
+ *	\brief		yourtree_insert_after(*self, *index_node, *node)
  *	\brief		二分木に対し、所定のノードの後に挿入する
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		index_node	(node_type_t*)挿入位置指定ノード。NULLで先頭挿入
@@ -124,7 +133,7 @@
 #define	KEYTREE_INSERT_AFTER_(yourtree)		yourtree##_insert_after
 
 /**
- *	\fn			yourtree_has_node(*self, *node)
+ *	\brief		yourtree_has_node(*self, *node)
  *	\brief		ノードを二分木が持っているかをチェックする
  *	\param		self	(yourtree_t*)取り扱う二分木
  *	\param		node	(nodetype_t*)対象ノード
@@ -133,7 +142,7 @@
 #define	KEYTREE_HAS_NODE_(yourtree)	yourtree##_has_node
 
 /**
- *	\fn			yourtree_get_next(*self, *node)
+ *	\brief		yourtree_get_next(*self, *node)
  *	\brief		指定ノードの「次」を取得する
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		node		(node_type_t*)前に扱ったノード。NULLで先頭を返す。
@@ -143,7 +152,7 @@
 #define	KEYTREE_GET_NEXT_(yourtree)	yourtree##_get_next
 
 /**
- *	\fn			yourtree_get_prev(*self, *node)
+ *	\brief		yourtree_get_prev(*self, *node)
  *	\brief		指定ノードの「前」を取得する
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		node		(node_type_t*)前に扱ったノード。NULLで末尾を返す。
@@ -153,7 +162,7 @@
 #define	KEYTREE_GET_PREV_(yourtree)	yourtree##_get_prev
 
 /**
- *	\fn			yourtree_get_belong(*node)
+ *	\brief		yourtree_get_belong(*node)
  *	\brief		ノードが所属する二分木を参照する
  *	\param		node	(node_type_t*)所属を取りたいノード
  *	\return			(yourtree_t*)所属する二分木のポインタ。ない場合はNULL。
@@ -161,7 +170,7 @@
 #define	KEYTREE_GET_BELONG_(yourtree)	yourtree##_get_belong
 
 /**
- *	\fn			yourtree_find_eq_node(*self, *node)
+ *	\brief		yourtree_find_eq_node(*self, *node)
  *	\brief		ノードを元手に、同じ値を持つ左端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		index_node	(node_type_t*)参考ノード。所属してもしなくてもOK
@@ -170,7 +179,7 @@
 #define	KEYTREE_FIND_EQ_NODE_(yourtree)			yourtree##_find_eq_node
 
 /**
- *	\fn			yourtree_find_eq_value(*self, *value, value_len)
+ *	\brief		yourtree_find_eq_value(*self, *value, value_len)
  *	\brief		指定されたポインタの値と同じ値を持つ左端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		value		(void*)値のポインタ。できればintを直接書くとかの運用はやめてね？
@@ -180,7 +189,7 @@
 #define	KEYTREE_FIND_EQ_VALUE_(yourtree)		yourtree##_find_eq_value
 
 /**
- *	\fn			yourtree_find_eq_node_end(*self, *node)
+ *	\brief		yourtree_find_eq_node_end(*self, *node)
  *	\brief		ノードを元手に、同じ値を持つ右端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		index_node	(node_type_t*)参考ノード。所属してもしなくてもOK
@@ -189,7 +198,7 @@
 #define	KEYTREE_FIND_EQ_NODE_END_(yourtree)		yourtree##_find_eq_node_end
 
 /**
- *	\fn			yourtree_find_eq_value_end(*self, *value, value_len)
+ *	\brief		yourtree_find_eq_value_end(*self, *value, value_len)
  *	\brief		指定されたポインタの値と同じ値を持つ右端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		value		(void*)値のポインタ。できればintを直接書くとかの運用はやめてね？
@@ -199,7 +208,7 @@
 #define	KEYTREE_FIND_EQ_VALUE_END_(yourtree)	yourtree##_find_eq_value_end
 
 /**
- *	\fn			yourtree_find_lt_node(*self, *node)
+ *	\brief		yourtree_find_lt_node(*self, *node)
  *	\brief		指定したノード「未満」の値を持つ右端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		index_node	(node_type_t*)参考ノード。所属してもしなくてもOK
@@ -208,7 +217,7 @@
 #define	KEYTREE_FIND_LT_NODE_(yourtree)			yourtree##_find_lt_node
 
 /**
- *	\fn			yourtree_find_lt_value(*self, *value, value_len)
+ *	\brief		yourtree_find_lt_value(*self, *value, value_len)
  *	\brief		指定したポインタの値「未満」の値を持つ右端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		value		(void*)値のポインタ。できればintを直接書くとかの運用はやめてね？
@@ -218,7 +227,7 @@
 #define	KEYTREE_FIND_LT_VALUE_(yourtree)		yourtree##_find_lt_value
 
 /**
- *	\fn			yourtree_find_gt_node(*self, *node)
+ *	\brief		yourtree_find_gt_node(*self, *node)
  *	\brief		指定したノード「超過」の値を持つ右端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		index_node	(node_type_t*)参考ノード。所属してもしなくてもOK
@@ -227,7 +236,7 @@
 #define	KEYTREE_FIND_GT_NODE_(yourtree)			yourtree##_find_gt_node
 
 /**
- *	\fn			yourtree_find_gt_value(*self, *value, value_len)
+ *	\brief		yourtree_find_gt_value(*self, *value, value_len)
  *	\brief		指定したポインタの値「超過」の値を持つ右端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		value		(void*)値のポインタ。できればintを直接書くとかの運用はやめてね？
@@ -237,7 +246,7 @@
 #define	KEYTREE_FIND_GT_VALUE_(yourtree)		yourtree##_find_gt_value
 
 /**
- *	\fn			yourtree_find_le_node(*self, *node)
+ *	\brief		yourtree_find_le_node(*self, *node)
  *	\brief		指定したノード「以下」の値を持つ右端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		index_node	(node_type_t*)参考ノード。所属してもしなくてもOK
@@ -246,7 +255,7 @@
 #define	KEYTREE_FIND_LE_NODE_(yourtree)			yourtree##_find_le_node
 
 /**
- *	\fn			yourtree_find_le_value(*self, *value, value_len)
+ *	\brief		yourtree_find_le_value(*self, *value, value_len)
  *	\brief		指定したポインタの値「以下」の値を持つ右端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		value		(void*)値のポインタ。できればintを直接書くとかの運用はやめてね？
@@ -256,7 +265,7 @@
 #define	KEYTREE_FIND_LE_VALUE_(yourtree)		yourtree##_find_le_value
 
 /**
- *	\fn			yourtree_find_ge_node(*self, *node)
+ *	\brief		yourtree_find_ge_node(*self, *node)
  *	\brief		指定したノード「以上」の値を持つ右端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		index_node	(node_type_t*)参考ノード。所属してもしなくてもOK
@@ -265,7 +274,7 @@
 #define	KEYTREE_FIND_GE_NODE_(yourtree)			yourtree##_find_ge_node
 
 /**
- *	\fn			yourtree_find_ge_value(*self, *value, value_len)
+ *	\brief		yourtree_find_ge_value(*self, *value, value_len)
  *	\brief		指定したポインタの値「以上」の値を持つ右端ノードを探す
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		value		(void*)値のポインタ。できればintを直接書くとかの運用はやめてね？
@@ -275,7 +284,7 @@
 #define	KEYTREE_FIND_GE_VALUE_(yourtree)		yourtree##_find_ge_value
 
 /**
- *	\fn			yourtree_init_iterator(*self, *iterator)
+ *	\brief		yourtree_init_iterator(*self, *iterator)
  *	\brief		二分木のループを取るためのイテレータを初期化する
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		iterator	(yourtree_iterator_t*)イテレータ
@@ -286,7 +295,7 @@
 #define	KEYTREE_INIT_ITERATOR_(yourtree)	yourtree##_init_iterator
 
 /**
- *	\fn			yourtree_init_iterator_ranged(*self, *iterator, *head, *tail)
+ *	\brief		yourtree_init_iterator_ranged(*self, *iterator, *head, *tail)
  *	\brief		二分木のループを取るためのイテレータを初期化する。ついでに範囲を指定する
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		iterator	(yourtree_iterator_t*)イテレータ
@@ -299,7 +308,7 @@
 #define	KEYTREE_INIT_ITERATOR_RANGED_(yourtree)	yourtree##_init_iterator_ranged
 
 /**
- *	\fn			yourtree_iterator_move(*iterator, *index_node)
+ *	\brief		yourtree_iterator_move(*iterator, *index_node)
  *	\brief		指定されたノードが次の起点になるようイテレータを移動させる
  *	\param		iterator	(yourtree_iterator_t*)イテレータ
  *	\param		index_node	(node_type_t*)対象ノード。
@@ -309,7 +318,7 @@
 #define	KEYTREE_ITERATOR_MOVE_(yourtree)	yourtree##_iterator_move
 
 /**
- *	\fn			yourtree_iterator_forward(*iterator)
+ *	\brief		yourtree_iterator_forward(*iterator)
  *	\brief		前方向イテレーションを行う
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		iterator	(yourtree_iterator_t*)イテレータ
@@ -319,7 +328,7 @@
 #define	KEYTREE_ITERATOR_FORWARD_(yourtree)		yourtree##_iterator_forward
 
 /**
- *	\fn			yourtree_iterator_backward(*iterator)
+ *	\brief		yourtree_iterator_backward(*iterator)
  *	\brief		後方向イテレーションを行う
  *	\param		self		(yourtree_t*)取り扱う二分木
  *	\param		iterator	(yourtree_iterator_t*)イテレータ

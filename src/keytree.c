@@ -9,6 +9,10 @@ void		keytree_init(keytree_t *self, int allow_eq, keytree_comp_node_cb comp_node
 	keytree_init_raw(0, self, allow_eq, comp_node);
 }
 
+void		keytree_set_eq_comp(keytree_t *self, keytree_comp_node_cb eq_comp){
+	keytree_set_eq_comp_raw(0, self, eq_comp);
+}
+
 int			keytree_get_count(keytree_t *self){
 	return keytree_get_count_raw(self->ofst, self);
 }

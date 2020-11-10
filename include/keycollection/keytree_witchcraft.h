@@ -27,6 +27,8 @@
 	\
 	void			KEYTREE_INIT_(yourtree)(KEYTREE_T_(yourtree) *self, int allow_eq, keytree_comp_node_cb comp_node, keytree_make_node_cb make_node);\
 	\
+	void			KEYTREE_SET_EQ_COMP_(yourtree)(KEYTREE_T_(yourtree) *self, keytree_comp_node_cb eq_comp);\
+	\
 	int				KEYTREE_GET_COUNT_(yourtree)(KEYTREE_T_(yourtree) *self);\
 	\
 	nodetype_s*		KEYTREE_REF_HEAD_(yourtree)(KEYTREE_T_(yourtree) *self);\

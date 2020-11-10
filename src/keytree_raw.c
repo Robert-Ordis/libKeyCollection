@@ -11,6 +11,7 @@
 /*static関数群。*/
 
 /*rand関数相当*/	
+#define kt_rand_macro_(rng)	(int)(rng = (rng * 0x0fdeece66dllu + 0x0bllu) & 0x0000ffffffffffffllu) & 0x7fffffff
 inline static int		kt_rand_r_(uint64_t *rng){	
 	const static uint64_t rng_mul = 0x0fdeece66dllu;
 	const static uint64_t rng_add = 0x0bllu;
@@ -321,11 +322,18 @@ int				keytree_add_raw(size_t offset, keytree_t *self, void *node){
 			while(*cursor != NULL){
 				/*葉に落ち着くまでカーソルを操作する*/
 				parent = *cursor;
+				void *node_c = keycollection_get_container_ptr(offset, parent);
 				/*nodeが*cursor以上の値を持つかを検査*/
-				comp_ret = self->comp_node(node, keycollection_get_container_ptr(offset, *cursor));
-				if(!self->allow_eq && comp_ret == 0){
-					KEYCOLLECT_LOCK_RELEASE_(self);
-					return -2;
+				comp_ret = self->comp_node(node, node_c);
+				if(comp_ret == 0){
+					/*同値だった場合→同値NGに引っ掛けるか同値間ソートを動かすか*/
+					if(!self->allow_eq){
+						KEYCOLLECT_LOCK_RELEASE_(self);
+						return -2;
+					}
+					if(self->comp_equivalent != NULL){
+						comp_ret = self->comp_equivalent(node, node_c);
+					}
 				}
 				cursor = (comp_ret >= 0) ? &(parent->ge) : &(parent->lt);
 			}

@@ -33,6 +33,10 @@
 		(self)->make_node = make_node;\
 	}\
 	\
+	void			KEYTREE_SET_EQ_COMP_(yourtree)(KEYTREE_T_(yourtree) *self, keytree_comp_node_cb eq_sort){\
+		keytree_set_eq_comp_raw(offsetof(nodetype_s, link_member), self, eq_sort);\
+	}\
+	\
 	int				KEYTREE_GET_COUNT_(yourtree)(KEYTREE_T_(yourtree) *self){\
 		return keytree_get_count_raw(offsetof(nodetype_s, link_member), self);\
 	}\

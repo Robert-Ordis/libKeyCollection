@@ -54,7 +54,6 @@ typedef int	(*keytree_comp_node_cb)(void *node_a, void *node_b);
 typedef void	(*keytree_make_node_cb)(void *node, void *value, size_t value_len);
 
 /**
- *
  *  \brief		Initialize the tree.
  *  \param		*self	tree instance.
  *  \param		allow_eq	0 if you don't want to add same-valued node in the tree. Otherwise if you allow.
@@ -62,6 +61,14 @@ typedef void	(*keytree_make_node_cb)(void *node, void *value, size_t value_len);
  *  \remarks	If you  use this func, target struct must contains keytree_link_t as the first member.
  */
 void		keytree_init(keytree_t *self, int allow_eq, keytree_comp_node_cb comp_node);
+
+/**
+ *  \brief		Define the order between equivalent nodes.
+ *  \param		*self	tree instance.
+ *  \param		comp_node	Comparator for the equivalent nodes on this tree.
+ *  \remarks	If eq_sort is NULL, order between equivalent nodes will be on their arrival time.
+ */
+void		keytree_set_eq_comp(keytree_t *self, keytree_comp_node_cb eq_comp);
 
 /**
  *
@@ -394,10 +401,12 @@ struct keytree_s {
 	struct keytree_link_s*	root;
 		
 	/**1 if allowing to insert the "Equals" node to "ge" pointer.*/
-	int						allow_eq;	
+	int						allow_eq;
 	
 	/**Node comparator*/
-	keytree_comp_node_cb	comp_node;	
+	keytree_comp_node_cb	comp_node;
+	/**Node comparator between equivalents. If NULL, sort order will be on arrival time.*/
+	keytree_comp_node_cb	comp_equivalent;
 	
 	/**Node value setter*/
 	keytree_make_node_cb	make_node;	
