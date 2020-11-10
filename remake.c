@@ -47,9 +47,9 @@ yourtree_find_lt_value(ptree, value_ptr, value_len);
 
 //。。。まあ、split/mergeはひとまず置いておこう！
 
-//keytree、ひとまず仮完成。しばらく遊んだりしてアイデアを練ってみようか。
-//→additional compの件忘れてたなあ。同値間での最終比較条件。nulleable
-//->comp_oneq
+//keytree、やりたいことこれで全部かな。
+//finderとsorterのアイデアはないこともないがkeyhashと衝突してしまうので断念。
+//やるなら、hash_on_nodeとhash_on_valueの2つを持たせることになる。それでいいの？
 
 //keyhashの素体は、チェーン数を決めれば一応組める。
 //せめて共通化できるところは共通化、っていう方針じゃねかなあ。

@@ -46,6 +46,9 @@ typedef int (*keyhash_calc_hash_cb)(void*);
 					keyhash_calc_hash_cb hash\
 				);\
 	\
+	/*同値間のソート用比較関数をセットする*/\
+	void		KEYHASH_SET_EQ_COMP_(yourhash)(KEYHASH_T_(yourhash) *self, keytree_comp_node_cb eq_comp);\
+	\
 	/*単純に各チェインの合計数を取得する*/\
 	int			KEYHASH_GET_COUNT_(yourhash)(KEYHASH_T_(yourhash) *self);\
 	\
@@ -108,6 +111,12 @@ typedef int (*keyhash_calc_hash_cb)(void*);
 		}\
 	}\
 	\
+	void		KEYHASH_SET_EQ_COMP_(yourhash)(KEYHASH_T_(yourhash) *self, keytree_comp_node_cb eq_comp){\
+		int i;\
+		for(i = hash_max - 1; i >= 0; --i){\
+			KEYTREE_SET_EQ_COMP_(treename)(&((self)->hash_chain[i]), eq_comp);\
+		}\
+	}\
 	\
 	/*単純に各チェインの合計数を取得する*/\
 	int			KEYHASH_GET_COUNT_(yourhash)(KEYHASH_T_(yourhash) *self){\

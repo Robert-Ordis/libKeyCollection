@@ -27,7 +27,7 @@
 
 /**
  *	\brief		yourhash_init(*self)
- *	\brief		ツリーの初期化
+ *	\brief		Initiate the hash table.
  *	\param		self		(yourhash_t*)取り扱うツリー
  *	\param		allow_eq	(int)同値の同居を許すかどうか。0で不許可。それ以外でOK
  *	\param		comp_node	(keytree_comp_node_cb)ツリー挿入用の比較関数
@@ -38,10 +38,19 @@
 #define	KEYHASH_INIT_(yourhash)					yourhash##_init
 
 /**
+ *	\brief		yourhash_set_eq_comp(*self, eq_comp)
+ *	\brief		Set the comparator between equivalent nodes.
+ *	\param		self		(yourhash_t*)Hash instance.
+ *	\param		eq_comp		(keytree_comp_node_cb)Comparator for between equivalent nodes.
+ *	\return				(void)
+ */
+#define	KEYHASH_SET_EQ_COMP_(yourhash)			yourhash##_set_eq_comp
+
+/**
  *	\brief		yourhash_get_count(*self)
- *	\brief		ハッシュテーブルが抱えているノード数を取得
- *	\param		self	(yourhash_t*)取り扱うハッシュテーブル
- *	\return			(int)テーブル中の格納数
+ *	\brief		Get the count of nodes on the hashtable.
+ *	\param		self	(yourhash_t*)Hashtable instance.
+ *	\return			(int)
  */
 #define	KEYHASH_GET_COUNT_(yourhash)	yourhash##_get_count
 

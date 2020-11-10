@@ -16,19 +16,19 @@ static int hash_type_compare_a(void *node_a, void *node_b){
 	return (a->a - b->a);
 }
 
-static int hash_type_compare_d(void *node_a, void *node_b){
+static int hash_type_compare_b(void *node_a, void *node_b){
 	hash_type_t *a = (hash_type_t *)node_a;
 	hash_type_t *b = (hash_type_t *)node_b;
 	
 	//printf("%s: a[%lu] vs b[%lu]\n", __func__, a->d, b->d);
 	
-	if(a->d > b->d){
-		return 1;
+	if(a->b > b->b){
+		return -1;
 	}
-	else if(a->d == b->d){
+	else if(a->b == b->b){
 		return 0;
 	}
-	return -1;
+	return 1;
 }
 
 static void hash_type_make_node(void *node_ptr, void *value, size_t value_len){
@@ -66,6 +66,7 @@ int type_hash_test(){
 	
 	
 	typehash_init(phash, 1, hash_type_compare_a, hash_type_make_node, hash_type_calc_hash);
+	typehash_set_eq_comp(phash, hash_type_compare_b);
 	
 	memset(nodes, 0, sizeof(hash_type_t) * nodes_num);
 	
@@ -83,11 +84,31 @@ int type_hash_test(){
 	
 	i = 2;
 	
-
+	
 	printf("%s: iterate with value: %d[%d]\n", __func__, i, typehash_setup_iterator(phash, it, &i, sizeof(i)));
+	i = 0;
+	pnodeC = NULL;
+	while((pnode = typehash_iterator_forward(it)) != NULL){
+		hash_type_dbg_printf(pnode, lebs.link);
+		if(i++ == 3){
+			db_printf("%s: ->DELETE!!\n", __func__);
+			pnodeC = pnode;
+			typehash_del(phash, pnode);
+		}
+	}
+	
+	printf("%s: iterator reset.%d\n", __func__, typehash_iterator_move(it, NULL));
 	while((pnode = typehash_iterator_forward(it)) != NULL){
 		hash_type_dbg_printf(pnode, lebs.link);
 	}
-	
+	if(pnodeC != NULL){
+		printf("%s: add deleted node back again and iterate backward\n", __func__);
+		typehash_add(phash, pnodeC);
+		i = 2;
+		typehash_setup_iterator(phash, it, &i, sizeof(i));
+		while((pnode = typehash_iterator_backward(it)) != NULL){
+			hash_type_dbg_printf(pnode, lebs.link);
+		}
+	}
 	return 0;
 }
