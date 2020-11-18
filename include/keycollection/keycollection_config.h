@@ -19,4 +19,12 @@
  */
 #define	KEYTREE_ROUGHLY_TREAP_DELETION
 
+/**
+ *  \def		KEYTREE_TREAP_RNG
+ *  \brief		(config) Config for determin which algorithm to use as rng.
+ *  \remarks	0 = Linear congurential generator, 1 = xorshift.
+ *
+ */
+#define	KEYTREE_TREAP_RNG 1
+
 #endif	/* !KEYCOLLECT_CONFIG_H_ */
