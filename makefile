@@ -32,13 +32,13 @@ SRC_PROGRAM		:=\
 				 $(TST_DIR)/type_hash_test.c
 
 #### default compilers ####
-CC	= gcc
-#CC = clang
+#CC	= gcc
+CC = clang
 AR	= ar
 
 ####build options####
 #CFLAGS			= -Wall -O0 -g -std=c99
-CFLAGS			= -Wall -O2 -g -std=c99 
+CFLAGS			= -Wall -Os -g -std=c99
 #CFLAGS			= -Wall -O2 -g -std=c99
 #CFLAGS			= -Wall -O2 -g -ansi
 DEFS			= 

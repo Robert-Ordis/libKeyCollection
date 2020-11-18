@@ -84,8 +84,15 @@ int type_hash_test(){
 	
 	i = 2;
 	
-	
-	printf("%s: iterate with value: %d[%d]\n", __func__, i, typehash_setup_iterator(phash, it, &i, sizeof(i)));
+	int ret = typehash_setup_iterator(phash, it, &i, sizeof(i));
+	if(ret < 0){
+		db_printf("%s: Iterator initiation: failed. because %d is unhashable dat.\n", __func__, i);
+		ret = typehash_setup_iterator_wildcard(phash, it);
+		db_printf("%s: Iterate on wildcard: %d\n", __func__, ret);
+	}
+	else{
+		db_printf("%s: iterate with value: %d[%d]\n", __func__, i, ret);
+	}
 	i = 0;
 	pnodeC = NULL;
 	while((pnode = typehash_iterator_forward(it)) != NULL){
@@ -97,7 +104,7 @@ int type_hash_test(){
 		}
 	}
 	
-	printf("%s: iterator reset.%d\n", __func__, typehash_iterator_move(it, NULL));
+	db_printf("%s: iterator reset.%d\n", __func__, typehash_iterator_move(it, NULL));
 	while((pnode = typehash_iterator_forward(it)) != NULL){
 		hash_type_dbg_printf(pnode, lebs.link);
 	}
