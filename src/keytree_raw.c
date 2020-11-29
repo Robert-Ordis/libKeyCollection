@@ -11,7 +11,7 @@
 /*static関数群。*/
 
 /*rand関数相当*/	
-#define kt_rand_macro_(rng)	(int)(rng = (rng * 0x0fdeece66dllu + 0x0bllu) & 0x0000ffffffffffffllu) & 0x7fffffff
+#if KEYTREE_TREAP_RNG == 0
 inline static int		kt_rand_r_(uint64_t *rng){	
 	const static uint64_t rng_mul = 0x0fdeece66dllu;
 	const static uint64_t rng_add = 0x0bllu;
@@ -19,6 +19,16 @@ inline static int		kt_rand_r_(uint64_t *rng){
 	*rng = (*rng * rng_mul + rng_add) & rng_msk;
 	return (int)(*rng & 0x7fffffffllu);
 }
+#elif KEYTREE_TREAP_RNG == 1
+inline static int		kt_rand_r_(uint64_t *rng){
+	*rng = (*rng) ^ ((*rng) << 13);
+	*rng = (*rng) ^ ((*rng) >> 7);
+	*rng = (*rng) ^ ((*rng) << 17);
+	return (int) (*rng & 0x7fffffffllu);
+}
+#else
+	#error KEYTREE_TREAP_RNG must configure (0 or 1)
+#endif
 
 /*linkを、右方向に下げるように回転する*/
 static int		keytree_link_rotate_right_(keytree_t *self, keytree_link_t *link){
@@ -352,11 +362,6 @@ int				keytree_add_raw(size_t offset, keytree_t *self, void *node){
 			
 			/*ここからtreap実装*/
 			link->h_pri = kt_rand_r_(&self->rng);
-			/*
-			link->h_pri = kt_rand_r_(&self->rng);
-			link->h_pri = kt_rand_macro_(self->rng);
-			link->h_pri = nrand48(self->rng);
-			*/
 			/*printf("%s: h_pri:%ld\n", __func__, link->h_pri);*/
 			while(1){
 				/*親の優先度 = 子の優先度でヒープを作る*/
