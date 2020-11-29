@@ -22,8 +22,8 @@
  */
 
 #define	keylist_define_prototypes(yourlist, nodetype_s, link_member)\
-	typedef			keylist_t			KEYLIST_T_(yourlist);\
-	typedef			keylist_iterator_t	KEYLIST_ITERATOR_T_(yourlist);\
+	typedef struct {keylist_t super;}	KEYLIST_T_(yourtree);\
+	typedef struct {keylist_iterator_t super;}	KEYLIST_ITERATOR_T_(yourlist);\
 	\
 	void			KEYLIST_INIT_(yourlist)(KEYLIST_T_(yourlist) *self);\
 	\

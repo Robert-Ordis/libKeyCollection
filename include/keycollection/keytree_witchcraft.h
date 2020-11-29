@@ -20,10 +20,12 @@
  *  \param	nodetype_s		Target type you want to treat.
  *  \param	link_member		Target link member you want to use for making link on this definitions.
  */
-
+///\todo
 #define	keytree_define_prototypes(yourtree, nodetype_s, link_member)\
-	typedef			keytree_t			KEYTREE_T_(yourtree);\
-	typedef			keytree_iterator_t	KEYTREE_ITERATOR_T_(yourtree);\
+	/*typedef			keytree_t			KEYTREE_T_(yourtree);*/\
+	typedef struct {keytree_t super;}	KEYTREE_T_(yourtree);\
+	/*typedef			keytree_iterator_t	KEYTREE_ITERATOR_T_(yourtree);*/\
+	typedef struct {keytree_iterator_t super;}	KEYTREE_ITERATOR_T_(yourtree);\
 	\
 	void			KEYTREE_INIT_(yourtree)(KEYTREE_T_(yourtree) *self, int allow_eq, keytree_comp_node_cb comp_node, keytree_make_node_cb make_node);\
 	\
