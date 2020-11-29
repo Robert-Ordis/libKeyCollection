@@ -232,9 +232,9 @@ void*		keylist_iterator_backward(keylist_iterator_t *iterator);
  */
 #define		keylist_foreach_forward(node, self)\
 	for(\
-		node = keylist_ref_head(self);\
+		node = keylist_ref_head((keylist_t *)self);\
 		node != NULL;\
-		node = keylist_get_next(self, node)\
+		node = keylist_get_next((keylist_t *)self, node)\
 	)
 
 /**
@@ -246,9 +246,9 @@ void*		keylist_iterator_backward(keylist_iterator_t *iterator);
  */
 #define		keylist_foreach_backward(node, self)\
 	for(\
-		node = keylist_ref_tail(self);\
+		node = keylist_ref_tail((keylist_t *)self);\
 		node != NULL;\
-		node = keylist_get_prev(self, node)\
+		node = keylist_get_prev((keylist_t *)self, node)\
 	)
 
 /**

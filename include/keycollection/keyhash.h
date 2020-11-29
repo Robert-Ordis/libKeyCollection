@@ -189,7 +189,7 @@ typedef int (*keyhash_calc_hash_cb)(void*);
 		nodetype_s v_node;\
 		int hash_index;\
 		\
-		(self)->hash_chain[0].make_node(&v_node, value, value_len);\
+		(self)->hash_chain[0].super.make_node(&v_node, value, value_len);\
 		KEYHASH_IMPL_CALC_HASH_(self, &v_node, hash_max, hash_index);\
 		\
 		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
@@ -205,8 +205,8 @@ typedef int (*keyhash_calc_hash_cb)(void*);
 	nodetype_s *KEYHASH_SEARCH_WILDCARD_(yourhash)(KEYHASH_T_(yourhash) *self, void *value, size_t value_len){\
 		nodetype_s *ret_node = NULL;\
 		nodetype_s v_node;\
-		keytree_comp_node_cb cmp = (self)->hash_chain[0].comp_node;\
-		(self)->hash_chain[0].make_node(&v_node, value, value_len);\
+		keytree_comp_node_cb cmp = (self)->hash_chain[0].super.comp_node;\
+		(self)->hash_chain[0].super.make_node(&v_node, value, value_len);\
 		\
 		/*ワイルドカードチェインを回して、一致したら抜ける*/\
 		KEYCOLLECT_LOCK_ACQUIRE_(self);{\
@@ -227,7 +227,7 @@ typedef int (*keyhash_calc_hash_cb)(void*);
 		int ret = -1;\
 		nodetype_s v_node;\
 		int hash_index;\
-		(self)->hash_chain[0].make_node(&v_node, value, value_len);\
+		(self)->hash_chain[0].super.make_node(&v_node, value, value_len);\
 		KEYHASH_IMPL_CALC_HASH_(self, &v_node, hash_max, hash_index);\
 		\
 		KEYCOLLECT_LOCK_ACQUIRE_(self);{\

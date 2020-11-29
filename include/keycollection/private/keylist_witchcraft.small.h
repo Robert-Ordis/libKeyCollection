@@ -28,92 +28,92 @@
  */
 #define	keylist_define_implements_small(yourlist, nodetype_s, link_member)\
 	void			KEYLIST_INIT_(yourlist)(KEYLIST_T_(yourlist) *self){\
-		keylist_init_raw(offsetof(nodetype_s, link_member), self);\
+		keylist_init_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self));\
 	}\
 	\
 	int				KEYLIST_GET_COUNT_(yourlist)(KEYLIST_T_(yourlist) *self){\
-		return keylist_get_count_raw(offsetof(nodetype_s, link_member), self);\
+		return keylist_get_count_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self));\
 	}\
 	\
 	nodetype_s*		KEYLIST_REF_HEAD_(yourlist)(KEYLIST_T_(yourlist) *self){\
-		return (nodetype_s *)keylist_ref_head_raw(offsetof(nodetype_s, link_member), self);\
+		return (nodetype_s *)keylist_ref_head_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self));\
 	}\
 	\
 	nodetype_s*		KEYLIST_REF_TAIL_(yourlist)(KEYLIST_T_(yourlist) *self){\
-		return (nodetype_s *)keylist_ref_tail_raw(offsetof(nodetype_s, link_member), self);\
+		return (nodetype_s *)keylist_ref_tail_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self));\
 	}\
 	\
 	nodetype_s*		KEYLIST_POP_HEAD_(yourlist)(KEYLIST_T_(yourlist) *self){\
-		return (nodetype_s *)keylist_pop_head_raw(offsetof(nodetype_s, link_member), self);\
+		return (nodetype_s *)keylist_pop_head_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self));\
 	}\
 	\
 	nodetype_s*		KEYLIST_POP_TAIL_(yourlist)(KEYLIST_T_(yourlist) *self){\
-		return (nodetype_s *)keylist_pop_tail_raw(offsetof(nodetype_s, link_member), self);\
+		return (nodetype_s *)keylist_pop_tail_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self));\
 	}\
 	\
 	nodetype_s*		KEYLIST_REF_NTH_(yourlist)(KEYLIST_T_(yourlist) *self, int nth){\
-		return (nodetype_s *)keylist_ref_nth_raw(offsetof(nodetype_s, link_member), self, nth);\
+		return (nodetype_s *)keylist_ref_nth_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self), nth);\
 	}\
 	\
 	int				KEYLIST_ADD_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){\
-		return keylist_add_raw(offsetof(nodetype_s, link_member), self, node);\
+		return keylist_add_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self), node);\
 	}\
 	\
 	int				KEYLIST_ADD_HEAD_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){\
-		return keylist_add_head_raw(offsetof(nodetype_s, link_member), self, node);\
+		return keylist_add_head_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self), node);\
 	}\
 	\
 	int				KEYLIST_ADD_TAIL_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){\
-		return keylist_add_tail_raw(offsetof(nodetype_s, link_member), self, node);\
+		return keylist_add_tail_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self), node);\
 	}\
 	\
 	int				KEYLIST_DEL_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){\
-		return keylist_del_raw(offsetof(nodetype_s, link_member), self, node);\
+		return keylist_del_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self), node);\
 	}\
 	\
 	int				KEYLIST_HAS_NODE_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){\
-		return self == keylist_link_get_belong_raw(offsetof(nodetype_s, link_member), node);\
+		return ((keylist_t *) self) == keylist_link_get_belong_raw(offsetof(nodetype_s, link_member), node);\
 	}\
 	\
 	int				KEYLIST_INSERT_BEFORE_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *index_node, nodetype_s *node){\
-		return keylist_insert_before_raw(offsetof(nodetype_s, link_member), self, index_node, node);\
+		return keylist_insert_before_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self), index_node, node);\
 	}\
 	\
 	int				KEYLIST_INSERT_AFTER_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *index_node, nodetype_s *node){\
-		return keylist_insert_after_raw(offsetof(nodetype_s, link_member), self, index_node, node);\
+		return keylist_insert_after_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self), index_node, node);\
 	}\
 	\
 	int				KEYLIST_INIT_ITERATOR_(yourlist)(KEYLIST_T_(yourlist) *self, KEYLIST_ITERATOR_T_(yourlist) *iterator){\
-		return keylist_init_iterator_raw(offsetof(nodetype_s, link_member), self, iterator);\
+		return keylist_init_iterator_raw(offsetof(nodetype_s, link_member), ((keylist_t *) self), ((keylist_iterator_t *) iterator));\
 	}\
 	int				KEYLIST_ITERATOR_MOVE_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator, nodetype_s *index_node){\
-		return keylist_iterator_move_raw(offsetof(nodetype_s, link_member), iterator, index_node);\
+		return keylist_iterator_move_raw(offsetof(nodetype_s, link_member), ((keylist_iterator_t *) iterator), index_node);\
 	}\
 	\
 	nodetype_s*		KEYLIST_ITERATOR_FORWARD_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
-		return (nodetype_s *)keylist_iterator_forward_raw(offsetof(nodetype_s, link_member), iterator);\
+		return (nodetype_s *)keylist_iterator_forward_raw(offsetof(nodetype_s, link_member), ((keylist_iterator_t *) iterator));\
 	}\
 	\
 	nodetype_s*		KEYLIST_ITERATOR_BACKWARD_(yourlist)(KEYLIST_ITERATOR_T_(yourlist) *iterator){\
-		return (nodetype_s *)keylist_iterator_backward_raw(offsetof(nodetype_s, link_member), iterator);\
+		return (nodetype_s *)keylist_iterator_backward_raw(offsetof(nodetype_s, link_member), ((keylist_iterator_t *) iterator));\
 	}\
 	\
 	nodetype_s*		KEYLIST_GET_NEXT_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){\
-		if((node)->link_member.coll != self){\
+		if((node)->link_member.coll != ((keylist_t *) self)){\
 			return NULL;\
 		}\
 		return keycollection_get_container_ptr(offsetof(nodetype_s, link_member), (node)->link_member.next);\
 	}\
 	\
 	nodetype_s*		KEYLIST_GET_PREV_(yourlist)(KEYLIST_T_(yourlist) *self, nodetype_s *node){\
-		if((node)->link_member.coll != self){\
+		if((node)->link_member.coll != ((keylist_t *) self)){\
 			return NULL;\
 		}\
 		return keycollection_get_container_ptr(offsetof(nodetype_s, link_member), (node)->link_member.prev);\
 	}\
 	\
 	KEYLIST_T_(yourlist)* KEYLIST_GET_BELONG_(yourlist)(nodetype_s* node){\
-		return (node)->link_member.coll;\
+		return (KEYLIST_T_(yourlist) *)((node)->link_member.coll);\
 	}\
 	
 

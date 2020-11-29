@@ -99,7 +99,7 @@ int type_tree_eqcmp_test(){
 	typetree_init_iterator(ptree, it);
 	db_printf("%s: iterator forward iterating\n", __func__);
 	db_printf("%s: [%p], curr->%p, next->%p, prev->%p, coll->%p\n", __func__,
-		it, it->curr, it->next, it->prev, it->coll
+		it, it->super.curr, it->super.next, it->super.prev, it->super.coll
 	);
 	while((pnode = typetree_iterator_forward(it)) != NULL){
 		db_printf("%s: result of add_raw is %d\n", __func__, typetree_add(ptree, pnode));
@@ -118,7 +118,7 @@ int type_tree_eqcmp_test(){
 	typetree_init_iterator(ptree, it);
 	db_printf("%s: iterator backward iterating\n", __func__);
 	db_printf("%s: [%p], curr->%p, next->%p, prev->%p, coll->%p\n", __func__,
-		it, it->curr, it->next, it->prev, it->coll
+		it, it->super.curr, it->super.next, it->super.prev, it->super.coll
 	);
 	while((pnode = typetree_iterator_backward(it)) != NULL){
 		db_printf("%s: result of add_raw is %d\n", __func__, typetree_add(ptree, pnode));

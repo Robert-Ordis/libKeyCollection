@@ -313,9 +313,9 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
  */
 #define		keytree_foreach_forward(node, self)\
 	for(\
-		node = keytree_ref_head(self);\
+		node = keytree_ref_head((keytree_t *)self);\
 		node != NULL;\
-		node = keytree_get_next(self, node)\
+		node = keytree_get_next((keytree_t *)self, node)\
 	)
 
 /**
@@ -326,9 +326,9 @@ void*		keytree_iterator_backward(keytree_iterator_t *iterator);
  */
 #define		keytree_foreach_backward(node, self)\
 	for(\
-		node = keytree_ref_tail(self);\
+		node = keytree_ref_tail((keytree_t *)self);\
 		node != NULL;\
-		node = keytree_get_prev(self, node)\
+		node = keytree_get_prev((keytree_t *)self, node)\
 	)
 
 /**
